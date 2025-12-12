@@ -1,10 +1,10 @@
-]<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Patient Login - PADY Healthcare</title>
+    <title>Hospital Staff Signup - PADY Healthcare</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -36,7 +36,7 @@
             padding: 20px;
         }
 
-        .login-container {
+        .signup-container {
             display: grid;
             grid-template-columns: 1fr 1fr;
             background: var(--card-background);
@@ -48,7 +48,7 @@
             min-height: 600px;
         }
 
-        .login-form-section {
+        .signup-form-section {
             padding: 60px 50px;
             display: flex;
             flex-direction: column;
@@ -59,11 +59,12 @@
             display: flex;
             align-items: center;
             gap: 12px;
-            margin-bottom: 40px;
+            margin-bottom: 20px;
         }
 
-        .logo img {
-            height: 40px;
+        .logo .material-icons-outlined {
+            font-size: 40px;
+            color: var(--primary-color);
         }
 
         .logo-text {
@@ -72,14 +73,27 @@
             color: var(--primary-color);
         }
 
-        .login-header h1 {
+        .admin-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(0, 123, 255, 0.1);
+            color: var(--primary-color);
+            padding: 8px 16px;
+            border-radius: 30px;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+
+        .signup-header h1 {
             color: var(--text-primary);
             font-size: 32px;
             font-weight: 700;
             margin-bottom: 8px;
         }
 
-        .login-header p {
+        .signup-header p {
             color: var(--text-secondary);
             font-size: 14px;
         }
@@ -149,16 +163,7 @@
             accent-color: var(--primary-color);
         }
 
-        .forgot-password {
-            color: var(--primary-color);
-            font-weight: 500;
-        }
-
-        .forgot-password:hover {
-            color: var(--primary-dark);
-        }
-
-        .btn-login {
+        .btn-signup {
             width: 100%;
             padding: 16px;
             background: var(--primary-color);
@@ -175,18 +180,18 @@
             gap: 8px;
         }
 
-        .btn-login:hover {
+        .btn-signup:hover {
             background: var(--primary-dark);
             transform: translateY(-2px);
             box-shadow: 0 8px 24px rgba(0, 123, 255, 0.3);
         }
 
-        .btn-login.loading {
+        .btn-signup.loading {
             opacity: 0.8;
             cursor: not-allowed;
         }
 
-        .btn-login .spinner {
+        .btn-signup .spinner {
             width: 20px;
             height: 20px;
             border: 3px solid rgba(255,255,255,0.3);
@@ -196,7 +201,7 @@
             display: none;
         }
 
-        .btn-login.loading .spinner {
+        .btn-signup.loading .spinner {
             display: block;
         }
 
@@ -240,22 +245,22 @@
             border-color: var(--primary-color);
         }
 
-        .signup-link {
+        .login-link {
             text-align: center;
             margin-top: 32px;
             color: var(--text-secondary);
         }
 
-        .signup-link a {
+        .login-link a {
             color: var(--primary-color);
             font-weight: 600;
         }
 
-        .signup-link a:hover {
+        .login-link a:hover {
             color: var(--primary-dark);
         }
 
-        .login-illustration {
+        .signup-illustration {
             background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
             padding: 60px 40px;
             color: white;
@@ -271,6 +276,17 @@
 
         .circle-1 { width: 300px; height: 300px; top: -100px; right: -100px; }
         .circle-2 { width: 200px; height: 200px; bottom: -50px; left: -50px; }
+
+        .illustration-content {
+            text-align: center;
+            position: relative;
+            z-index: 2;
+        }
+
+        .illustration-icon {
+            font-size: 120px;
+            margin-bottom: 32px;
+        }
 
         .notification {
             position: fixed;
@@ -293,8 +309,8 @@
         .notification.error { border-left: 4px solid var(--error-color); }
 
         @media (max-width: 968px) {
-            .login-container { grid-template-columns: 1fr; }
-            .login-illustration { display: none; }
+            .signup-container { grid-template-columns: 1fr; }
+            .signup-illustration { display: none; }
         }
     </style>
 </head>
@@ -305,24 +321,29 @@
         <span class="message">Success!</span>
     </div>
 
-    <div class="login-container">
-        <div class="login-form-section">
+    <div class="signup-container">
+        <div class="signup-form-section">
             <div class="logo">
-                <img src="Images/PADY 2.png" alt="PADY Logo" onerror="this.style.display='none'">
+                <span class="material-icons-outlined">local_hospital</span>
                 <span class="logo-text">PADY</span>
             </div>
 
-            <div class="login-header">
-                <h1>Welcome Back!</h1>
-                <p>Please login to access your healthcare dashboard</p>
+            <div class="admin-badge">
+                <span class="material-icons-outlined">admin_panel_settings</span>
+                Hospital / Staff Portal
             </div>
 
-            <form id="loginForm">
+            <div class="signup-header">
+                <h1>Create Staff Account</h1>
+                <p>Register to access the hospital management system</p>
+            </div>
+
+            <form id="signupForm">
                 <div class="form-group">
                     <label for="email">Email Address</label>
                     <div class="input-wrapper">
                         <span class="material-icons-outlined">email</span>
-                        <input type="email" id="email" class="form-control" placeholder="Enter your email" required>
+                        <input type="email" id="email" class="form-control" placeholder="staff@hospital.com" required>
                     </div>
                 </div>
 
@@ -330,8 +351,19 @@
                     <label for="password">Password</label>
                     <div class="input-wrapper">
                         <span class="material-icons-outlined">lock</span>
-                        <input type="password" id="password" class="form-control" placeholder="Enter your password" required>
+                        <input type="password" id="password" class="form-control" placeholder="Create a strong password" required>
                         <button type="button" class="password-toggle" id="togglePassword">
+                            <span class="material-icons-outlined">visibility_off</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="confirmPassword">Confirm Password</label>
+                    <div class="input-wrapper">
+                        <span class="material-icons-outlined">lock</span>
+                        <input type="password" id="confirmPassword" class="form-control" placeholder="Re-enter password" required>
+                        <button type="button" class="password-toggle" id="toggleConfirmPassword">
                             <span class="material-icons-outlined">visibility_off</span>
                         </button>
                     </div>
@@ -339,45 +371,46 @@
 
                 <div class="form-options">
                     <div class="remember-me">
-                        <input type="checkbox" id="rememberMe">
-                        <label for="rememberMe">Remember me</label>
+                        <input type="checkbox" id="terms" required>
+                        <label for="terms">I agree to the terms and conditions</label>
                     </div>
-                    <a href="#" class="forgot-password">Forgot password?</a>
                 </div>
 
-                <button type="submit" class="btn-login" id="loginBtn">
+                <button type="submit" class="btn-signup" id="signupBtn">
                     <span class="spinner"></span>
-                    <span class="btn-text">Login</span>
+                    <span class="btn-text">Create Staff Account</span>
                 </button>
 
-                <div class="divider"><span>or continue with</span></div>
+                <div class="divider"><span>or sign up with</span></div>
 
-                <button type="button" class="btn-google" id="googleLogin">
+                <button type="button" class="btn-google" id="googleSignup">
                     <svg width="20" height="20" viewBox="0 0 20 20"><!-- Google SVG --></svg>
-                    Sign in with Google
+                    Sign up with Google
                 </button>
 
-                <div class="signup-link">
-                    Don't have an account? <a href="signup.html">Sign up here</a>
+                <div class="login-link">
+                    Already have an account? <a href="login.html">Login here</a>
                 </div>
             </form>
         </div>
 
-        <div class="login-illustration">
+        <div class="signup-illustration">
             <div class="circle circle-1"></div>
             <div class="circle circle-2"></div>
-            <div style="text-align:center; margin-top:100px;">
-                <span class="material-icons-outlined" style="font-size:120px;">local_hospital</span>
-                <h2 style="margin:20px 0;">Your Health, Our Priority</h2>
-                <p>Access your medical records, book appointments, and manage your healthcare all in one place</p>
+            <div class="illustration-content">
+                <div class="illustration-icon">
+                    <span class="material-icons-outlined">admin_panel_settings</span>
+                </div>
+                <h2>Hospital Dashboard</h2>
+                <p>Manage patients, appointments, records, and staff with powerful tools designed for healthcare professionals</p>
             </div>
         </div>
     </div>
 
-    <!-- Firebase + Login Script -->
+    <!-- Firebase Integration -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+        import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyDhAV79o2AYqq33oSvJXVv9Ri23L29R60I",
@@ -393,36 +426,57 @@
         const auth = getAuth(app);
 
         // Password toggle
-        document.getElementById('togglePassword').addEventListener('click', () => {
-            const password = document.getElementById('password');
-            const icon = document.querySelector('#togglePassword span');
-            if (password.type === 'password') {
-                password.type = 'text';
-                icon.textContent = 'visibility';
-            } else {
-                password.type = 'password';
-                icon.textContent = 'visibility_off';
-            }
-        });
+        function setupToggle(inputId, toggleId) {
+            const input = document.getElementById(inputId);
+            const toggle = document.getElementById(toggleId);
+            const icon = toggle.querySelector('.material-icons-outlined');
+            toggle.addEventListener('click', () => {
+                if (input.type === 'password') {
+                    input.type = 'text';
+                    icon.textContent = 'visibility';
+                } else {
+                    input.type = 'password';
+                    icon.textContent = 'visibility_off';
+                }
+            });
+        }
+        setupToggle('password', 'togglePassword');
+        setupToggle('confirmPassword', 'toggleConfirmPassword');
 
-        // Login form
-        document.getElementById('loginForm').addEventListener('submit', (e) => {
+        // Signup form
+        document.getElementById('signupForm').addEventListener('submit', (e) => {
             e.preventDefault();
             const email = document.getElementById('email').value.trim();
             const password = document.getElementById('password').value;
-            const btn = document.getElementById('loginBtn');
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            const terms = document.getElementById('terms').checked;
+            const btn = document.getElementById('signupBtn');
+
+            if (password !== confirmPassword) {
+                showNotification('error', 'Passwords do not match');
+                return;
+            }
+            if (password.length < 6) {
+                showNotification('error', 'Password must be at least 6 characters');
+                return;
+            }
+            if (!terms) {
+                showNotification('error', 'You must agree to the terms');
+                return;
+            }
 
             btn.classList.add('loading');
             btn.disabled = true;
 
-            signInWithEmailAndPassword(auth, email, password)
+            createUserWithEmailAndPassword(auth, email, password)
                 .then(() => {
-                    showNotification('success', 'Login successful! Redirecting...');
-                    setTimeout(() => window.location.href = 'profile.html', 1500);
+                    showNotification('success', 'Staff account created! Redirecting to login...');
+                    setTimeout(() => window.location.href = 'login.html', 2000);
                 })
                 .catch((error) => {
-                    let msg = 'Invalid email or password.';
-                    if (error.code === 'auth/user-not-found' || error.code === 'auth/wrong-password') msg = 'Invalid email or password.';
+                    let msg = error.message;
+                    if (error.code === 'auth/email-already-in-use') msg = 'This email is already registered.';
+                    else if (error.code === 'auth/weak-password') msg = 'Password is too weak.';
                     showNotification('error', msg);
                 })
                 .finally(() => {
@@ -440,8 +494,8 @@
             setTimeout(() => n.classList.remove('show'), 4000);
         }
 
-        document.getElementById('googleLogin').addEventListener('click', () => {
-            showNotification('info', 'Google sign-in coming soon!');
+        document.getElementById('googleSignup').addEventListener('click', () => {
+            showNotification('info', 'Google sign-up coming soon!');
         });
     </script>
 </body>

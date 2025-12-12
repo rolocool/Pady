@@ -1,15 +1,31 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hospital Login - PADY</title>
+    <title>Hospital Login - PADY Healthcare</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
     <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --primary-color: #007bff;
+            --primary-dark: #0056b3;
+            --secondary-color: #05CD99;
+            --background-color: #f5f7fa;
+            --card-background: #ffffff;
+            --text-primary: #2B3674;
+            --text-secondary: #A3AED0;
+            --border-color: #E9EDF7;
+            --error-color: #EE5D50;
+            --success-color: #05CD99;
+        }
+
         body {
             font-family: 'Poppins', sans-serif;
             background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
@@ -20,124 +36,444 @@
             padding: 20px;
         }
 
-        .login-card {
-            background: white;
-            border-radius: 20px;
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
+        .login-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            background: var(--card-background);
+            border-radius: 24px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
             overflow: hidden;
-            max-width: 480px;
+            max-width: 1000px;
             width: 100%;
+            min-height: 600px;
         }
 
-        .card-header {
-            background: #007bff;
-            color: white;
-            padding: 30px;
-            text-align: center;
+        .login-form-section {
+            padding: 60px 50px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
         }
 
-        .card-header .logo {
-            font-size: 36px;
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 40px;
+        }
+
+        .logo img {
+            height: 40px;
+        }
+
+        .logo-text {
+            font-size: 28px;
             font-weight: 700;
+            color: var(--primary-color);
         }
 
         .admin-badge {
-            background: rgba(255,255,255,0.2);
-            padding: 8px 20px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(0, 123, 255, 0.1);
+            color: var(--primary-color);
+            padding: 8px 16px;
             border-radius: 30px;
             font-size: 14px;
-            display: inline-block;
-            margin-top: 10px;
+            font-weight: 600;
+            margin-bottom: 20px;
         }
 
-        .card-body {
-            padding: 40px;
+        .login-header h1 {
+            color: var(--text-primary);
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .login-header p {
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        .form-group {
+            margin-bottom: 24px;
+        }
+
+        .input-wrapper {
+            position: relative;
+        }
+
+        .input-wrapper .material-icons-outlined {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-secondary);
+            font-size: 20px;
         }
 
         .form-control {
+            width: 100%;
+            padding: 14px 16px 14px 48px;
+            border: 2px solid var(--border-color);
             border-radius: 12px;
-            padding: 12px 16px;
-            font-size: 15px;
-        }
-
-        .btn-primary {
-            background: #007bff;
-            border: none;
-            border-radius: 12px;
-            padding: 14px;
-            font-weight: 600;
-            font-size: 16px;
-        }
-
-        .btn-primary:hover {
-            background: #0056b3;
-        }
-
-        .input-group-text {
-            background: transparent;
-            border-right: none;
-            color: #007bff;
+            font-size: 14px;
+            color: var(--text-primary);
+            transition: all 0.3s ease;
         }
 
         .form-control:focus {
-            border-color: #007bff;
-            box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 4px rgba(0, 123, 255, 0.1);
+        }
+
+        .password-toggle {
+            position: absolute;
+            right: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            cursor: pointer;
+        }
+
+        .password-toggle:hover {
+            color: var(--primary-color);
+        }
+
+        .form-options {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 32px;
+        }
+
+        .remember-me {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .remember-me input[type="checkbox"] {
+            accent-color: var(--primary-color);
         }
 
         .forgot-password {
-            color: #007bff;
-            font-size: 14px;
+            color: var(--primary-color);
+            font-weight: 500;
         }
 
         .forgot-password:hover {
-            text-decoration: underline;
+            color: var(--primary-dark);
+        }
+
+        .btn-login {
+            width: 100%;
+            padding: 16px;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn-login:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(0, 123, 255, 0.3);
+        }
+
+        .btn-login.loading {
+            opacity: 0.8;
+            cursor: not-allowed;
+        }
+
+        .btn-login .spinner {
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,0.3);
+            border-top-color: white;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            display: none;
+        }
+
+        .btn-login.loading .spinner {
+            display: block;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .divider {
+            display: flex;
+            align-items: center;
+            margin: 32px 0;
+        }
+
+        .divider::before, .divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: var(--border-color);
+        }
+
+        .divider span {
+            padding: 0 16px;
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        .btn-google {
+            width: 100%;
+            padding: 14px;
+            background: white;
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            transition: all 0.3s;
+        }
+
+        .btn-google:hover {
+            border-color: var(--primary-color);
+        }
+
+        .signup-link {
+            text-align: center;
+            margin-top: 32px;
+            color: var(--text-secondary);
+        }
+
+        .signup-link a {
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+
+        .signup-link a:hover {
+            color: var(--primary-dark);
+        }
+
+        .login-illustration {
+            background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+            padding: 60px 40px;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .circle {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.1);
+        }
+
+        .circle-1 { width: 300px; height: 300px; top: -100px; right: -100px; }
+        .circle-2 { width: 200px; height: 200px; bottom: -50px; left: -50px; }
+
+        .illustration-content {
+            text-align: center;
+            position: relative;
+            z-index: 2;
+        }
+
+        .illustration-icon {
+            font-size: 120px;
+            margin-bottom: 32px;
+        }
+
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 16px 24px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transform: translateX(400px);
+            transition: transform 0.3s ease;
+            z-index: 1000;
+        }
+
+        .notification.show { transform: translateX(0); }
+        .notification.success { border-left: 4px solid var(--success-color); }
+        .notification.error { border-left: 4px solid var(--error-color); }
+
+        @media (max-width: 968px) {
+            .login-container { grid-template-columns: 1fr; }
+            .login-illustration { display: none; }
         }
     </style>
 </head>
+
 <body>
-    <div class="login-card">
-        <div class="card-header">
-            <div class="logo mb-2">
-                <span class="material-icons-outlined" style="font-size: 48px;">local_hospital</span>
-                <div>PADY</div>
+    <div id="notification" class="notification">
+        <span class="material-icons-outlined icon">check_circle</span>
+        <span class="message">Success!</span>
+    </div>
+
+    <div class="login-container">
+        <div class="login-form-section">
+            <div class="logo">
+                <span class="material-icons-outlined" style="font-size: 40px; color: var(--primary-color);">local_hospital</span>
+                <span class="logo-text">PADY</span>
             </div>
+
             <div class="admin-badge">
                 <span class="material-icons-outlined" style="font-size: 18px;">admin_panel_settings</span>
                 Hospital / Staff Portal
             </div>
-            <h4 class="mt-3">Welcome Back</h4>
-            <p>Sign in to manage healthcare services</p>
-        </div>
 
-        <div class="card-body">
+            <div class="login-header">
+                <h1>Welcome Back</h1>
+                <p>Sign in to access the hospital management system</p>
+            </div>
+
             <form id="loginForm">
-                <div class="mb-3">
-                    <label class="form-label">Email Address</label>
-                    <div class="input-group">
-                        <span class="input-group-text"><i class="material-icons-outlined">email</i></span>
-                        <input type="email" class="form-control" id="email" placeholder="staff@hospital.com" required>
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <div class="input-wrapper">
+                        <span class="material-icons-outlined">email</span>
+                        <input type="email" id="email" class="form-control" placeholder="staff@hospital.com" required>
                     </div>
                 </div>
 
-                <div class="mb-3">
-                    <label class="form-label">Password</label>
-                    <div class="input-group">
-                        <span class="input-group-text"><i class="material-icons-outlined">lock</i></span>
-                        <input type="password" class="form-control" id="password" placeholder="••••••••" required>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <div class="input-wrapper">
+                        <span class="material-icons-outlined">lock</span>
+                        <input type="password" id="password" class="form-control" placeholder="Enter your password" required>
+                        <button type="button" class="password-toggle" id="togglePassword">
+                            <span class="material-icons-outlined">visibility_off</span>
+                        </button>
                     </div>
                 </div>
 
-                <div class="d-flex justify-content-between align-items-center mb-4">
-                    <div class="form-check">
-                        <input type="checkbox" class="form-check-input" id="remember">
-                        <label class="form-check-label" for="remember">Remember me</label>
+                <div class="form-options">
+                    <div class="remember-me">
+                        <input type="checkbox" id="rememberMe">
+                        <label for="rememberMe">Remember me</label>
                     </div>
                     <a href="#" class="forgot-password">Forgot password?</a>
                 </div>
 
-                <button type="submit" class="btn btn-primary w-100">Login as Staff</button>
+                <button type="submit" class="btn-login" id="loginBtn">
+                    <span class="spinner"></span>
+                    <span class="btn-text">Login as Staff</span>
+                </button>
+
+                <div class="divider"><span>or continue with</span></div>
+
+                <button type="button" class="btn-google" id="googleLogin">
+                    <svg width="20" height="20" viewBox="0 0 20 20"><!-- Google SVG here --></svg>
+                    Sign in with Google
+                </button>
+
+                <div class="signup-link">
+                    Need an account? <a href="#">Contact Admin</a>
+                </div>
             </form>
         </div>
+
+        <div class="login-illustration">
+            <div class="circle circle-1"></div>
+            <div class="circle circle-2"></div>
+            <div class="illustration-content">
+                <div class="illustration-icon">
+                    <span class="material-icons-outlined">admin_panel_settings</span>
+                </div>
+                <h2>Hospital Dashboard</h2>
+                <p>Manage patients, appointments, records, and staff with powerful tools</p>
+            </div>
+        </div>
     </div>
+
+    <!-- Firebase + Login Script -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyDhAV79o2AYqq33oSvJXVv9Ri23L29R60I",
+            authDomain: "pady-122be.firebaseapp.com",
+            projectId: "pady-122be",
+            storageBucket: "pady-122be.firebasestorage.app",
+            messagingSenderId: "785554651840",
+            appId: "1:785554651840:web:83a33b87f6f226e0064b25",
+            measurementId: "G-WJZ0HYLHQ6"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+
+        // Password toggle
+        document.getElementById('togglePassword').addEventListener('click', () => {
+            const password = document.getElementById('password');
+            const icon = document.querySelector('#togglePassword span');
+            if (password.type === 'password') {
+                password.type = 'text';
+                icon.textContent = 'visibility';
+            } else {
+                password.type = 'password';
+                icon.textContent = 'visibility_off';
+            }
+        });
+
+        // Login form
+        document.getElementById('loginForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value;
+            const btn = document.getElementById('loginBtn');
+
+            btn.classList.add('loading');
+            btn.disabled = true;
+
+            signInWithEmailAndPassword(auth, email, password)
+                .then(() => {
+                    showNotification('success', 'Login successful! Redirecting...');
+                    setTimeout(() => window.location.href = '../Template/dashboard.html', 1500); // Change to your hospital dashboard
+                })
+                .catch((error) => {
+                    let msg = 'Invalid email or password.';
+                    if (error.code === 'auth/user-not-found' || error.code === 'auth/wrong-password') msg = 'Invalid email or password.';
+                    showNotification('error', msg);
+                })
+                .finally(() => {
+                    btn.classList.remove('loading');
+                    btn.disabled = false;
+                });
+        });
+
+        function showNotification(type, message) {
+            const n = document.getElementById('notification');
+            n.querySelector('.message').textContent = message;
+            n.className = 'notification ' + type;
+            n.querySelector('.icon').textContent = type === 'success' ? 'check_circle' : 'error';
+            n.classList.add('show');
+            setTimeout(() => n.classList.remove('show'), 4000);
+        }
+
+        document.getElementById('googleLogin').addEventListener('click', () => {
+            showNotification('info', 'Google sign-in coming soon!');
+        });
+    </script>
 </body>
 </html>

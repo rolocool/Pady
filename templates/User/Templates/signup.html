@@ -20,8 +20,8 @@
         }
 
         :root {
-            --primary-color: #4318FF;
-            --primary-dark: #2D0FDB;
+            --primary-color: #007bff;
+            --primary-dark: #0056b3;
             --secondary-color: #05CD99;
             --background-color: #f5f7fa;
             --card-background: #ffffff;
@@ -34,7 +34,7 @@
 
         body {
             font-family: 'Poppins', sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
             min-height: 100vh;
             display: flex;
             align-items: center;
@@ -145,7 +145,7 @@
         .form-control:focus {
             outline: none;
             border-color: var(--primary-color);
-            box-shadow: 0 0 0 4px rgba(67, 24, 255, 0.1);
+            box-shadow: 0 0 0 4px rgba(0, 123, 255, 0.1);
         }
 
         .form-control.error {
@@ -202,20 +202,9 @@
             border-radius: 2px;
         }
 
-        .password-strength-bar.weak {
-            width: 33%;
-            background: var(--error-color);
-        }
-
-        .password-strength-bar.medium {
-            width: 66%;
-            background: #FFB547;
-        }
-
-        .password-strength-bar.strong {
-            width: 100%;
-            background: var(--success-color);
-        }
+        .password-strength-bar.weak { width: 33%; background: var(--error-color); }
+        .password-strength-bar.medium { width: 66%; background: #FFB547; }
+        .password-strength-bar.strong { width: 100%; background: var(--success-color); }
 
         .password-hint {
             font-size: 12px;
@@ -278,7 +267,7 @@
         .btn-signup:hover {
             background: var(--primary-dark);
             transform: translateY(-2px);
-            box-shadow: 0 8px 24px rgba(67, 24, 255, 0.3);
+            box-shadow: 0 8px 24px rgba(0, 123, 255, 0.3);
         }
 
         .btn-signup:disabled {
@@ -371,7 +360,7 @@
 
         /* Right Side - Illustration */
         .signup-illustration {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -432,10 +421,6 @@
             justify-content: center;
             font-size: 24px;
             flex-shrink: 0;
-        }
-
-        .benefit-text {
-            flex: 1;
         }
 
         .benefit-text h4 {
@@ -538,30 +523,12 @@
         }
 
         @media (max-width: 480px) {
-            body {
-                padding: 0;
-            }
-
-            .signup-container {
-                border-radius: 0;
-                min-height: 100vh;
-            }
-
-            .signup-form-section {
-                padding: 30px 20px;
-            }
-
-            .signup-header h1 {
-                font-size: 26px;
-            }
-
-            .logo {
-                margin-bottom: 20px;
-            }
-
-            .form-group {
-                margin-bottom: 16px;
-            }
+            body { padding: 0; }
+            .signup-container { border-radius: 0; min-height: 100vh; }
+            .signup-form-section { padding: 30px 20px; }
+            .signup-header h1 { font-size: 26px; }
+            .logo { margin-bottom: 20px; }
+            .form-group { margin-bottom: 16px; }
         }
     </style>
 </head>
@@ -593,30 +560,16 @@
                         <label for="fullName">Full Name</label>
                         <div class="input-wrapper">
                             <span class="material-icons-outlined">person</span>
-                            <input 
-                                type="text" 
-                                id="fullName" 
-                                class="form-control" 
-                                placeholder="John Doe"
-                                required
-                            >
+                            <input type="text" id="fullName" class="form-control" placeholder="John Doe" required>
                         </div>
-                        <div class="error-message" id="nameError">Please enter your full name</div>
                     </div>
 
                     <div class="form-group">
                         <label for="email">Email Address</label>
                         <div class="input-wrapper">
                             <span class="material-icons-outlined">email</span>
-                            <input 
-                                type="email" 
-                                id="email" 
-                                class="form-control" 
-                                placeholder="john@example.com"
-                                required
-                            >
+                            <input type="email" id="email" class="form-control" placeholder="john@example.com" required>
                         </div>
-                        <div class="error-message" id="emailError">Please enter a valid email</div>
                     </div>
                 </div>
 
@@ -626,29 +579,16 @@
                         <label for="phone">Phone Number</label>
                         <div class="input-wrapper">
                             <span class="material-icons-outlined">phone</span>
-                            <input 
-                                type="tel" 
-                                id="phone" 
-                                class="form-control" 
-                                placeholder="+250 788 123 456"
-                                required
-                            >
+                            <input type="tel" id="phone" class="form-control" placeholder="+250 788 123 456" required>
                         </div>
-                        <div class="error-message" id="phoneError">Please enter a valid phone number</div>
                     </div>
 
                     <div class="form-group">
                         <label for="dob">Date of Birth</label>
                         <div class="input-wrapper">
                             <span class="material-icons-outlined">cake</span>
-                            <input 
-                                type="date" 
-                                id="dob" 
-                                class="form-control"
-                                required
-                            >
+                            <input type="date" id="dob" class="form-control" required>
                         </div>
-                        <div class="error-message" id="dobError">Please enter your date of birth</div>
                     </div>
                 </div>
 
@@ -665,7 +605,6 @@
                                 <option value="other">Other</option>
                             </select>
                         </div>
-                        <div class="error-message" id="genderError">Please select your gender</div>
                     </div>
 
                     <div class="form-group">
@@ -692,13 +631,7 @@
                     <label for="password">Password</label>
                     <div class="input-wrapper">
                         <span class="material-icons-outlined">lock</span>
-                        <input 
-                            type="password" 
-                            id="password" 
-                            class="form-control" 
-                            placeholder="Create a strong password"
-                            required
-                        >
+                        <input type="password" id="password" class="form-control" placeholder="Create a strong password" required>
                         <button type="button" class="password-toggle" id="togglePassword">
                             <span class="material-icons-outlined">visibility_off</span>
                         </button>
@@ -707,7 +640,6 @@
                         <div class="password-strength-bar" id="passwordStrengthBar"></div>
                     </div>
                     <div class="password-hint">Minimum 8 characters with letters and numbers</div>
-                    <div class="error-message" id="passwordError">Password is too weak</div>
                 </div>
 
                 <!-- Confirm Password -->
@@ -715,18 +647,11 @@
                     <label for="confirmPassword">Confirm Password</label>
                     <div class="input-wrapper">
                         <span class="material-icons-outlined">lock</span>
-                        <input 
-                            type="password" 
-                            id="confirmPassword" 
-                            class="form-control" 
-                            placeholder="Re-enter your password"
-                            required
-                        >
+                        <input type="password" id="confirmPassword" class="form-control" placeholder="Re-enter your password" required>
                         <button type="button" class="password-toggle" id="toggleConfirmPassword">
                             <span class="material-icons-outlined">visibility_off</span>
                         </button>
                     </div>
-                    <div class="error-message" id="confirmPasswordError">Passwords do not match</div>
                 </div>
 
                 <!-- Terms & Conditions -->
@@ -815,14 +740,30 @@
         </div>
     </div>
 
-    <script>
-        // Password toggle functionality
+    <!-- Firebase Integration -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyDhAV79o2AYqq33oSvJXVv9Ri23L29R60I",
+            authDomain: "pady-122be.firebaseapp.com",
+            projectId: "pady-122be",
+            storageBucket: "pady-122be.firebasestorage.app",
+            messagingSenderId: "785554651840",
+            appId: "1:785554651840:web:83a33b87f6f226e0064b25",
+            measurementId: "G-WJZ0HYLHQ6"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+
+        // Password toggle
         function setupPasswordToggle(inputId, toggleId) {
             const input = document.getElementById(inputId);
             const toggle = document.getElementById(toggleId);
             const icon = toggle.querySelector('.material-icons-outlined');
-            
-            toggle.addEventListener('click', function() {
+            toggle.addEventListener('click', () => {
                 if (input.type === 'password') {
                     input.type = 'text';
                     icon.textContent = 'visibility';
@@ -832,184 +773,92 @@
                 }
             });
         }
-
         setupPasswordToggle('password', 'togglePassword');
         setupPasswordToggle('confirmPassword', 'toggleConfirmPassword');
 
-        // Password strength checker
+        // Password strength
         document.getElementById('password').addEventListener('input', function() {
             const password = this.value;
-            const strengthBar = document.getElementById('passwordStrengthBar');
-            const strengthContainer = document.getElementById('passwordStrength');
-            
-            if (password.length === 0) {
-                strengthContainer.style.display = 'none';
+            const bar = document.getElementById('passwordStrengthBar');
+            const container = document.getElementById('passwordStrength');
+            if (!password) {
+                container.style.display = 'none';
                 return;
             }
-            
-            strengthContainer.style.display = 'block';
-            
+            container.style.display = 'block';
             let strength = 0;
             if (password.length >= 8) strength++;
             if (password.match(/[a-z]/) && password.match(/[A-Z]/)) strength++;
             if (password.match(/[0-9]/)) strength++;
             if (password.match(/[^a-zA-Z0-9]/)) strength++;
-            
-            strengthBar.className = 'password-strength-bar';
-            if (strength <= 1) {
-                strengthBar.classList.add('weak');
-            } else if (strength === 2 || strength === 3) {
-                strengthBar.classList.add('medium');
-            } else {
-                strengthBar.classList.add('strong');
-            }
+            bar.className = 'password-strength-bar';
+            if (strength <= 1) bar.classList.add('weak');
+            else if (strength <= 3) bar.classList.add('medium');
+            else bar.classList.add('strong');
         });
 
-        // Form validation and submission
-        document.getElementById('signupForm').addEventListener('submit', async function(e) {
+        // Form submission with Firebase
+        document.getElementById('signupForm').addEventListener('submit', function(e) {
             e.preventDefault();
-            
-            // Get form values
-            const fullName = document.getElementById('fullName');
-            const email = document.getElementById('email');
-            const phone = document.getElementById('phone');
-            const dob = document.getElementById('dob');
-            const gender = document.getElementById('gender');
-            const bloodType = document.getElementById('bloodType');
-            const password = document.getElementById('password');
-            const confirmPassword = document.getElementById('confirmPassword');
-            const terms = document.getElementById('terms');
+
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            const terms = document.getElementById('terms').checked;
             const signupBtn = document.getElementById('signupBtn');
-            
-            // Reset errors
-            document.querySelectorAll('.error-message').forEach(el => el.style.display = 'none');
-            document.querySelectorAll('.form-control').forEach(el => el.classList.remove('error'));
-            
-            let isValid = true;
-            
-            // Validate full name
-            if (!fullName.value || fullName.value.trim().length < 3) {
-                fullName.classList.add('error');
-                document.getElementById('nameError').style.display = 'block';
-                isValid = false;
+
+            // Basic validation
+            if (password !== confirmPassword) {
+                showNotification('error', 'Passwords do not match');
+                return;
             }
-            
-            // Validate email
-            if (!email.value || !email.value.includes('@')) {
-                email.classList.add('error');
-                document.getElementById('emailError').style.display = 'block';
-                isValid = false;
+            if (password.length < 6) {
+                showNotification('error', 'Password must be at least 6 characters');
+                return;
             }
-            
-            // Validate phone
-            const phoneRegex = /^[+]?[\d\s-]{10,}$/;
-            if (!phone.value || !phoneRegex.test(phone.value)) {
-                phone.classList.add('error');
-                document.getElementById('phoneError').style.display = 'block';
-                isValid = false;
+            if (!terms) {
+                showNotification('error', 'You must accept the terms and conditions');
+                return;
             }
-            
-            // Validate DOB
-            if (!dob.value) {
-                dob.classList.add('error');
-                document.getElementById('dobError').style.display = 'block';
-                isValid = false;
-            }
-            
-            // Validate gender
-            if (!gender.value) {
-                gender.classList.add('error');
-                document.getElementById('genderError').style.display = 'block';
-                isValid = false;
-            }
-            
-            // Validate password
-            if (!password.value || password.value.length < 8) {
-                password.classList.add('error');
-                document.getElementById('passwordError').textContent = 'Password must be at least 8 characters';
-                document.getElementById('passwordError').style.display = 'block';
-                isValid = false;
-            }
-            
-            // Validate password match
-            if (password.value !== confirmPassword.value) {
-                confirmPassword.classList.add('error');
-                document.getElementById('confirmPasswordError').style.display = 'block';
-                isValid = false;
-            }
-            
-            // Validate terms
-            if (!terms.checked) {
-                showNotification('error', 'Please accept the terms and conditions');
-                isValid = false;
-            }
-            
-            if (!isValid) return;
-            
-            // Show loading
+
             signupBtn.classList.add('loading');
             signupBtn.disabled = true;
-            
-            // Simulate signup (replace with Firebase authentication)
-            setTimeout(() => {
-                showNotification('success', 'Account created successfully! Redirecting...');
-                
-                // Store user data (for demo)
-                const userData = {
-                    fullName: fullName.value,
-                    email: email.value,
-                    phone: phone.value,
-                    dob: dob.value,
-                    gender: gender.value,
-                    bloodType: bloodType.value
-                };
-                localStorage.setItem('userData', JSON.stringify(userData));
-                
-                setTimeout(() => {
-                    window.location.href = 'login.html';
-                }, 1500);
-            }, 2000);
-        });
 
-        // Google signup
-        document.getElementById('googleSignup').addEventListener('click', function() {
-            showNotification('info', 'Google sign-up coming soon!');
-            // Implement Google sign-up here
+            createUserWithEmailAndPassword(auth, email, password)
+                .then(() => {
+                    showNotification('success', 'Account created successfully! Redirecting to login...');
+                    setTimeout(() => window.location.href = 'login.html', 2000);
+                })
+                .catch((error) => {
+                    let msg = error.message;
+                    if (error.code === 'auth/email-already-in-use') msg = 'This email is already registered.';
+                    else if (error.code === 'auth/weak-password') msg = 'Password is too weak.';
+                    else if (error.code === 'auth/invalid-email') msg = 'Invalid email address.';
+                    showNotification('error', msg);
+                })
+                .finally(() => {
+                    signupBtn.classList.remove('loading');
+                    signupBtn.disabled = false;
+                });
         });
 
         // Notification system
         function showNotification(type, message) {
             const notification = document.getElementById('notification');
             const icon = notification.querySelector('.icon');
-            const messageEl = notification.querySelector('.message');
-            
-            messageEl.textContent = message;
+            const msgEl = notification.querySelector('.message');
+            msgEl.textContent = message;
             notification.className = 'notification ' + type;
-            
-            if (type === 'success') {
-                icon.textContent = 'check_circle';
-            } else if (type === 'error') {
-                icon.textContent = 'error';
-            } else {
-                icon.textContent = 'info';
-            }
-            
+            icon.textContent = type === 'success' ? 'check_circle' : 'error';
             notification.classList.add('show');
-            
-            setTimeout(() => {
-                notification.classList.remove('show');
-            }, 3000);
+            setTimeout(() => notification.classList.remove('show'), 4000);
         }
-    </script>
 
-    <!-- Firebase Integration (when ready) -->
-    <!--
-    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
-    <script src="../../js/firebase-config.js"></script>
-    <script src="../../js/firebase-services.js"></script>
-    <script src="../../js/app.js"></script>
-    -->
+        // Google signup placeholder
+        document.getElementById('googleSignup').addEventListener('click', () => {
+            showNotification('info', 'Google sign-up coming soon!');
+        });
+    </script>
 </body>
 
 </html>
