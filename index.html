@@ -5,7 +5,8 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css"
+        integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous" />
     <link rel="stylesheet" href="styles.css">
     <style>
         /* Additional Styles */
@@ -73,13 +74,14 @@
         .navbar-nav .nav-link:hover {
             color: #007bff;
         }
+
         .navbar {
-            background-color: rgba(0, 0, 0, 0); /* Transparent white background */
+            background-color: rgba(0, 0, 0, 0);
         }
 
         .navbar-brand img {
-            max-height: 40px; /* Adjust the max height as needed */
-            margin-right: 10px; /* Optional: Add margin for spacing */
+            max-height: 40px;
+            margin-right: 10px;
         }
 
         .cta-section {
@@ -93,7 +95,6 @@
             padding: 30px 0;
         }
 
-        /* Responsive Typography */
         @media (max-width: 767px) {
             .navbar-brand {
                 font-size: 20px;
@@ -109,88 +110,86 @@
         }
     </style>
     <title>PADY - Modern EHR System</title>
-    <!-- Add any additional styles or scripts here -->
 </head>
 
 <body>
 
     <!-- Navbar -->
- <nav class="navbar navbar-expand-md navbar-light bg-light py-3 fixed-top">
-    <div class="container-fluid">
-        <!-- Logo Image -->
-        <a class="navbar-brand" href="#">
-            <img src="./templates/User/Templates/Images/PADY 2.png" alt="PADY Logo">
-        </a>
+    <nav class="navbar navbar-expand-md navbar-light bg-light py-3 fixed-top">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">
+                <img src="./templates/User/Templates/Images/PADY 2.png" alt="PADY Logo">
+            </a>
 
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navmenu" aria-controls="navmenu" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navmenu"
+                aria-controls="navmenu" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
 
-        <div class="collapse navbar-collapse" id="navmenu" role="navigation">
-            <ul class="navbar-nav ms-auto">
-                <li class="nav-item">
-                    <a class="nav-link" href="#features">Features</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#about">About</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="./templates/User/Templates/login.html">Patient</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="./templates/Sub_Admin/Template/login.html">Hospital</a>
-                </li>
-            </ul>
+            <div class="collapse navbar-collapse" id="navmenu">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#features">Features</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#about">About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#contact">Contact</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="signinDropdown" role="button"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            Sign In
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="signinDropdown">
+                            <li><a class="dropdown-item" href="./templates/User/Templates/login.html">Patient Login</a></li>
+                            <li><a class="dropdown-item" href="./templates/Sub_Admin/Template/login.html">Hospital / Staff Login</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
         </div>
-    </div>
- </nav>
-
+    </nav>
 
     <!-- Hero Section -->
-    <section id="home" class="bg-dark text-light d-flex align-items-center justify-content-center p-5 text-center position-relative" 
-         style="background-image: url(./templates/User/Templates/Images/EHR.jpg); 
-                background-size: cover; 
-                background-position: center; 
-                min-height: 100vh;">
+    <section id="home"
+        class="bg-dark text-light d-flex align-items-center justify-content-center p-5 text-center position-relative"
+        style="background-image: url(./templates/User/Templates/Images/EHR.jpg); 
+               background-size: cover; 
+               background-position: center; 
+               min-height: 100vh;">
 
         <div class="overlay" style="background-color: rgba(0, 0, 0, 0.5);"></div>
 
         <div class="container position-relative hero-text">
-             <h1 class="display-3 fw-bold mb-4">
-                 Transforming Healthcare with <span class="hero-highlight">PADY</span>
-             </h1>
-             <p class="lead mb-5" style="font-size: 1.3rem;">
+            <h1 class="display-3 fw-bold mb-4">
+                Transforming Healthcare with <span class="hero-highlight">PADY</span>
+            </h1>
+            <p class="lead mb-5" style="font-size: 1.3rem;">
                 PADY is a modern Electronic Health Records system,<br>streamlining healthcare for a better tomorrow.
-             </p>
-        <div class="d-flex flex-column flex-md-row gap-4 justify-content-center align-items-center">
-            <a href="./templates/User/Templates/login.html" 
-               class="btn btn-primary btn-lg px-5 py-3 shadow">
-                <strong>I'm a Patient</strong>
-            </a>
-            <a href="./templates/Sub_Admin/Template/login.html" 
-               class="btn btn-outline-light btn-lg px-5 py-3 shadow">
-                <strong>Hospital / Staff Login</strong>
-            </a>
+            </p>
+            <p class="mt-4 text-light opacity-75">
+                Secure, intuitive, and designed for the future of healthcare.
+            </p>
         </div>
     </section>
-        <p class="mt-4 text-light opacity-75">
-            Choose your role to get started
-        </p>
-    </div>
 
     <!-- About Section -->
     <section id="about" class="p-5" style="height: 30vh;">
-       <div class="container">
-           <div class="row">
-               <div class="col-md-8 mx-auto text-center">
-                   <h2 class="display-4">About PADY</h2>
-                   <p class="lead">
-                       PADY is on a mission to revolutionize healthcare by providing a seamless and secure Electronic Health Records (EHR) system. Our innovative platform is designed to enhance patient care, simplify administrative tasks, and empower healthcare professionals.
-                   </p>
-               </div>
-           </div>
-       </div>
-   </section>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-8 mx-auto text-center">
+                    <h2 class="display-4">About PADY</h2>
+                    <p class="lead">
+                        PADY is on a mission to revolutionize healthcare by providing a seamless and secure Electronic
+                        Health Records (EHR) system. Our innovative platform is designed to enhance patient care,
+                        simplify administrative tasks, and empower healthcare professionals.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
 
     <!-- Features Section -->
     <section id="features" class="bg-light text-center">
@@ -209,7 +208,7 @@
                     <div class="card feature-card">
                         <div class="card-body">
                             <h5 class="card-title">Patient Records</h5>
-                            <p class="card-text">Patient data at your convinience and your information easy.</p>
+                            <p class="card-text">Patient data at your convenience and your information easy.</p>
                         </div>
                     </div>
                 </div>
@@ -251,14 +250,60 @@
     </section>
 
     <!-- Contact Section -->
-    <section id="contact" class="bg-primary text-light p-5 text-center cta-section">
+    <section id="contact" class="bg-primary text-light py-5 cta-section">
         <div class="container">
-            <h2 class="display-4">Get Started with PADY Today</h2>
-            <p class="lead">
-                Experience the future of healthcare. Join PADY and revolutionize your medical practice.
-            </p>
-            <!-- Add a contact form or call-to-action button -->
-            <a href="get-started.html" class="btn btn-light btn-lg">Sign Up Now</a>
+            <div class="row">
+                <div class="col-lg-8 mx-auto">
+                    <h2 class="display-4 text-center mb-5">Contact Us</h2>
+
+                    <div class="row">
+                        <!-- Contact Form -->
+                        <div class="col-md-6 mb-4">
+                            <h4 class="mb-4">Send us a message</h4>
+                            <form action="https://formspree.io/f/munyanaroline@gmail.com" method="POST">
+                                <div class="mb-3">
+                                    <label for="name" class="form-label">Your Name</label>
+                                    <input type="text" class="form-control" id="name" name="name" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="email" class="form-label">Your Email</label>
+                                    <input type="email" class="form-control" id="email" name="_replyto" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="message" class="form-label">Message</label>
+                                    <textarea class="form-control" id="message" name="message" rows="5" required></textarea>
+                                </div>
+                                <button type="submit" class="btn btn-light btn-lg">Send Message</button>
+                            </form>
+                        </div>
+
+                        <!-- Contact Info -->
+                        <div class="col-md-6">
+                            <h4 class="mb-4">Get in touch</h4>
+                            <p class="lead mb-4">
+                                We'd love to hear from you! Reach out via email or phone.
+                            </p>
+                            <ul class="list-unstyled">
+                                <li class="mb-3">
+                                    <strong>Email:</strong> 
+                                    <a href="mailto:munyanaroline@gmail.com" class="text-light text-decoration-underline">
+                                        munyanaroline@gmail.com
+                                    </a>
+                                </li>
+                                <li class="mb-3">
+                                    <strong>Phone:</strong> 
+                                    <a href="tel:+250784362809" class="text-light text-decoration-underline">
+                                        +250 784 362 809
+                                    </a>
+                                </li>
+                            </ul>
+                            <p class="mt-4">
+                                We're here to answer any questions about PADY or how we can help your healthcare practice.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </section>
 
@@ -275,14 +320,12 @@
     <!-- Footer -->
     <footer class="p-5 bg-dark text-light text-center footer-section">
         <div class="container">
-            <p>&copy; 2023 PADY. All rights reserved.</p>
+            <p>&copy; 2025 PADY. All rights reserved.</p>
         </div>
     </footer>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4" crossorigin="anonymous"></script>
-
-    <!-- Add any additional scripts here -->
-
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4" crossorigin="anonymous"></script>
 </body>
 
 </html>
