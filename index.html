@@ -147,30 +147,50 @@
 
 
     <!-- Hero Section -->
-    <section id="home" class="bg-dark text-light d-flex align-items-center justify-content-center p-5 text-center text-md-middle position-relative" style="background-image: url(./templates/User/Templates/Images/EHR.jpg); background-size: cover; background-position: center; height: 100vh;">
-        <div class="overlay" style="background-color: rgba(0, 0, 0, 0.1);"></div>
-        <div class="container hero-text">
-            <h1 class="display-4">Transforming Healthcare with <span class="hero-highlight">PADY</span></h1>
-            <p class="lead">
-                PADY is a modern Electronic Health Records system, streamlining healthcare for a better tomorrow.
-            </p>
-            <a href="login.html" class="btn btn-primary btn-lg">Learn More</a>
+    <section id="home" class="bg-dark text-light d-flex align-items-center justify-content-center p-5 text-center position-relative" 
+         style="background-image: url(./templates/User/Templates/Images/EHR.jpg); 
+                background-size: cover; 
+                background-position: center; 
+                min-height: 100vh;">
+
+        <div class="overlay" style="background-color: rgba(0, 0, 0, 0.5);"></div>
+
+        <div class="container position-relative hero-text">
+             <h1 class="display-3 fw-bold mb-4">
+                 Transforming Healthcare with <span class="hero-highlight">PADY</span>
+             </h1>
+             <p class="lead mb-5" style="font-size: 1.3rem;">
+                PADY is a modern Electronic Health Records system,<br>streamlining healthcare for a better tomorrow.
+             </p>
+        <div class="d-flex flex-column flex-md-row gap-4 justify-content-center align-items-center">
+            <a href="./templates/User/Templates/login.html" 
+               class="btn btn-primary btn-lg px-5 py-3 shadow">
+                <strong>I'm a Patient</strong>
+            </a>
+            <a href="./templates/Sub_Admin/Template/login.html" 
+               class="btn btn-outline-light btn-lg px-5 py-3 shadow">
+                <strong>Hospital / Staff Login</strong>
+            </a>
         </div>
     </section>
+        <p class="mt-4 text-light opacity-75">
+            Choose your role to get started
+        </p>
+    </div>
 
     <!-- About Section -->
     <section id="about" class="p-5" style="height: 30vh;">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-8 mx-auto text-center">
-                    <h2 class="display-4">About PADY</h2>
-                    <p class="lead">
-                        PADY is on a mission to revolutionize healthcare by providing a seamless and secure Electronic Health Records (EHR) system. Our innovative platform is designed to enhance patient care, simplify administrative tasks, and empower healthcare professionals.
-                    </p>
-                </div>
-            </div>
-        </div>
-    </section>
+       <div class="container">
+           <div class="row">
+               <div class="col-md-8 mx-auto text-center">
+                   <h2 class="display-4">About PADY</h2>
+                   <p class="lead">
+                       PADY is on a mission to revolutionize healthcare by providing a seamless and secure Electronic Health Records (EHR) system. Our innovative platform is designed to enhance patient care, simplify administrative tasks, and empower healthcare professionals.
+                   </p>
+               </div>
+           </div>
+       </div>
+   </section>
 
     <!-- Features Section -->
     <section id="features" class="bg-light text-center">

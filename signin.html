@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PADY Healthcare - Login</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --primary: #4318FF;
+            --primary-dark: #2D0FDB;
+            --secondary: #05CD99;
+            --bg: #f5f7fa;
+            --text: #2B3674;
+            --text-light: #A3AED0;
+            --border: #E9EDF7;
+        }
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .login-container {
+            background: white;
+            border-radius: 24px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+            max-width: 1000px;
+            width: 100%;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+        }
+        .login-left {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 60px 40px;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 40px;
+        }
+        .logo .material-icons-outlined {
+            font-size: 48px;
+        }
+        .logo h1 {
+            font-size: 36px;
+            font-weight: 700;
+        }
+        .login-left h2 {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+        .login-left p {
+            font-size: 16px;
+            opacity: 0.9;
+            line-height: 1.6;
+        }
+        .login-right {
+            padding: 60px 40px;
+        }
+        .login-right h3 {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 12px;
+        }
+        .login-right .subtitle {
+            font-size: 14px;
+            color: var(--text-light);
+            margin-bottom: 40px;
+        }
+        .form-group {
+            margin-bottom: 24px;
+        }
+        .form-group label {
+            display: block;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text);
+            margin-bottom: 8px;
+        }
+        .input-wrapper {
+            position: relative;
+        }
+        .input-wrapper .material-icons-outlined {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-light);
+            font-size: 20px;
+        }
+        .form-control {
+            width: 100%;
+            padding: 14px 16px 14px 48px;
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            font-size: 14px;
+            font-family: 'Poppins';
+            transition: all 0.3s;
+        }
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(67, 24, 255, 0.1);
+        }
+        .role-selector {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+        .role-option {
+            padding: 16px;
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+        }
+        .role-option:hover {
+            border-color: var(--primary);
+            background: rgba(67, 24, 255, 0.05);
+        }
+        .role-option.active {
+            border-color: var(--primary);
+            background: rgba(67, 24, 255, 0.1);
+        }
+        .role-option .material-icons-outlined {
+            font-size: 32px;
+            color: var(--primary);
+            margin-bottom: 8px;
+        }
+        .role-option .label {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text);
+        }
+        .btn-login {
+            width: 100%;
+            padding: 16px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .btn-login:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(67, 24, 255, 0.3);
+        }
+        .divider {
+            text-align: center;
+            margin: 24px 0;
+            color: var(--text-light);
+            font-size: 14px;
+        }
+        .signup-link {
+            text-align: center;
+            margin-top: 24px;
+            font-size: 14px;
+            color: var(--text-light);
+        }
+        .signup-link a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+        }
+        @media (max-width: 768px) {
+            .login-container {
+                grid-template-columns: 1fr;
+            }
+            .login-left {
+                padding: 40px 30px;
+            }
+            .login-right {
+                padding: 40px 30px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-left">
+            <div class="logo">
+                <span class="material-icons-outlined">local_hospital</span>
+                <h1>PADY</h1>
+            </div>
+            <h2>Welcome to PADY Healthcare</h2>
+            <p>Your complete healthcare management solution. Access patient records, book appointments, manage staff, and streamline operations - all in one place.</p>
+        </div>
+
+        <div class="login-right">
+            <h3>Sign In</h3>
+            <p class="subtitle">Select your role and enter your credentials</p>
+
+            <form id="loginForm" onsubmit="handleLogin(event)">
+                <div class="form-group">
+                    <label>Login As</label>
+                    <div class="role-selector">
+                        <div class="role-option active" data-role="patient" onclick="selectRole('patient')">
+                            <span class="material-icons-outlined">person</span>
+                            <div class="label">Patient</div>
+                        </div>
+                        <div class="role-option" data-role="admin" onclick="selectRole('admin')">
+                            <span class="material-icons-outlined">admin_panel_settings</span>
+                            <div class="label">Admin/Staff</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Email or Patient ID</label>
+                    <div class="input-wrapper">
+                        <span class="material-icons-outlined">email</span>
+                        <input type="text" class="form-control" id="email" placeholder="Enter email or patient ID" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Password</label>
+                    <div class="input-wrapper">
+                        <span class="material-icons-outlined">lock</span>
+                        <input type="password" class="form-control" id="password" placeholder="Enter password" required>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn-login">Sign In</button>
+
+                <div class="signup-link">
+                    Don't have an account? <a href="signup-new.html">Sign up as patient</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        let selectedRole = 'patient';
+
+        function selectRole(role) {
+            selectedRole = role;
+            document.querySelectorAll('.role-option').forEach(option => {
+                option.classList.remove('active');
+            });
+            document.querySelector(`[data-role="${role}"]`).classList.add('active');
+        }
+
+        function handleLogin(e) {
+            e.preventDefault();
+            
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            
+            
+            if (selectedRole === 'patient') {
+                // Redirect to patient portal
+                window.location.href = './templates/User/Templates/profile.html';
+            } else {
+                // Redirect to admin portal
+                window.location.href = './templates/Sub_Admin/Template/dashboard.html';
+            }
+        }
+
+        // Demo credentials guide (remove in production)
+        console.log('DEMO CREDENTIALS:');
+        console.log('Patient: any email/password');
+        console.log('Admin: any email/password');
+    </script>
+</body>
+</html>

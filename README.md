@@ -1,24 +1,88 @@
-# 🔥 PADY Healthcare System - Complete Firebase Version
+"PADY SOFTWARE"
 
-Your complete PADY system with **all original pages** + Firebase backend (no Node.js needed!)
+## Description
 
-## 🚀 Quick Start
+PADY SOFTWARE is a healthcare application designed to reduce hospital wait times and streamline payment processes, with a primary focus on improving healthcare services in Rwanda.
 
-1. **Configure Firebase** - Edit `js/firebase-config.js`
-2. **Test Locally** - `python -m http.server 8000`
-3. **Deploy** - `vercel --prod`
+## Features
 
-## 📦 What's Inside
+Dashboard: Get an overview of essential metrics and activities in a visually appealing format.
+Patient Management: Efficiently manage patient records, appointments, and medical history.
+Hospital Management: Organize and optimize hospital operations, resources, and services.
+Patient Testing: Schedule and track patient testing and diagnostic procedures.
+Operation Theater: Monitor and manage operation theater schedules and availability.
+Staff Management: Handle staff information, roles, and attendance records.
+User Management: Control access and permissions for different users within the system.
+Doctor Management: Manage doctor profiles, specialties, and assignments.
+Staff Attendance: Track staff attendance and generate attendance reports.
+Patient Reports: Generate and access patient medical reports securely.
+Profile: Users can view and update their profiles.
 
-✅ All User Portal pages (login, profile, hospitals, etc.)
-✅ All Admin Portal pages (dashboard, patients, doctors, etc.)
-✅ Firebase Authentication
-✅ Firestore Database
-✅ Real-time updates
-✅ Complete integration guide
+## Target Users
 
-## 📖 Full Documentation
+- Patients - Book appointments, access records, pay bills digitally
+- Doctors - Manage schedules, view patient history, generate reports
+- Nurses - Track tests, update patient information, assist operations
+- Administrators - Oversee operations, manage staff, generate analytics
+- Hospital Management - Monitor performance, optimize resources
 
-See **INTEGRATION-GUIDE.md** for complete setup instructions!
+## Local Development
 
-**Deploy in 5 minutes!** 🎉
+To set up the application for local development:
+
+1. Clone the repository:
+   ```bash
+   git clone
+   ```
+
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+
+3. Set up the environment variables:
+   - Create a `.env` file based on the provided `.env.example`.
+   - Update the variables with your specific configurations.
+
+4. Ensure your database (PostgreSQL) is running.
+
+5. Run the development server:
+   ```bash
+   npm run dev
+   ```
+
+6. Access the API documentation:
+   - Open your browser and go to [http://localhost:7001/api-docs/](http://localhost:7001/api-docs/).
+   - A small deployment has been made [https://rumunyana.github.io/PADY/]
+
+## Deployment
+
+To deploy the application:
+
+1. Build the project:
+   ```bash
+   npm run build
+   ```
+
+2. Start the production server:
+   ```bash
+   npm start
+   ```
+
+## Database Migrations
+
+If you are using PostgreSQL:
+
+- Run migrations:
+  ```bash
+  npm run migrate
+  ```
+
+- Undo migrations:
+  ```bash
+  npm run undo-migrate
+  ```
+
+## Author and Acknowledgement
+
+Created by PADY
