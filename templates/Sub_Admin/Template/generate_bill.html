@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generate Bill - PADY</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --primary: #4318FF; --primary-dark: #2D0FDB; --secondary: #05CD99;
+            --bg: #f5f7fa; --card-bg: #fff; --text: #2B3674; --text-light: #A3AED0;
+            --border: #E9EDF7; --hover: #F4F7FE;
+        }
+        body { font-family: 'Poppins', sans-serif; background: var(--bg); }
+        .grid-container {
+            display: grid; grid-template-columns: 260px 1fr;
+            grid-template-rows: 70px 1fr; min-height: 100vh;
+            grid-template-areas: "sidebar header" "sidebar main";
+        }
+        .header {
+            grid-area: header; background: #f8f9fa; display: flex;
+            align-items: center; justify-content: space-between; padding: 0 30px;
+            border-bottom: 1px solid var(--border);
+        }
+        .header-left h4 { color: var(--text); font-size: 18px; font-weight: 600; }
+        .header-right { display: flex; gap: 20px; align-items: center; }
+        .header-right .material-icons-outlined { font-size: 24px; color: var(--text-light); cursor: pointer; }
+        #sidebar {
+            grid-area: sidebar; background: var(--card-bg); border-right: 1px solid var(--border);
+            position: sticky; top: 0; height: 100vh; overflow-y: auto;
+        }
+        .sidebar-brand {
+            display: flex; align-items: center; gap: 12px; padding: 20px 24px;
+            border-bottom: 1px solid var(--border);
+        }
+        .sidebar-brand .material-icons-outlined { font-size: 32px; color: var(--primary); }
+        .sidebar-brand strong { font-size: 24px; font-weight: 700; color: var(--primary); }
+        .sidebar-list { list-style: none; padding: 20px 0; }
+        .sidebar-list a {
+            display: flex; align-items: center; gap: 16px; padding: 14px 24px;
+            color: var(--text-light); text-decoration: none; font-size: 14px;
+            transition: all 0.3s; font-weight: 500;
+        }
+        .sidebar-list a:hover, .sidebar-list a.active {
+            background: var(--hover); color: var(--primary);
+        }
+        .sidebar-list a.active { border-left: 3px solid var(--primary); }
+        .logout-button { padding: 20px 24px; border-top: 1px solid var(--border); }
+        .btn-logout {
+            width: 100%; padding: 12px; background: var(--primary); color: white;
+            border: none; border-radius: 10px; font-size: 14px; font-weight: 600;
+            cursor: pointer; transition: all 0.3s; display: flex; align-items: center;
+            justify-content: center; gap: 8px;
+        }
+        .main-container { grid-area: main; padding: 30px; overflow-y: auto; }
+        .page-header { margin-bottom: 30px; }
+        .page-header h2 { font-size: 32px; font-weight: 700; color: var(--text); margin-bottom: 8px; }
+        .page-header p { color: var(--text-light); font-size: 14px; }
+        
+        /* Two Column Layout */
+        .bill-layout {
+            display: grid; grid-template-columns: 1fr 400px; gap: 30px;
+        }
+        
+        /* Bill Form */
+        .bill-form-card {
+            background: var(--card-bg); padding: 32px; border-radius: 16px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+        .form-section { margin-bottom: 32px; }
+        .form-section:last-child { margin-bottom: 0; }
+        .section-title {
+            font-size: 18px; font-weight: 600; color: var(--text);
+            margin-bottom: 20px; display: flex; align-items: center; gap: 12px;
+        }
+        .section-title .material-icons-outlined {
+            font-size: 24px; color: var(--primary);
+        }
+        .form-group { margin-bottom: 20px; }
+        .form-group label {
+            display: block; font-size: 14px; font-weight: 500;
+            color: var(--text); margin-bottom: 8px;
+        }
+        .form-control {
+            width: 100%; padding: 14px 16px; border: 2px solid var(--border);
+            border-radius: 12px; font-size: 14px; font-family: 'Poppins';
+            color: var(--text); transition: all 0.3s;
+        }
+        .form-control:focus {
+            outline: none; border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(67,24,255,0.1);
+        }
+        select.form-control {
+            cursor: pointer; appearance: none;
+            background: white url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23A3AED0' d='M6 9L1 4h10z'/%3E%3C/svg%3E") no-repeat right 16px center;
+            padding-right: 40px;
+        }
+        
+        /* Service Items */
+        .service-items { margin-bottom: 20px; }
+        .service-item {
+            display: grid; grid-template-columns: 2fr 1fr 1fr 1fr 40px;
+            gap: 12px; margin-bottom: 12px; align-items: center;
+        }
+        .service-item input, .service-item select {
+            padding: 12px; border: 2px solid var(--border); border-radius: 10px;
+            font-size: 14px; font-family: 'Poppins';
+        }
+        .service-item .subtotal {
+            padding: 12px; background: var(--hover); border-radius: 10px;
+            text-align: center; font-weight: 600; color: var(--primary);
+        }
+        .btn-remove {
+            width: 36px; height: 36px; background: rgba(238,93,80,0.1);
+            color: #EE5D50; border: none; border-radius: 8px;
+            cursor: pointer; display: flex; align-items: center;
+            justify-content: center; transition: all 0.3s;
+        }
+        .btn-remove:hover { background: #EE5D50; color: white; }
+        .btn-add-item {
+            width: 100%; padding: 12px; background: var(--hover);
+            color: var(--primary); border: 2px dashed var(--border);
+            border-radius: 10px; font-size: 14px; font-weight: 600;
+            cursor: pointer; display: flex; align-items: center;
+            justify-content: center; gap: 8px; transition: all 0.3s;
+        }
+        .btn-add-item:hover { background: rgba(67,24,255,0.1); border-color: var(--primary); }
+        
+        /* Payment Method */
+        .payment-methods {
+            display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px;
+        }
+        .payment-option {
+            padding: 16px; border: 2px solid var(--border); border-radius: 12px;
+            cursor: pointer; transition: all 0.3s; text-align: center;
+        }
+        .payment-option:hover { border-color: var(--primary); background: var(--hover); }
+        .payment-option.active {
+            border-color: var(--primary); background: rgba(67,24,255,0.1);
+        }
+        .payment-option .material-icons-outlined {
+            font-size: 32px; color: var(--primary); margin-bottom: 8px;
+        }
+        .payment-option .label {
+            font-size: 13px; font-weight: 600; color: var(--text);
+        }
+        
+        /* Bill Summary Sidebar */
+        .bill-summary {
+            background: var(--card-bg); padding: 24px; border-radius: 16px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08); position: sticky; top: 30px;
+        }
+        .summary-title {
+            font-size: 20px; font-weight: 700; color: var(--text);
+            margin-bottom: 20px; display: flex; align-items: center; gap: 12px;
+        }
+        .patient-info {
+            padding: 16px; background: var(--hover); border-radius: 12px;
+            margin-bottom: 20px;
+        }
+        .patient-info h4 {
+            font-size: 16px; font-weight: 600; color: var(--text); margin-bottom: 12px;
+        }
+        .info-row {
+            display: flex; justify-content: space-between; margin-bottom: 8px;
+            font-size: 13px;
+        }
+        .info-row .label { color: var(--text-light); }
+        .info-row .value { color: var(--text); font-weight: 500; }
+        
+        .items-list { margin-bottom: 20px; }
+        .item-row {
+            display: flex; justify-content: space-between; padding: 12px 0;
+            border-bottom: 1px solid var(--border); font-size: 14px;
+        }
+        .item-row:last-child { border-bottom: none; }
+        .item-name { color: var(--text); }
+        .item-qty { color: var(--text-light); font-size: 12px; }
+        .item-price { color: var(--text); font-weight: 500; }
+        
+        .calculation {
+            padding: 16px 0; border-top: 2px solid var(--border);
+        }
+        .calc-row {
+            display: flex; justify-content: space-between; margin-bottom: 12px;
+            font-size: 14px;
+        }
+        .calc-row .label { color: var(--text-light); }
+        .calc-row .value { color: var(--text); font-weight: 500; }
+        .total-row {
+            display: flex; justify-content: space-between; padding: 16px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 12px; margin: 16px 0;
+        }
+        .total-row .label { color: white; font-size: 16px; font-weight: 600; }
+        .total-row .value { color: white; font-size: 24px; font-weight: 700; }
+        
+        .action-buttons { display: flex; gap: 12px; }
+        .btn {
+            flex: 1; padding: 14px; border: none; border-radius: 10px;
+            font-size: 14px; font-weight: 600; cursor: pointer;
+            transition: all 0.3s; display: flex; align-items: center;
+            justify-content: center; gap: 8px;
+        }
+        .btn-primary { background: var(--primary); color: white; }
+        .btn-primary:hover { background: var(--primary-dark); transform: translateY(-2px); }
+        .btn-secondary {
+            background: var(--hover); color: var(--primary);
+            border: 2px solid var(--border);
+        }
+        .btn-secondary:hover { background: var(--border); }
+        
+        @media (max-width: 1200px) {
+            .bill-layout { grid-template-columns: 1fr; }
+            .bill-summary { position: static; }
+        }
+        @media (max-width: 968px) {
+            .grid-container { grid-template-columns: 1fr; grid-template-areas: "header" "main"; }
+            #sidebar { display: none; }
+            .service-item { grid-template-columns: 1fr; }
+            .payment-methods { grid-template-columns: 1fr; }
+        }
+        @media (max-width: 640px) {
+            .main-container { padding: 20px; }
+            .bill-form-card { padding: 20px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="grid-container">
+        <header class="header">
+            <div class="header-left"><h4>Generate Bill</h4></div>
+            <div class="header-right">
+                <span class="material-icons-outlined">notifications</span>
+                <span class="material-icons-outlined">account_circle</span>
+            </div>
+        </header>
+
+        <aside id="sidebar">
+            <div class="sidebar-brand">
+                <span class="material-icons-outlined">local_hospital</span>
+                <strong>PADY</strong>
+            </div>
+            <ul class="sidebar-list">
+                <li><a href="dashboard.html"><span class="material-icons-outlined">dashboard</span> Dashboard</a></li>
+                <li><a href="patient_management.html"><span class="material-icons-outlined">people</span> Patient Management</a></li>
+                <li><a href="add_patient.html"><span class="material-icons-outlined">person_add</span> Add Patient</a></li>
+                <li><a href="doctor_management.html"><span class="material-icons-outlined">medical_services</span> Doctor Management</a></li>
+                <li><a href="hospital_management.html"><span class="material-icons-outlined">local_hospital</span> Hospital Management</a></li>
+                <li><a href="Scheduling.html"><span class="material-icons-outlined">event</span> Scheduling</a></li>
+                <li><a href="generate_bill.html" class="active"><span class="material-icons-outlined">receipt</span> Generate Bill</a></li>
+                <li><a href="Patient_Reports.html"><span class="material-icons-outlined">description</span> Patient Reports</a></li>
+                <li><a href="patient_testing_log.html"><span class="material-icons-outlined">science</span> Testing Log</a></li>
+                <li><a href="profile.html"><span class="material-icons-outlined">person</span> Profile</a></li>
+            </ul>
+            <div class="logout-button">
+                <button class="btn-logout" onclick="window.location.href='login.html'">
+                    <span class="material-icons-outlined">logout</span> Logout
+                </button>
+            </div>
+        </aside>
+
+        <main class="main-container">
+            <div class="page-header">
+                <h2>Generate Bill</h2>
+                <p>Create invoice for patient services</p>
+            </div>
+
+            <div class="bill-layout">
+                <!-- Bill Form -->
+                <div class="bill-form-card">
+                    <!-- Patient Selection -->
+                    <div class="form-section">
+                        <h3 class="section-title">
+                            <span class="material-icons-outlined">person</span>
+                            Patient Information
+                        </h3>
+                        <div class="form-group">
+                            <label>Select Patient *</label>
+                            <select class="form-control" id="patientSelect" onchange="loadPatientInfo()">
+                                <option value="">Search by name or ID...</option>
+                                <option value="1">Marie Uwase - #PAT-0001</option>
+                                <option value="2">Jean Mugabo - #PAT-0002</option>
+                                <option value="3">Patrick Niyonzima - #PAT-0003</option>
+                                <option value="4">Claire Umutoni - #PAT-0004</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Service Items -->
+                    <div class="form-section">
+                        <h3 class="section-title">
+                            <span class="material-icons-outlined">medical_services</span>
+                            Service Items
+                        </h3>
+                        <div class="service-items" id="serviceItems">
+                            <div class="service-item">
+                                <select class="form-control service-type" onchange="updatePrice(this)">
+                                    <option value="">Select Service</option>
+                                    <option value="30000">Consultation - RWF 30,000</option>
+                                    <option value="25000">Lab Test (CBC) - RWF 25,000</option>
+                                    <option value="40000">X-ray - RWF 40,000</option>
+                                    <option value="35000">Ultrasound - RWF 35,000</option>
+                                    <option value="500000">Surgery - RWF 500,000</option>
+                                    <option value="15000">Prescription - RWF 15,000</option>
+                                </select>
+                                <input type="number" class="form-control quantity" placeholder="Qty" value="1" min="1" onchange="calculateSubtotal(this)">
+                                <input type="number" class="form-control price" placeholder="Price" readonly>
+                                <div class="subtotal">RWF 0</div>
+                                <button class="btn-remove" onclick="removeItem(this)">
+                                    <span class="material-icons-outlined" style="font-size: 18px;">close</span>
+                                </button>
+                            </div>
+                        </div>
+                        <button class="btn-add-item" onclick="addServiceItem()">
+                            <span class="material-icons-outlined" style="font-size: 18px;">add</span>
+                            Add Another Service
+                        </button>
+                    </div>
+
+                    <!-- Payment Method -->
+                    <div class="form-section">
+                        <h3 class="section-title">
+                            <span class="material-icons-outlined">payment</span>
+                            Payment Method
+                        </h3>
+                        <div class="payment-methods">
+                            <div class="payment-option active" onclick="selectPayment(this)">
+                                <span class="material-icons-outlined">payments</span>
+                                <div class="label">Cash</div>
+                            </div>
+                            <div class="payment-option" onclick="selectPayment(this)">
+                                <span class="material-icons-outlined">credit_card</span>
+                                <div class="label">Card</div>
+                            </div>
+                            <div class="payment-option" onclick="selectPayment(this)">
+                                <span class="material-icons-outlined">smartphone</span>
+                                <div class="label">Mobile Money</div>
+                            </div>
+                            <div class="payment-option" onclick="selectPayment(this)">
+                                <span class="material-icons-outlined">health_and_safety</span>
+                                <div class="label">Insurance</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Notes -->
+                    <div class="form-section">
+                        <div class="form-group">
+                            <label>Additional Notes</label>
+                            <textarea class="form-control" rows="3" placeholder="Any additional information..."></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Bill Summary Sidebar -->
+                <div class="bill-summary">
+                    <h3 class="summary-title">
+                        <span class="material-icons-outlined">receipt</span>
+                        Bill Summary
+                    </h3>
+
+                    <div class="patient-info" id="summaryPatient">
+                        <h4>Patient Details</h4>
+                        <div class="info-row">
+                            <span class="label">Name:</span>
+                            <span class="value">-</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="label">Patient ID:</span>
+                            <span class="value">-</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="label">Date:</span>
+                            <span class="value"><?php echo date('M d, Y'); ?></span>
+                        </div>
+                    </div>
+
+                    <div class="items-list" id="summaryItems">
+                        <p style="text-align: center; color: var(--text-light); padding: 20px 0;">
+                            No services added yet
+                        </p>
+                    </div>
+
+                    <div class="calculation">
+                        <div class="calc-row">
+                            <span class="label">Subtotal:</span>
+                            <span class="value" id="subtotalAmount">RWF 0</span>
+                        </div>
+                        <div class="calc-row">
+                            <span class="label">Tax (18%):</span>
+                            <span class="value" id="taxAmount">RWF 0</span>
+                        </div>
+                        <div class="calc-row">
+                            <span class="label">Discount:</span>
+                            <span class="value">
+                                <input type="number" style="width: 80px; padding: 4px 8px; border: 1px solid var(--border); border-radius: 6px; text-align: right;" 
+                                       value="0" min="0" max="100" id="discountInput" onchange="calculateTotal()"> %
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="total-row">
+                        <span class="label">Total Amount:</span>
+                        <span class="value" id="totalAmount">RWF 0</span>
+                    </div>
+
+                    <div class="action-buttons">
+                        <button class="btn btn-secondary" onclick="printBill()">
+                            <span class="material-icons-outlined" style="font-size: 18px;">print</span>
+                            Print
+                        </button>
+                        <button class="btn btn-primary" onclick="saveBill()">
+                            <span class="material-icons-outlined" style="font-size: 18px;">save</span>
+                            Save Bill
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        const patients = {
+            '1': { name: 'Marie Uwase', id: '#PAT-0001', phone: '+250 788 123 456' },
+            '2': { name: 'Jean Mugabo', id: '#PAT-0002', phone: '+250 788 234 567' },
+            '3': { name: 'Patrick Niyonzima', id: '#PAT-0003', phone: '+250 788 345 678' },
+            '4': { name: 'Claire Umutoni', id: '#PAT-0004', phone: '+250 788 456 789' }
+        };
+
+        function loadPatientInfo() {
+            const select = document.getElementById('patientSelect');
+            const patient = patients[select.value];
+            
+            if (patient) {
+                document.querySelector('#summaryPatient .info-row:nth-child(1) .value').textContent = patient.name;
+                document.querySelector('#summaryPatient .info-row:nth-child(2) .value').textContent = patient.id;
+            }
+        }
+
+        function updatePrice(select) {
+            const row = select.closest('.service-item');
+            const price = select.value;
+            row.querySelector('.price').value = price;
+            calculateSubtotal(row.querySelector('.quantity'));
+        }
+
+        function calculateSubtotal(input) {
+            const row = input.closest('.service-item');
+            const price = parseFloat(row.querySelector('.price').value) || 0;
+            const qty = parseFloat(input.value) || 0;
+            const subtotal = price * qty;
+            row.querySelector('.subtotal').textContent = 'RWF ' + subtotal.toLocaleString();
+            calculateTotal();
+        }
+
+        function calculateTotal() {
+            let subtotal = 0;
+            document.querySelectorAll('.service-item').forEach(item => {
+                const price = parseFloat(item.querySelector('.price').value) || 0;
+                const qty = parseFloat(item.querySelector('.quantity').value) || 0;
+                subtotal += price * qty;
+            });
+
+            const discount = parseFloat(document.getElementById('discountInput').value) || 0;
+            const discountAmount = subtotal * (discount / 100);
+            const afterDiscount = subtotal - discountAmount;
+            const tax = afterDiscount * 0.18;
+            const total = afterDiscount + tax;
+
+            document.getElementById('subtotalAmount').textContent = 'RWF ' + subtotal.toLocaleString();
+            document.getElementById('taxAmount').textContent = 'RWF ' + tax.toLocaleString();
+            document.getElementById('totalAmount').textContent = 'RWF ' + total.toLocaleString();
+
+            updateSummaryItems();
+        }
+
+        function updateSummaryItems() {
+            const container = document.getElementById('summaryItems');
+            const items = document.querySelectorAll('.service-item');
+            
+            if (items.length === 0 || !items[0].querySelector('.service-type').value) {
+                container.innerHTML = '<p style="text-align: center; color: var(--text-light); padding: 20px 0;">No services added yet</p>';
+                return;
+            }
+
+            let html = '';
+            items.forEach(item => {
+                const service = item.querySelector('.service-type');
+                const qty = item.querySelector('.quantity').value;
+                const price = item.querySelector('.price').value;
+                
+                if (service.value) {
+                    const serviceName = service.options[service.selectedIndex].text.split(' - ')[0];
+                    const subtotal = parseFloat(price) * parseFloat(qty);
+                    html += `
+                        <div class="item-row">
+                            <div>
+                                <div class="item-name">${serviceName}</div>
+                                <div class="item-qty">Qty: ${qty}</div>
+                            </div>
+                            <div class="item-price">RWF ${subtotal.toLocaleString()}</div>
+                        </div>
+                    `;
+                }
+            });
+            container.innerHTML = html;
+        }
+
+        function addServiceItem() {
+            const container = document.getElementById('serviceItems');
+            const newItem = container.querySelector('.service-item').cloneNode(true);
+            newItem.querySelector('.service-type').value = '';
+            newItem.querySelector('.quantity').value = '1';
+            newItem.querySelector('.price').value = '';
+            newItem.querySelector('.subtotal').textContent = 'RWF 0';
+            container.appendChild(newItem);
+        }
+
+        function removeItem(btn) {
+            const container = document.getElementById('serviceItems');
+            if (container.querySelectorAll('.service-item').length > 1) {
+                btn.closest('.service-item').remove();
+                calculateTotal();
+            }
+        }
+
+        function selectPayment(option) {
+            document.querySelectorAll('.payment-option').forEach(opt => opt.classList.remove('active'));
+            option.classList.add('active');
+        }
+
+        function printBill() {
+            alert('Print functionality would open print dialog');
+        }
+
+        function saveBill() {
+            const patient = document.getElementById('patientSelect').value;
+            if (!patient) {
+                alert('Please select a patient');
+                return;
+            }
+            
+            const items = document.querySelectorAll('.service-item');
+            let hasItems = false;
+            items.forEach(item => {
+                if (item.querySelector('.service-type').value) hasItems = true;
+            });
+            
+            if (!hasItems) {
+                alert('Please add at least one service item');
+                return;
+            }
+
+            const billNumber = 'INV-2024-' + Math.floor(1000 + Math.random() * 9000);
+            alert('Bill saved successfully!\n\nBill Number: ' + billNumber + '\nTotal: ' + document.getElementById('totalAmount').textContent);
+            
+            // Reset form
+            setTimeout(() => window.location.reload(), 1500);
+        }
+
+        // Set today's date
+        const today = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+        document.querySelector('#summaryPatient .info-row:nth-child(3) .value').textContent = today;
+    </script>
+</body>
+</html>

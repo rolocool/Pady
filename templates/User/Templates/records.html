@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medical Records - PADY</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --primary: #4318FF; --primary-dark: #2D0FDB; --secondary: #05CD99;
+            --bg: #f5f7fa; --card-bg: #fff; --text: #2B3674; --text-light: #A3AED0;
+            --border: #E9EDF7; --hover: #F4F7FE; --success: #05CD99; --warning: #FFB547;
+            --error: #EE5D50;
+        }
+        body { font-family: 'Poppins', sans-serif; background: var(--bg); }
+        .grid-container {
+            display: grid; grid-template-columns: 260px 1fr;
+            grid-template-rows: 70px 1fr; min-height: 100vh;
+            grid-template-areas: "sidebar header" "sidebar main";
+        }
+        .header {
+            grid-area: header; background: #f8f9fa; display: flex;
+            align-items: center; justify-content: space-between; padding: 0 30px;
+            border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 100;
+        }
+        .header h4 { color: var(--text); font-size: 18px; font-weight: 600; }
+        .header-right { display: flex; gap: 20px; align-items: center; }
+        .header-right .material-icons-outlined { font-size: 24px; color: var(--text-light); cursor: pointer; }
+        .menu-icon { display: none; cursor: pointer; font-size: 28px; color: var(--text); }
+        
+        #sidebar {
+            grid-area: sidebar; background: var(--card-bg); border-right: 1px solid var(--border);
+            position: sticky; top: 0; height: 100vh; overflow-y: auto;
+        }
+        .sidebar-brand {
+            display: flex; align-items: center; gap: 12px; padding: 20px 24px;
+            border-bottom: 1px solid var(--border);
+        }
+        .sidebar-brand .material-icons-outlined { font-size: 32px; color: var(--primary); }
+        .sidebar-brand strong { font-size: 24px; font-weight: 700; color: var(--primary); }
+        .sidebar-list { list-style: none; padding: 20px 0; }
+        .sidebar-list a {
+            display: flex; align-items: center; gap: 16px; padding: 14px 24px;
+            color: var(--text-light); text-decoration: none; font-size: 14px; transition: all 0.3s;
+        }
+        .sidebar-list a:hover, .sidebar-list a.active {
+            background: var(--hover); color: var(--primary);
+        }
+        .sidebar-list a.active { border-left: 3px solid var(--primary); }
+        
+        .main-container { grid-area: main; padding: 30px; overflow-y: auto; }
+        .page-header { margin-bottom: 30px; }
+        .page-header h2 { font-size: 32px; font-weight: 700; color: var(--text); margin-bottom: 8px; }
+        .page-header p { color: var(--text-light); font-size: 14px; }
+        
+        /* Stats Cards */
+        .stats-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 20px; margin-bottom: 30px;
+        }
+        .stat-card {
+            background: var(--card-bg); padding: 24px; border-radius: 16px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08); display: flex; align-items: center; gap: 16px;
+        }
+        .stat-icon {
+            width: 56px; height: 56px; border-radius: 12px; display: flex;
+            align-items: center; justify-content: center; font-size: 28px; color: white;
+        }
+        .stat-icon.labs { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+        .stat-icon.prescriptions { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); }
+        .stat-icon.xrays { background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); }
+        .stat-icon.reports { background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); }
+        .stat-info h4 { font-size: 28px; font-weight: 700; color: var(--text); margin-bottom: 4px; }
+        .stat-info p { font-size: 13px; color: var(--text-light); }
+        
+        /* Filters */
+        .filters-section {
+            background: var(--card-bg); padding: 24px; border-radius: 16px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08); margin-bottom: 30px;
+        }
+        .filters-row {
+            display: grid; grid-template-columns: 2fr 1fr 1fr;
+            gap: 16px; margin-bottom: 16px;
+        }
+        .search-box {
+            position: relative;
+        }
+        .search-box .material-icons-outlined {
+            position: absolute; left: 16px; top: 50%; transform: translateY(-50%);
+            color: var(--text-light); font-size: 20px;
+        }
+        .search-box input {
+            width: 100%; padding: 14px 16px 14px 48px; border: 2px solid var(--border);
+            border-radius: 12px; font-size: 14px; font-family: 'Poppins'; transition: all 0.3s;
+        }
+        .search-box input:focus {
+            outline: none; border-color: var(--primary); box-shadow: 0 0 0 4px rgba(67,24,255,0.1);
+        }
+        .filter-select {
+            padding: 14px 16px; border: 2px solid var(--border); border-radius: 12px;
+            font-size: 14px; font-family: 'Poppins'; cursor: pointer; transition: all 0.3s;
+            appearance: none; background: white url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23A3AED0' d='M6 9L1 4h10z'/%3E%3C/svg%3E") no-repeat right 16px center;
+            padding-right: 40px;
+        }
+        .filter-select:focus {
+            outline: none; border-color: var(--primary); box-shadow: 0 0 0 4px rgba(67,24,255,0.1);
+        }
+        .filter-chips {
+            display: flex; gap: 12px; flex-wrap: wrap;
+        }
+        .filter-chip {
+            padding: 10px 20px; border-radius: 20px; border: 2px solid var(--border);
+            background: var(--card-bg); color: var(--text); font-size: 14px;
+            font-weight: 500; cursor: pointer; transition: all 0.3s;
+        }
+        .filter-chip:hover { border-color: var(--primary); background: var(--hover); }
+        .filter-chip.active {
+            border-color: var(--primary); background: var(--primary); color: white;
+        }
+        
+        /* Records Grid */
+        .records-grid {
+            display: grid; gap: 20px;
+        }
+        .record-card {
+            background: var(--card-bg); padding: 24px; border-radius: 16px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08); transition: all 0.3s;
+            border-left: 4px solid transparent;
+        }
+        .record-card:hover {
+            transform: translateY(-4px); box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+        }
+        .record-card.lab { border-left-color: #667eea; }
+        .record-card.prescription { border-left-color: #f5576c; }
+        .record-card.xray { border-left-color: #00f2fe; }
+        .record-card.report { border-left-color: #38f9d7; }
+        
+        .record-header {
+            display: flex; justify-content: space-between; align-items: start; margin-bottom: 16px;
+        }
+        .record-info { flex: 1; }
+        .record-type {
+            display: flex; align-items: center; gap: 8px; margin-bottom: 8px;
+        }
+        .type-badge {
+            padding: 6px 12px; border-radius: 6px; font-size: 12px;
+            font-weight: 600; text-transform: uppercase;
+        }
+        .type-badge.lab { background: rgba(102,126,234,0.1); color: #667eea; }
+        .type-badge.prescription { background: rgba(245,87,108,0.1); color: #f5576c; }
+        .type-badge.xray { background: rgba(0,242,254,0.1); color: #00a8b8; }
+        .type-badge.report { background: rgba(56,249,215,0.1); color: #00b89f; }
+        
+        .record-title {
+            font-size: 18px; font-weight: 600; color: var(--text); margin-bottom: 8px;
+        }
+        .record-meta {
+            display: flex; gap: 20px; font-size: 13px; color: var(--text-light);
+        }
+        .record-meta span {
+            display: flex; align-items: center; gap: 6px;
+        }
+        .record-meta .material-icons-outlined { font-size: 16px; }
+        
+        .record-description {
+            color: var(--text); font-size: 14px; line-height: 1.6; margin-bottom: 16px;
+        }
+        
+        .record-actions {
+            display: flex; gap: 12px;
+        }
+        .btn {
+            padding: 10px 20px; border: none; border-radius: 10px;
+            font-size: 14px; font-weight: 600; cursor: pointer;
+            transition: all 0.3s; display: flex; align-items: center; gap: 6px;
+        }
+        .btn-primary {
+            background: var(--primary); color: white;
+        }
+        .btn-primary:hover { background: var(--primary-dark); transform: translateY(-2px); }
+        .btn-secondary {
+            background: var(--hover); color: var(--primary); border: 2px solid var(--border);
+        }
+        .btn-secondary:hover { background: var(--border); }
+        
+        .empty-state {
+            text-align: center; padding: 60px 20px; background: var(--card-bg);
+            border-radius: 16px; box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+        .empty-state .material-icons-outlined {
+            font-size: 80px; color: var(--text-light); margin-bottom: 16px;
+        }
+        .empty-state h3 { font-size: 20px; color: var(--text); margin-bottom: 8px; }
+        .empty-state p { color: var(--text-light); font-size: 14px; }
+        
+        @media (max-width: 968px) {
+            .grid-container { grid-template-columns: 1fr; grid-template-areas: "header" "main"; }
+            #sidebar { display: none; }
+            .menu-icon { display: block; }
+            .filters-row { grid-template-columns: 1fr; }
+            .stats-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+        @media (max-width: 480px) {
+            .main-container { padding: 20px; }
+            .stats-grid { grid-template-columns: 1fr; }
+            .record-actions { flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+    <div class="grid-container">
+        <header class="header">
+            <div style="display: flex; align-items: center; gap: 20px;">
+                <div class="menu-icon"><span class="material-icons-outlined">menu</span></div>
+                <h4>Medical Records</h4>
+            </div>
+            <div class="header-right">
+                <span class="material-icons-outlined">notifications</span>
+                <span class="material-icons-outlined">account_circle</span>
+            </div>
+        </header>
+
+        <aside id="sidebar">
+            <div class="sidebar-brand">
+                <span class="material-icons-outlined">add_box</span>
+                <strong>PADY</strong>
+            </div>
+            <ul class="sidebar-list">
+                <li><a href="profile.html"><span class="material-icons-outlined">person</span> My Profile</a></li>
+                <li><a href="hospitals.html"><span class="material-icons-outlined">add_box</span> Find Hospitals</a></li>
+                <li><a href="consultation.html"><span class="material-icons-outlined">event</span> Book Appointment</a></li>
+                <li><a href="records.html" class="active"><span class="material-icons-outlined">folder</span> Medical Records</a></li>
+                <li><a href="view_bill.html"><span class="material-icons-outlined">receipt</span> View Bills</a></li>
+                <li><a href="payment.html"><span class="material-icons-outlined">credit_card</span> Payments</a></li>
+            </ul>
+        </aside>
+
+        <main class="main-container">
+            <div class="page-header">
+                <h2>Medical Records</h2>
+                <p>View and download your medical history</p>
+            </div>
+
+            <!-- Stats -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon labs"><span class="material-icons-outlined">biotech</span></div>
+                    <div class="stat-info"><h4>8</h4><p>Lab Results</p></div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon prescriptions"><span class="material-icons-outlined">medication</span></div>
+                    <div class="stat-info"><h4>12</h4><p>Prescriptions</p></div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon xrays"><span class="material-icons-outlined">photo_camera</span></div>
+                    <div class="stat-info"><h4>5</h4><p>X-rays & Scans</p></div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon reports"><span class="material-icons-outlined">description</span></div>
+                    <div class="stat-info"><h4>6</h4><p>Medical Reports</p></div>
+                </div>
+            </div>
+
+            <!-- Filters -->
+            <div class="filters-section">
+                <div class="filters-row">
+                    <div class="search-box">
+                        <span class="material-icons-outlined">search</span>
+                        <input type="text" id="searchRecords" placeholder="Search records by title, doctor, or hospital...">
+                    </div>
+                    <select class="filter-select" id="dateFilter">
+                        <option value="all">All Dates</option>
+                        <option value="week">Last 7 Days</option>
+                        <option value="month">Last 30 Days</option>
+                        <option value="year">Last Year</option>
+                    </select>
+                    <select class="filter-select" id="sortFilter">
+                        <option value="newest">Newest First</option>
+                        <option value="oldest">Oldest First</option>
+                    </select>
+                </div>
+                <div class="filter-chips">
+                    <div class="filter-chip active" data-type="all">All Records</div>
+                    <div class="filter-chip" data-type="lab">Lab Results</div>
+                    <div class="filter-chip" data-type="prescription">Prescriptions</div>
+                    <div class="filter-chip" data-type="xray">X-rays</div>
+                    <div class="filter-chip" data-type="report">Reports</div>
+                </div>
+            </div>
+
+            <!-- Records List -->
+            <div class="records-grid" id="recordsList">
+                <!-- Lab Result -->
+                <div class="record-card lab" data-type="lab" data-date="2024-12-08">
+                    <div class="record-header">
+                        <div class="record-info">
+                            <div class="record-type">
+                                <span class="type-badge lab">Lab Result</span>
+                            </div>
+                            <h3 class="record-title">Complete Blood Count (CBC)</h3>
+                            <div class="record-meta">
+                                <span><span class="material-icons-outlined">calendar_today</span> Dec 8, 2024</span>
+                                <span><span class="material-icons-outlined">person</span> Dr. Smith</span>
+                                <span><span class="material-icons-outlined">local_hospital</span> King Faisal Hospital</span>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="record-description">
+                        Routine blood work showing normal values for hemoglobin, white blood cells, and platelets. All results within expected ranges for age and gender.
+                    </p>
+                    <div class="record-actions">
+                        <button class="btn btn-primary" onclick="viewRecord('CBC')">
+                            <span class="material-icons-outlined" style="font-size: 18px;">visibility</span>
+                            View Results
+                        </button>
+                        <button class="btn btn-secondary" onclick="downloadRecord('CBC')">
+                            <span class="material-icons-outlined" style="font-size: 18px;">download</span>
+                            Download
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Prescription -->
+                <div class="record-card prescription" data-type="prescription" data-date="2024-12-05">
+                    <div class="record-header">
+                        <div class="record-info">
+                            <div class="record-type">
+                                <span class="type-badge prescription">Prescription</span>
+                            </div>
+                            <h3 class="record-title">Antibiotics - Amoxicillin 500mg</h3>
+                            <div class="record-meta">
+                                <span><span class="material-icons-outlined">calendar_today</span> Dec 5, 2024</span>
+                                <span><span class="material-icons-outlined">person</span> Dr. Jean</span>
+                                <span><span class="material-icons-outlined">local_hospital</span> CHUK</span>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="record-description">
+                        Take 1 capsule three times daily for 7 days. Complete full course even if symptoms improve. Take with food to reduce stomach upset.
+                    </p>
+                    <div class="record-actions">
+                        <button class="btn btn-primary" onclick="viewRecord('Prescription')">
+                            <span class="material-icons-outlined" style="font-size: 18px;">visibility</span>
+                            View Details
+                        </button>
+                        <button class="btn btn-secondary" onclick="downloadRecord('Prescription')">
+                            <span class="material-icons-outlined" style="font-size: 18px;">download</span>
+                            Download
+                        </button>
+                    </div>
+                </div>
+
+                <!-- X-ray -->
+                <div class="record-card xray" data-type="xray" data-date="2024-11-28">
+                    <div class="record-header">
+                        <div class="record-info">
+                            <div class="record-type">
+                                <span class="type-badge xray">X-ray</span>
+                            </div>
+                            <h3 class="record-title">Chest X-ray</h3>
+                            <div class="record-meta">
+                                <span><span class="material-icons-outlined">calendar_today</span> Nov 28, 2024</span>
+                                <span><span class="material-icons-outlined">person</span> Dr. Marie</span>
+                                <span><span class="material-icons-outlined">local_hospital</span> Kanombe Hospital</span>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="record-description">
+                        Frontal and lateral chest radiographs. Lungs are clear with no evidence of infiltrates or masses. Heart size normal. No pleural effusion.
+                    </p>
+                    <div class="record-actions">
+                        <button class="btn btn-primary" onclick="viewRecord('Xray')">
+                            <span class="material-icons-outlined" style="font-size: 18px;">visibility</span>
+                            View Images
+                        </button>
+                        <button class="btn btn-secondary" onclick="downloadRecord('Xray')">
+                            <span class="material-icons-outlined" style="font-size: 18px;">download</span>
+                            Download
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Medical Report -->
+                <div class="record-card report" data-type="report" data-date="2024-11-20">
+                    <div class="record-header">
+                        <div class="record-info">
+                            <div class="record-type">
+                                <span class="type-badge report">Medical Report</span>
+                            </div>
+                            <h3 class="record-title">Annual Physical Examination</h3>
+                            <div class="record-meta">
+                                <span><span class="material-icons-outlined">calendar_today</span> Nov 20, 2024</span>
+                                <span><span class="material-icons-outlined">person</span> Dr. Paul</span>
+                                <span><span class="material-icons-outlined">local_hospital</span> Plateau Poly-Clinic</span>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="record-description">
+                        Comprehensive annual checkup. Blood pressure 120/80, BMI 23.5. All vital signs normal. Recommended maintaining healthy lifestyle with regular exercise.
+                    </p>
+                    <div class="record-actions">
+                        <button class="btn btn-primary" onclick="viewRecord('Report')">
+                            <span class="material-icons-outlined" style="font-size: 18px;">visibility</span>
+                            View Report
+                        </button>
+                        <button class="btn btn-secondary" onclick="downloadRecord('Report')">
+                            <span class="material-icons-outlined" style="font-size: 18px;">download</span>
+                            Download
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Lab Result 2 -->
+                <div class="record-card lab" data-type="lab" data-date="2024-11-15">
+                    <div class="record-header">
+                        <div class="record-info">
+                            <div class="record-type">
+                                <span class="type-badge lab">Lab Result</span>
+                            </div>
+                            <h3 class="record-title">Lipid Panel</h3>
+                            <div class="record-meta">
+                                <span><span class="material-icons-outlined">calendar_today</span> Nov 15, 2024</span>
+                                <span><span class="material-icons-outlined">person</span> Dr. Smith</span>
+                                <span><span class="material-icons-outlined">local_hospital</span> King Faisal Hospital</span>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="record-description">
+                        Cholesterol screening. Total cholesterol: 185 mg/dL, LDL: 110 mg/dL, HDL: 55 mg/dL, Triglycerides: 100 mg/dL. All values within healthy range.
+                    </p>
+                    <div class="record-actions">
+                        <button class="btn btn-primary" onclick="viewRecord('Lipid')">
+                            <span class="material-icons-outlined" style="font-size: 18px;">visibility</span>
+                            View Results
+                        </button>
+                        <button class="btn btn-secondary" onclick="downloadRecord('Lipid')">
+                            <span class="material-icons-outlined" style="font-size: 18px;">download</span>
+                            Download
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Prescription 2 -->
+                <div class="record-card prescription" data-type="prescription" data-date="2024-10-22">
+                    <div class="record-header">
+                        <div class="record-info">
+                            <div class="record-type">
+                                <span class="type-badge prescription">Prescription</span>
+                            </div>
+                            <h3 class="record-title">Pain Relief - Ibuprofen 400mg</h3>
+                            <div class="record-meta">
+                                <span><span class="material-icons-outlined">calendar_today</span> Oct 22, 2024</span>
+                                <span><span class="material-icons-outlined">person</span> Dr. Jean</span>
+                                <span><span class="material-icons-outlined">local_hospital</span> CHUK</span>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="record-description">
+                        Take 1 tablet every 6-8 hours as needed for pain. Do not exceed 3 tablets in 24 hours. Take with food or milk.
+                    </p>
+                    <div class="record-actions">
+                        <button class="btn btn-primary" onclick="viewRecord('Ibuprofen')">
+                            <span class="material-icons-outlined" style="font-size: 18px;">visibility</span>
+                            View Details
+                        </button>
+                        <button class="btn btn-secondary" onclick="downloadRecord('Ibuprofen')">
+                            <span class="material-icons-outlined" style="font-size: 18px;">download</span>
+                            Download
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Empty State (hidden by default) -->
+            <div class="empty-state" id="emptyState" style="display: none;">
+                <span class="material-icons-outlined">folder_open</span>
+                <h3>No Records Found</h3>
+                <p>Try adjusting your search or filters</p>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Filter chips
+        document.querySelectorAll('.filter-chip').forEach(chip => {
+            chip.addEventListener('click', function() {
+                document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+                this.classList.add('active');
+                filterRecords();
+            });
+        });
+
+        // Search
+        document.getElementById('searchRecords').addEventListener('input', filterRecords);
+        document.getElementById('dateFilter').addEventListener('change', filterRecords);
+        document.getElementById('sortFilter').addEventListener('change', sortRecords);
+
+        function filterRecords() {
+            const searchTerm = document.getElementById('searchRecords').value.toLowerCase();
+            const activeType = document.querySelector('.filter-chip.active').dataset.type;
+            const cards = document.querySelectorAll('.record-card');
+            let visibleCount = 0;
+
+            cards.forEach(card => {
+                const type = card.dataset.type;
+                const text = card.textContent.toLowerCase();
+                const matchesSearch = text.includes(searchTerm);
+                const matchesType = activeType === 'all' || type === activeType;
+
+                if (matchesSearch && matchesType) {
+                    card.style.display = 'block';
+                    visibleCount++;
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+
+            document.getElementById('emptyState').style.display = visibleCount === 0 ? 'block' : 'none';
+            document.getElementById('recordsList').style.display = visibleCount === 0 ? 'none' : 'grid';
+        }
+
+        function sortRecords() {
+            const sort = document.getElementById('sortFilter').value;
+            const container = document.getElementById('recordsList');
+            const cards = Array.from(document.querySelectorAll('.record-card'));
+
+            cards.sort((a, b) => {
+                const dateA = new Date(a.dataset.date);
+                const dateB = new Date(b.dataset.date);
+                return sort === 'newest' ? dateB - dateA : dateA - dateB;
+            });
+
+            cards.forEach(card => container.appendChild(card));
+        }
+
+        function viewRecord(type) {
+            alert(`Viewing ${type} record\n\nThis would open a detailed view with:\n- Full medical information\n- Test results/details\n- Doctor notes\n- Images (if applicable)`);
+        }
+
+        function downloadRecord(type) {
+            alert(`Downloading ${type} record as PDF...`);
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,985 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Find Hospitals - PADY Healthcare</title>
+    <!-- Poppins Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Material Icons -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #4318FF;
+            --primary-light: #6B46FF;
+            --primary-dark: #2D0FDB;
+            --secondary-color: #05CD99;
+            --background-color: #f5f7fa;
+            --card-background: #ffffff;
+            --text-primary: #2B3674;
+            --text-secondary: #A3AED0;
+            --border-color: #E9EDF7;
+            --hover-color: #F4F7FE;
+            --sidebar-bg: #ffffff;
+            --header-bg: #f8f9fa;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--background-color);
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Layout Grid */
+        .grid-container {
+            display: grid;
+            grid-template-columns: 260px 1fr;
+            grid-template-rows: 70px 1fr;
+            grid-template-areas:
+                "sidebar header"
+                "sidebar main";
+            min-height: 100vh;
+        }
+
+        /* Header */
+        .header {
+            grid-area: header;
+            background: var(--header-bg);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 30px;
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .menu-icon {
+            display: none;
+            cursor: pointer;
+            font-size: 28px;
+            color: var(--text-primary);
+        }
+
+        .header-left h4 {
+            color: var(--text-primary);
+            font-size: 18px;
+            font-weight: 600;
+            margin: 0;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .header-right .material-icons-outlined {
+            font-size: 24px;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+
+        .header-right .material-icons-outlined:hover {
+            color: var(--primary-color);
+        }
+
+        /* Sidebar */
+        #sidebar {
+            grid-area: sidebar;
+            background: var(--sidebar-bg);
+            border-right: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+            position: sticky;
+            top: 0;
+            height: 100vh;
+        }
+
+        .sidebar-title {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 20px 24px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .sidebar-brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .sidebar-brand .material-icons-outlined {
+            font-size: 32px;
+            color: var(--primary-color);
+        }
+
+        .sidebar-brand strong {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        .sidebar-brand a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .sidebar-title .material-icons-outlined {
+            display: none;
+            cursor: pointer;
+            color: var(--text-secondary);
+        }
+
+        .sidebar-list {
+            list-style: none;
+            padding: 20px 0;
+            flex: 1;
+        }
+
+        .sidebar-list-item {
+            padding: 0;
+        }
+
+        .sidebar-list-item a {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 14px 24px;
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+
+        .sidebar-list-item a .material-icons-outlined {
+            font-size: 22px;
+        }
+
+        .sidebar-list-item a:hover,
+        .sidebar-list-item a.active {
+            background: var(--hover-color);
+            color: var(--primary-color);
+        }
+
+        .sidebar-list-item a.active {
+            border-left: 3px solid var(--primary-color);
+        }
+
+        .logout-button {
+            padding: 20px 24px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .btn-logout {
+            width: 100%;
+            padding: 12px;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn-logout:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        /* Main Content */
+        .main-container {
+            grid-area: main;
+            padding: 30px;
+            overflow-y: auto;
+        }
+
+        .page-header {
+            margin-bottom: 30px;
+        }
+
+        .page-header h2 {
+            color: var(--text-primary);
+            font-size: 32px;
+            font-weight: 700;
+            margin: 0 0 8px 0;
+        }
+
+        .page-header p {
+            color: var(--text-secondary);
+            font-size: 14px;
+            margin: 0;
+        }
+
+        /* Search & Filter Section */
+        .search-filter-section {
+            background: var(--card-background);
+            padding: 24px;
+            border-radius: 16px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            margin-bottom: 30px;
+        }
+
+        .search-box {
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 14px 48px 14px 48px;
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            font-size: 14px;
+            font-family: 'Poppins', sans-serif;
+            transition: all 0.3s;
+        }
+
+        .search-box input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(67, 24, 255, 0.1);
+        }
+
+        .search-box .search-icon {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-secondary);
+            font-size: 22px;
+        }
+
+        .filter-chips {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .filter-chip {
+            padding: 10px 24px;
+            border-radius: 24px;
+            border: 2px solid var(--border-color);
+            background: var(--card-background);
+            color: var(--text-primary);
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .filter-chip:hover {
+            border-color: var(--primary-light);
+            background: var(--hover-color);
+        }
+
+        .filter-chip.active {
+            border-color: var(--primary-color);
+            background: var(--primary-color);
+            color: white;
+        }
+
+        /* Hospital Cards Grid */
+        .hospitals-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+            gap: 24px;
+        }
+
+        .hospital-card {
+            background: var(--card-background);
+            border-radius: 20px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: 2px solid transparent;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+
+        .hospital-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 12px 32px rgba(67, 24, 255, 0.15);
+            border-color: var(--primary-color);
+        }
+
+        .hospital-image {
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .hospital-image .placeholder-icon {
+            font-size: 80px;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .hospital-badge {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+
+        .hospital-badge.clinic {
+            background: rgba(255, 255, 255, 0.95);
+            color: #8B5CF6;
+        }
+
+        .hospital-badge.private {
+            background: rgba(255, 255, 255, 0.95);
+            color: #10B981;
+        }
+
+        .hospital-content {
+            padding: 24px;
+        }
+
+        .hospital-header {
+            margin-bottom: 16px;
+        }
+
+        .hospital-name {
+            color: var(--text-primary);
+            font-size: 20px;
+            font-weight: 700;
+            margin: 0 0 8px 0;
+        }
+
+        .hospital-type {
+            color: var(--text-secondary);
+            font-size: 13px;
+            font-weight: 500;
+            display: inline-block;
+            padding: 4px 12px;
+            background: var(--hover-color);
+            border-radius: 6px;
+        }
+
+        .hospital-details {
+            margin: 16px 0;
+        }
+
+        .detail-item {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 12px;
+            font-size: 14px;
+        }
+
+        .detail-item .material-icons-outlined {
+            font-size: 20px;
+            color: var(--primary-color);
+            margin-right: 12px;
+            flex-shrink: 0;
+        }
+
+        .detail-text {
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+
+        .hospital-stats {
+            display: flex;
+            justify-content: space-around;
+            padding: 16px 0;
+            border-top: 1px solid var(--border-color);
+            border-bottom: 1px solid var(--border-color);
+            margin: 16px 0;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--primary-color);
+            display: block;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: var(--text-secondary);
+            margin-top: 4px;
+        }
+
+        .hospital-actions {
+            display: flex;
+            gap: 12px;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+
+        .btn-primary {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(67, 24, 255, 0.3);
+        }
+
+        .btn-secondary {
+            background: var(--hover-color);
+            color: var(--primary-color);
+            border: 2px solid var(--border-color);
+        }
+
+        .btn-secondary:hover {
+            background: var(--border-color);
+            border-color: var(--primary-color);
+        }
+
+        /* Mobile Sidebar Toggle */
+        #sidebar.open {
+            transform: translateX(0);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1200px) {
+            .hospitals-grid {
+                grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            }
+        }
+
+        @media (max-width: 968px) {
+            .grid-container {
+                grid-template-columns: 1fr;
+                grid-template-areas:
+                    "header"
+                    "main";
+            }
+
+            .menu-icon {
+                display: block;
+            }
+
+            #sidebar {
+                position: fixed;
+                left: 0;
+                top: 0;
+                width: 260px;
+                height: 100vh;
+                z-index: 200;
+                transform: translateX(-100%);
+                transition: transform 0.3s ease;
+            }
+
+            .sidebar-title .material-icons-outlined {
+                display: block;
+            }
+
+            .hospitals-grid {
+                grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            }
+        }
+
+        @media (max-width: 768px) {
+            .main-container {
+                padding: 20px;
+            }
+
+            .page-header h2 {
+                font-size: 26px;
+            }
+
+            .search-filter-section {
+                padding: 20px;
+            }
+
+            .filter-chips {
+                gap: 8px;
+            }
+
+            .filter-chip {
+                padding: 8px 16px;
+                font-size: 13px;
+            }
+
+            .hospitals-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .main-container {
+                padding: 16px;
+            }
+
+            .page-header h2 {
+                font-size: 22px;
+            }
+
+            .hospital-content {
+                padding: 20px;
+            }
+
+            .hospital-stats {
+                flex-wrap: wrap;
+                gap: 16px;
+            }
+
+            .stat-item {
+                flex: 1 1 45%;
+            }
+
+            .hospital-actions {
+                flex-direction: column;
+            }
+
+            .header {
+                padding: 0 16px;
+            }
+
+            .header-left h4 {
+                font-size: 16px;
+            }
+        }
+
+        /* Overlay for mobile sidebar */
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 150;
+        }
+
+        .overlay.show {
+            display: block;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Overlay for mobile -->
+    <div class="overlay" id="overlay" onclick="closeSidebar()"></div>
+
+    <div class="grid-container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-left">
+                <div class="menu-icon" onclick="openSidebar()">
+                    <span class="material-icons-outlined">menu</span>
+                </div>
+                <h4>Find Hospitals</h4>
+            </div>
+            <div class="header-right">
+                <span class="material-icons-outlined">notifications</span>
+                <span class="material-icons-outlined">account_circle</span>
+            </div>
+        </header>
+
+        <!-- Sidebar -->
+        <aside id="sidebar">
+            <div class="sidebar-title">
+                <div class="sidebar-brand">
+                    <span class="material-icons-outlined">add_box</span>
+                    <strong><a href="profile.html">PADY</a></strong>
+                </div>
+                <span class="material-icons-outlined" onclick="closeSidebar()">close</span>
+            </div>
+            
+            <ul class="sidebar-list">
+                <li class="sidebar-list-item">
+                    <a href="profile.html">
+                        <span class="material-icons-outlined">person</span>
+                        My Profile
+                    </a>
+                </li>
+                <li class="sidebar-list-item">
+                    <a href="hospitals.html" class="active">
+                        <span class="material-icons-outlined">add_box</span>
+                        Find Hospitals
+                    </a>
+                </li>
+                <li class="sidebar-list-item">
+                    <a href="consultation.html">
+                        <span class="material-icons-outlined">event</span>
+                        Book Appointment
+                    </a>
+                </li>
+                <li class="sidebar-list-item">
+                    <a href="records.html">
+                        <span class="material-icons-outlined">folder</span>
+                        Medical Records
+                    </a>
+                </li>
+                <li class="sidebar-list-item">
+                    <a href="view_bill.html">
+                        <span class="material-icons-outlined">receipt</span>
+                        View Bills
+                    </a>
+                </li>
+                <li class="sidebar-list-item">
+                    <a href="payment.html">
+                        <span class="material-icons-outlined">credit_card</span>
+                        Payments
+                    </a>
+                </li>
+            </ul>
+
+            <div class="logout-button">
+                <button class="btn-logout" onclick="window.location.href='login.html'">
+                    <span class="material-icons-outlined">logout</span>
+                    Logout
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-container">
+            <!-- Page Header -->
+            <div class="page-header">
+                <h2>Find Healthcare Facilities</h2>
+                <p>Browse and book appointments at top hospitals in Kigali</p>
+            </div>
+
+            <!-- Search & Filter -->
+            <div class="search-filter-section">
+                <div class="search-box">
+                    <span class="material-icons-outlined search-icon">search</span>
+                    <input type="text" id="hospital-search" placeholder="Search hospitals by name or location...">
+                </div>
+                <div class="filter-chips">
+                    <div class="filter-chip active" data-filter="all">All Hospitals</div>
+                    <div class="filter-chip" data-filter="public">Public</div>
+                    <div class="filter-chip" data-filter="private">Private</div>
+                    <div class="filter-chip" data-filter="clinic">Clinics</div>
+                    <div class="filter-chip" data-filter="specialty">Specialty Centers</div>
+                </div>
+            </div>
+
+            <!-- Hospitals Grid -->
+            <div class="hospitals-grid" id="hospitals-container">
+                <!-- Hospital Card 1 -->
+                <div class="hospital-card" data-type="public">
+                    <div class="hospital-image">
+                        <span class="material-icons-outlined placeholder-icon">local_hospital</span>
+                        <div class="hospital-badge">Open 24/7</div>
+                    </div>
+                    <div class="hospital-content">
+                        <div class="hospital-header">
+                            <h3 class="hospital-name">King Faisal Hospital</h3>
+                            <span class="hospital-type">Referral Hospital</span>
+                        </div>
+                        <div class="hospital-details">
+                            <div class="detail-item">
+                                <span class="material-icons-outlined">location_on</span>
+                                <span class="detail-text">KG 544 St, Kacyiru, Kigali</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="material-icons-outlined">phone</span>
+                                <span class="detail-text">+250 788 490 000</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="material-icons-outlined">medical_services</span>
+                                <span class="detail-text">Emergency, Surgery, Cardiology, Pediatrics</span>
+                            </div>
+                        </div>
+                        <div class="hospital-stats">
+                            <div class="stat-item">
+                                <span class="stat-value">150+</span>
+                                <span class="stat-label">Doctors</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-value">300+</span>
+                                <span class="stat-label">Beds</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-value">4.8</span>
+                                <span class="stat-label">Rating</span>
+                            </div>
+                        </div>
+                        <div class="hospital-actions">
+                            <button class="btn btn-primary" onclick="bookAppointment('King Faisal Hospital')">
+                                <span class="material-icons-outlined" style="font-size: 18px;">event</span>
+                                Book Now
+                            </button>
+                            <button class="btn btn-secondary" onclick="viewDetails('King Faisal Hospital')">
+                                <span class="material-icons-outlined" style="font-size: 18px;">info</span>
+                                Details
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Hospital Card 2 -->
+                <div class="hospital-card" data-type="public">
+                    <div class="hospital-image">
+                        <span class="material-icons-outlined placeholder-icon">local_hospital</span>
+                        <div class="hospital-badge">Open 24/7</div>
+                    </div>
+                    <div class="hospital-content">
+                        <div class="hospital-header">
+                            <h3 class="hospital-name">CHUK</h3>
+                            <span class="hospital-type">Teaching Hospital</span>
+                        </div>
+                        <div class="hospital-details">
+                            <div class="detail-item">
+                                <span class="material-icons-outlined">location_on</span>
+                                <span class="detail-text">KG 7 Ave, Nyarugenge, Kigali</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="material-icons-outlined">phone</span>
+                                <span class="detail-text">+250 788 490 100</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="material-icons-outlined">medical_services</span>
+                                <span class="detail-text">General Medicine, Surgery, Maternity, Oncology</span>
+                            </div>
+                        </div>
+                        <div class="hospital-stats">
+                            <div class="stat-item">
+                                <span class="stat-value">200+</span>
+                                <span class="stat-label">Doctors</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-value">500+</span>
+                                <span class="stat-label">Beds</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-value">4.7</span>
+                                <span class="stat-label">Rating</span>
+                            </div>
+                        </div>
+                        <div class="hospital-actions">
+                            <button class="btn btn-primary" onclick="bookAppointment('CHUK')">
+                                <span class="material-icons-outlined" style="font-size: 18px;">event</span>
+                                Book Now
+                            </button>
+                            <button class="btn btn-secondary" onclick="viewDetails('CHUK')">
+                                <span class="material-icons-outlined" style="font-size: 18px;">info</span>
+                                Details
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Hospital Card 3 -->
+                <div class="hospital-card" data-type="public">
+                    <div class="hospital-image">
+                        <span class="material-icons-outlined placeholder-icon">local_hospital</span>
+                        <div class="hospital-badge">Open 24/7</div>
+                    </div>
+                    <div class="hospital-content">
+                        <div class="hospital-header">
+                            <h3 class="hospital-name">Kanombe Military Hospital</h3>
+                            <span class="hospital-type">Military Hospital</span>
+                        </div>
+                        <div class="hospital-details">
+                            <div class="detail-item">
+                                <span class="material-icons-outlined">location_on</span>
+                                <span class="detail-text">Kanombe, Kigali</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="material-icons-outlined">phone</span>
+                                <span class="detail-text">+250 788 490 200</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="material-icons-outlined">medical_services</span>
+                                <span class="detail-text">General Medicine, Emergency, Diagnostics</span>
+                            </div>
+                        </div>
+                        <div class="hospital-stats">
+                            <div class="stat-item">
+                                <span class="stat-value">80+</span>
+                                <span class="stat-label">Doctors</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-value">150+</span>
+                                <span class="stat-label">Beds</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-value">4.6</span>
+                                <span class="stat-label">Rating</span>
+                            </div>
+                        </div>
+                        <div class="hospital-actions">
+                            <button class="btn btn-primary" onclick="bookAppointment('Kanombe Hospital')">
+                                <span class="material-icons-outlined" style="font-size: 18px;">event</span>
+                                Book Now
+                            </button>
+                            <button class="btn btn-secondary" onclick="viewDetails('Kanombe Hospital')">
+                                <span class="material-icons-outlined" style="font-size: 18px;">info</span>
+                                Details
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Hospital Card 4 -->
+                <div class="hospital-card" data-type="clinic">
+                    <div class="hospital-image">
+                        <span class="material-icons-outlined placeholder-icon">local_hospital</span>
+                        <div class="hospital-badge clinic">Clinic</div>
+                    </div>
+                    <div class="hospital-content">
+                        <div class="hospital-header">
+                            <h3 class="hospital-name">Plateau Poly-Clinic</h3>
+                            <span class="hospital-type">Private Clinic</span>
+                        </div>
+                        <div class="hospital-details">
+                            <div class="detail-item">
+                                <span class="material-icons-outlined">location_on</span>
+                                <span class="detail-text">KN 4 Ave, Nyarugenge, Kigali</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="material-icons-outlined">phone</span>
+                                <span class="detail-text">+250 788 490 300</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="material-icons-outlined">medical_services</span>
+                                <span class="detail-text">Consultation, Laboratory, Pharmacy</span>
+                            </div>
+                        </div>
+                        <div class="hospital-stats">
+                            <div class="stat-item">
+                                <span class="stat-value">25+</span>
+                                <span class="stat-label">Doctors</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-value">40+</span>
+                                <span class="stat-label">Beds</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-value">4.9</span>
+                                <span class="stat-label">Rating</span>
+                            </div>
+                        </div>
+                        <div class="hospital-actions">
+                            <button class="btn btn-primary" onclick="bookAppointment('Plateau Poly-Clinic')">
+                                <span class="material-icons-outlined" style="font-size: 18px;">event</span>
+                                Book Now
+                            </button>
+                            <button class="btn btn-secondary" onclick="viewDetails('Plateau Poly-Clinic')">
+                                <span class="material-icons-outlined" style="font-size: 18px;">info</span>
+                                Details
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <script>
+        // Sidebar toggle for mobile
+        function openSidebar() {
+            document.getElementById('sidebar').classList.add('open');
+            document.getElementById('overlay').classList.add('show');
+        }
+
+        function closeSidebar() {
+            document.getElementById('sidebar').classList.remove('open');
+            document.getElementById('overlay').classList.remove('show');
+        }
+
+        // Filter functionality
+        document.querySelectorAll('.filter-chip').forEach(chip => {
+            chip.addEventListener('click', function() {
+                // Update active state
+                document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+                this.classList.add('active');
+                
+                const filter = this.dataset.filter;
+                const cards = document.querySelectorAll('.hospital-card');
+                
+                cards.forEach(card => {
+                    if (filter === 'all' || card.dataset.type === filter) {
+                        card.style.display = 'block';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+            });
+        });
+
+        // Search functionality
+        document.getElementById('hospital-search').addEventListener('input', function(e) {
+            const searchTerm = e.target.value.toLowerCase();
+            const cards = document.querySelectorAll('.hospital-card');
+            
+            cards.forEach(card => {
+                const hospitalName = card.querySelector('.hospital-name').textContent.toLowerCase();
+                const location = card.querySelector('.detail-text').textContent.toLowerCase();
+                
+                if (hospitalName.includes(searchTerm) || location.includes(searchTerm)) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        });
+
+        // Book appointment
+        function bookAppointment(hospitalName) {
+            localStorage.setItem('selectedHospital', hospitalName);
+            window.location.href = 'consultation.html';
+        }
+
+        // View details
+        function viewDetails(hospitalName) {
+            alert(`Viewing details for ${hospitalName}\n\nThis would open a detailed view with:\n- Full hospital information\n- Available doctors\n- Departments\n- Services\n- Reviews\n- And more...`);
+        }
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile - PADY</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --primary: #4318FF; --primary-dark: #2D0FDB; --secondary: #05CD99;
+            --bg: #f5f7fa; --card-bg: #fff; --text: #2B3674; --text-light: #A3AED0;
+            --border: #E9EDF7; --hover: #F4F7FE;
+        }
+        body { font-family: 'Poppins', sans-serif; background: var(--bg); }
+        .grid-container {
+            display: grid; grid-template-columns: 260px 1fr;
+            grid-template-rows: 70px 1fr; min-height: 100vh;
+            grid-template-areas: "sidebar header" "sidebar main";
+        }
+        .header {
+            grid-area: header; background: #f8f9fa; display: flex;
+            align-items: center; justify-content: space-between; padding: 0 30px;
+            border-bottom: 1px solid var(--border);
+        }
+        .header-left h4 { color: var(--text); font-size: 18px; font-weight: 600; }
+        .header-right { display: flex; gap: 20px; align-items: center; }
+        .header-right .material-icons-outlined { font-size: 24px; color: var(--text-light); cursor: pointer; }
+        #sidebar {
+            grid-area: sidebar; background: var(--card-bg); border-right: 1px solid var(--border);
+            position: sticky; top: 0; height: 100vh; overflow-y: auto;
+        }
+        .sidebar-brand {
+            display: flex; align-items: center; gap: 12px; padding: 20px 24px;
+            border-bottom: 1px solid var(--border);
+        }
+        .sidebar-brand .material-icons-outlined { font-size: 32px; color: var(--primary); }
+        .sidebar-brand strong { font-size: 24px; font-weight: 700; color: var(--primary); }
+        .sidebar-list { list-style: none; padding: 20px 0; }
+        .sidebar-list a {
+            display: flex; align-items: center; gap: 16px; padding: 14px 24px;
+            color: var(--text-light); text-decoration: none; font-size: 14px;
+            transition: all 0.3s; font-weight: 500;
+        }
+        .sidebar-list a:hover, .sidebar-list a.active {
+            background: var(--hover); color: var(--primary);
+        }
+        .sidebar-list a.active { border-left: 3px solid var(--primary); }
+        .logout-button { padding: 20px 24px; border-top: 1px solid var(--border); }
+        .btn-logout {
+            width: 100%; padding: 12px; background: var(--primary); color: white;
+            border: none; border-radius: 10px; font-size: 14px; font-weight: 600;
+            cursor: pointer; transition: all 0.3s; display: flex; align-items: center;
+            justify-content: center; gap: 8px;
+        }
+        .main-container { grid-area: main; padding: 30px; overflow-y: auto; }
+        .page-header { margin-bottom: 30px; }
+        .page-header h2 { font-size: 32px; font-weight: 700; color: var(--text); margin-bottom: 8px; }
+        .page-header p { color: var(--text-light); font-size: 14px; }
+        
+        /* Profile Section */
+        .profile-section {
+            display: grid; grid-template-columns: 350px 1fr; gap: 30px;
+            margin-bottom: 30px;
+        }
+        
+        /* Profile Card */
+        .profile-card {
+            background: var(--card-bg); padding: 32px; border-radius: 16px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08); text-align: center;
+        }
+        .profile-avatar {
+            width: 120px; height: 120px; border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            margin: 0 auto 20px; display: flex; align-items: center;
+            justify-content: center; font-size: 48px; color: white;
+            position: relative; cursor: pointer; transition: all 0.3s;
+        }
+        .profile-avatar:hover { transform: scale(1.05); }
+        .avatar-edit {
+            position: absolute; bottom: 5px; right: 5px; width: 32px; height: 32px;
+            background: var(--primary); border-radius: 50%; display: flex;
+            align-items: center; justify-content: center; font-size: 16px;
+            color: white; cursor: pointer; border: 3px solid white;
+        }
+        .profile-name { font-size: 24px; font-weight: 700; color: var(--text); margin-bottom: 8px; }
+        .profile-role {
+            display: inline-block; padding: 6px 12px; background: rgba(67,24,255,0.1);
+            color: var(--primary); border-radius: 20px; font-size: 12px;
+            font-weight: 600; margin-bottom: 20px;
+        }
+        .profile-email { font-size: 14px; color: var(--text-light); margin-bottom: 20px; }
+        .btn-edit-profile {
+            width: 100%; padding: 12px; background: var(--primary); color: white;
+            border: none; border-radius: 10px; font-size: 14px; font-weight: 600;
+            cursor: pointer; transition: all 0.3s; display: flex; align-items: center;
+            justify-content: center; gap: 8px;
+        }
+        .btn-edit-profile:hover { background: var(--primary-dark); transform: translateY(-2px); }
+        
+        /* Info Card */
+        .info-card {
+            background: var(--card-bg); padding: 32px; border-radius: 16px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+        .info-card h3 {
+            font-size: 20px; font-weight: 600; color: var(--text);
+            margin-bottom: 24px; display: flex; align-items: center; gap: 12px;
+        }
+        .info-card h3 .material-icons-outlined { font-size: 24px; color: var(--primary); }
+        .info-grid {
+            display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px;
+        }
+        .info-item { }
+        .info-label {
+            display: flex; align-items: center; gap: 8px; font-size: 13px;
+            color: var(--text-light); margin-bottom: 6px;
+        }
+        .info-label .material-icons-outlined { font-size: 16px; }
+        .info-value { font-size: 15px; color: var(--text); font-weight: 500; }
+        
+        /* Settings Cards */
+        .settings-section { margin-bottom: 30px; }
+        .section-title {
+            font-size: 20px; font-weight: 600; color: var(--text); margin-bottom: 20px;
+        }
+        .settings-card {
+            background: var(--card-bg); padding: 24px; border-radius: 16px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08); margin-bottom: 20px;
+        }
+        .settings-card h4 {
+            font-size: 16px; font-weight: 600; color: var(--text);
+            margin-bottom: 16px; display: flex; align-items: center; gap: 12px;
+        }
+        .setting-item {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 16px 0; border-bottom: 1px solid var(--border);
+        }
+        .setting-item:last-child { border-bottom: none; }
+        .setting-info h5 { font-size: 14px; font-weight: 600; color: var(--text); margin-bottom: 4px; }
+        .setting-info p { font-size: 13px; color: var(--text-light); }
+        .toggle-switch {
+            width: 50px; height: 26px; background: var(--border);
+            border-radius: 13px; cursor: pointer; position: relative;
+            transition: all 0.3s;
+        }
+        .toggle-switch.active { background: var(--primary); }
+        .toggle-slider {
+            width: 20px; height: 20px; background: white; border-radius: 50%;
+            position: absolute; top: 3px; left: 3px; transition: all 0.3s;
+        }
+        .toggle-switch.active .toggle-slider { left: 27px; }
+        .btn-change {
+            padding: 8px 16px; background: rgba(67,24,255,0.1); color: var(--primary);
+            border: none; border-radius: 8px; font-size: 13px; font-weight: 600;
+            cursor: pointer; transition: all 0.3s;
+        }
+        .btn-change:hover { background: rgba(67,24,255,0.2); }
+        
+        /* Activity Log */
+        .activity-log {
+            background: var(--card-bg); padding: 24px; border-radius: 16px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+        .activity-item {
+            padding: 16px; background: var(--hover); border-radius: 10px;
+            margin-bottom: 12px; border-left: 3px solid var(--primary);
+        }
+        .activity-item:last-child { margin-bottom: 0; }
+        .activity-header {
+            display: flex; justify-content: space-between; align-items: start;
+            margin-bottom: 8px;
+        }
+        .activity-title { font-size: 14px; font-weight: 600; color: var(--text); }
+        .activity-time { font-size: 12px; color: var(--text-light); }
+        .activity-desc { font-size: 13px; color: var(--text-light); }
+        
+        @media (max-width: 1200px) {
+            .profile-section { grid-template-columns: 1fr; }
+            .info-grid { grid-template-columns: 1fr; }
+        }
+        @media (max-width: 968px) {
+            .grid-container { grid-template-columns: 1fr; grid-template-areas: "header" "main"; }
+            #sidebar { display: none; }
+        }
+        @media (max-width: 640px) {
+            .main-container { padding: 20px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="grid-container">
+        <header class="header">
+            <div class="header-left"><h4>My Profile</h4></div>
+            <div class="header-right">
+                <span class="material-icons-outlined">notifications</span>
+                <span class="material-icons-outlined">account_circle</span>
+            </div>
+        </header>
+
+        <aside id="sidebar">
+            <div class="sidebar-brand">
+                <span class="material-icons-outlined">local_hospital</span>
+                <strong>PADY</strong>
+            </div>
+            <ul class="sidebar-list">
+                <li><a href="dashboard.html"><span class="material-icons-outlined">dashboard</span> Dashboard</a></li>
+                <li><a href="patient_management.html"><span class="material-icons-outlined">people</span> Patient Management</a></li>
+                <li><a href="add_patient.html"><span class="material-icons-outlined">person_add</span> Add Patient</a></li>
+                <li><a href="doctor_management.html"><span class="material-icons-outlined">medical_services</span> Doctor Management</a></li>
+                <li><a href="hospital_management.html"><span class="material-icons-outlined">local_hospital</span> Hospital Management</a></li>
+                <li><a href="Scheduling.html"><span class="material-icons-outlined">event</span> Scheduling</a></li>
+                <li><a href="generate_bill.html"><span class="material-icons-outlined">receipt</span> Generate Bill</a></li>
+                <li><a href="Patient_Reports.html"><span class="material-icons-outlined">description</span> Patient Reports</a></li>
+                <li><a href="patient_testing_log.html"><span class="material-icons-outlined">science</span> Testing Log</a></li>
+                <li><a href="profile.html" class="active"><span class="material-icons-outlined">person</span> Profile</a></li>
+            </ul>
+            <div class="logout-button">
+                <button class="btn-logout" onclick="window.location.href='login.html'">
+                    <span class="material-icons-outlined">logout</span> Logout
+                </button>
+            </div>
+        </aside>
+
+        <main class="main-container">
+            <div class="page-header">
+                <h2>My Profile</h2>
+                <p>Manage your account settings and preferences</p>
+            </div>
+
+            <!-- Profile Section -->
+            <div class="profile-section">
+                <!-- Profile Card -->
+                <div class="profile-card">
+                    <div class="profile-avatar">
+                        <span class="material-icons-outlined" style="font-size: 60px;">person</span>
+                        <div class="avatar-edit">
+                            <span class="material-icons-outlined" style="font-size: 16px;">edit</span>
+                        </div>
+                    </div>
+                    <div class="profile-name">Admin User</div>
+                    <div class="profile-role">Hospital Administrator</div>
+                    <div class="profile-email">admin@pady.com</div>
+                    <button class="btn-edit-profile" onclick="editProfile()">
+                        <span class="material-icons-outlined" style="font-size: 18px;">edit</span>
+                        Edit Profile
+                    </button>
+                </div>
+
+                <!-- Personal Information -->
+                <div class="info-card">
+                    <h3>
+                        <span class="material-icons-outlined">info</span>
+                        Personal Information
+                    </h3>
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <div class="info-label">
+                                <span class="material-icons-outlined">person</span>
+                                Full Name
+                            </div>
+                            <div class="info-value">Admin User</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">
+                                <span class="material-icons-outlined">email</span>
+                                Email Address
+                            </div>
+                            <div class="info-value">admin@pady.com</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">
+                                <span class="material-icons-outlined">phone</span>
+                                Phone Number
+                            </div>
+                            <div class="info-value">+250 788 000 000</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">
+                                <span class="material-icons-outlined">work</span>
+                                Role
+                            </div>
+                            <div class="info-value">Hospital Administrator</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">
+                                <span class="material-icons-outlined">badge</span>
+                                Employee ID
+                            </div>
+                            <div class="info-value">EMP-2024-001</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">
+                                <span class="material-icons-outlined">local_hospital</span>
+                                Hospital/Branch
+                            </div>
+                            <div class="info-value">PADY - Kigali Branch</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">
+                                <span class="material-icons-outlined">event</span>
+                                Joined Date
+                            </div>
+                            <div class="info-value">January 15, 2024</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">
+                                <span class="material-icons-outlined">location_on</span>
+                                Location
+                            </div>
+                            <div class="info-value">Kigali, Rwanda</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Account Settings -->
+            <div class="settings-section">
+                <h3 class="section-title">Account Settings</h3>
+                
+                <div class="settings-card">
+                    <h4>
+                        <span class="material-icons-outlined">notifications</span>
+                        Notifications
+                    </h4>
+                    <div class="setting-item">
+                        <div class="setting-info">
+                            <h5>Email Notifications</h5>
+                            <p>Receive email updates about appointments and reports</p>
+                        </div>
+                        <div class="toggle-switch active" onclick="toggleSetting(this)">
+                            <div class="toggle-slider"></div>
+                        </div>
+                    </div>
+                    <div class="setting-item">
+                        <div class="setting-info">
+                            <h5>SMS Notifications</h5>
+                            <p>Get SMS alerts for urgent updates</p>
+                        </div>
+                        <div class="toggle-switch active" onclick="toggleSetting(this)">
+                            <div class="toggle-slider"></div>
+                        </div>
+                    </div>
+                    <div class="setting-item">
+                        <div class="setting-info">
+                            <h5>Push Notifications</h5>
+                            <p>Receive browser push notifications</p>
+                        </div>
+                        <div class="toggle-switch" onclick="toggleSetting(this)">
+                            <div class="toggle-slider"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="settings-card">
+                    <h4>
+                        <span class="material-icons-outlined">security</span>
+                        Security
+                    </h4>
+                    <div class="setting-item">
+                        <div class="setting-info">
+                            <h5>Password</h5>
+                            <p>Last changed 30 days ago</p>
+                        </div>
+                        <button class="btn-change" onclick="changePassword()">Change</button>
+                    </div>
+                    <div class="setting-item">
+                        <div class="setting-info">
+                            <h5>Two-Factor Authentication</h5>
+                            <p>Add extra security to your account</p>
+                        </div>
+                        <div class="toggle-switch" onclick="toggleSetting(this)">
+                            <div class="toggle-slider"></div>
+                        </div>
+                    </div>
+                    <div class="setting-item">
+                        <div class="setting-info">
+                            <h5>Active Sessions</h5>
+                            <p>Manage devices and sessions</p>
+                        </div>
+                        <button class="btn-change" onclick="manageSessions()">Manage</button>
+                    </div>
+                </div>
+
+                <div class="settings-card">
+                    <h4>
+                        <span class="material-icons-outlined">palette</span>
+                        Preferences
+                    </h4>
+                    <div class="setting-item">
+                        <div class="setting-info">
+                            <h5>Language</h5>
+                            <p>Choose your preferred language</p>
+                        </div>
+                        <button class="btn-change" onclick="changeLanguage()">English</button>
+                    </div>
+                    <div class="setting-item">
+                        <div class="setting-info">
+                            <h5>Theme</h5>
+                            <p>Switch between light and dark mode</p>
+                        </div>
+                        <button class="btn-change" onclick="changeTheme()">Light</button>
+                    </div>
+                    <div class="setting-item">
+                        <div class="setting-info">
+                            <h5>Time Zone</h5>
+                            <p>Set your local time zone</p>
+                        </div>
+                        <button class="btn-change" onclick="changeTimezone()">CAT (GMT+2)</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Activity -->
+            <div class="activity-log">
+                <h3 class="section-title">Recent Activity</h3>
+                
+                <div class="activity-item">
+                    <div class="activity-header">
+                        <div class="activity-title">Generated Bill</div>
+                        <div class="activity-time">2 hours ago</div>
+                    </div>
+                    <div class="activity-desc">Created bill #INV-2024-0245 for Marie Uwase</div>
+                </div>
+
+                <div class="activity-item">
+                    <div class="activity-header">
+                        <div class="activity-title">Scheduled Appointment</div>
+                        <div class="activity-time">5 hours ago</div>
+                    </div>
+                    <div class="activity-desc">Booked appointment for Jean Mugabo with Dr. Sarah Smith</div>
+                </div>
+
+                <div class="activity-item">
+                    <div class="activity-header">
+                        <div class="activity-title">Added New Patient</div>
+                        <div class="activity-time">1 day ago</div>
+                    </div>
+                    <div class="activity-desc">Registered new patient Patrick Niyonzima (#PAT-0003)</div>
+                </div>
+
+                <div class="activity-item">
+                    <div class="activity-header">
+                        <div class="activity-title">Updated Patient Records</div>
+                        <div class="activity-time">2 days ago</div>
+                    </div>
+                    <div class="activity-desc">Modified medical records for Claire Umutoni</div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        function editProfile() {
+            alert('Edit profile form would open here');
+        }
+
+        function toggleSetting(toggle) {
+            toggle.classList.toggle('active');
+        }
+
+        function changePassword() {
+            alert('Change password form would open here');
+        }
+
+        function manageSessions() {
+            alert('Active sessions management would open here');
+        }
+
+        function changeLanguage() {
+            alert('Language selection would open here');
+        }
+
+        function changeTheme() {
+            alert('Theme selection would open here');
+        }
+
+        function changeTimezone() {
+            alert('Timezone selection would open here');
+        }
+    </script>
+</body>
+</html>

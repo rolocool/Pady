@@ -1,0 +1,1015 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up - PADY Healthcare</title>
+    <!-- Poppins Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Material Icons -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #4318FF;
+            --primary-dark: #2D0FDB;
+            --secondary-color: #05CD99;
+            --background-color: #f5f7fa;
+            --card-background: #ffffff;
+            --text-primary: #2B3674;
+            --text-secondary: #A3AED0;
+            --border-color: #E9EDF7;
+            --error-color: #EE5D50;
+            --success-color: #05CD99;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .signup-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            background: var(--card-background);
+            border-radius: 24px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+            max-width: 1100px;
+            width: 100%;
+            min-height: 700px;
+        }
+
+        /* Left Side - Form */
+        .signup-form-section {
+            padding: 50px 45px;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+            max-height: 90vh;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 30px;
+        }
+
+        .logo img {
+            height: 40px;
+        }
+
+        .logo-text {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        .signup-header {
+            margin-bottom: 30px;
+        }
+
+        .signup-header h1 {
+            color: var(--text-primary);
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .signup-header p {
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group.full-width {
+            grid-column: 1 / -1;
+        }
+
+        .form-group label {
+            display: block;
+            color: var(--text-primary);
+            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: 8px;
+        }
+
+        .input-wrapper {
+            position: relative;
+        }
+
+        .input-wrapper .material-icons-outlined {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-secondary);
+            font-size: 20px;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 14px 16px 14px 48px;
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            font-size: 14px;
+            font-family: 'Poppins', sans-serif;
+            color: var(--text-primary);
+            transition: all 0.3s ease;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 4px rgba(67, 24, 255, 0.1);
+        }
+
+        .form-control.error {
+            border-color: var(--error-color);
+        }
+
+        select.form-control {
+            cursor: pointer;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23A3AED0' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 16px center;
+            padding-right: 40px;
+        }
+
+        .error-message {
+            color: var(--error-color);
+            font-size: 12px;
+            margin-top: 6px;
+            display: none;
+        }
+
+        .password-toggle {
+            position: absolute;
+            right: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            cursor: pointer;
+            padding: 4px;
+            display: flex;
+            align-items: center;
+        }
+
+        .password-toggle:hover {
+            color: var(--primary-color);
+        }
+
+        .password-strength {
+            margin-top: 8px;
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+            overflow: hidden;
+            display: none;
+        }
+
+        .password-strength-bar {
+            height: 100%;
+            width: 0%;
+            transition: all 0.3s;
+            border-radius: 2px;
+        }
+
+        .password-strength-bar.weak {
+            width: 33%;
+            background: var(--error-color);
+        }
+
+        .password-strength-bar.medium {
+            width: 66%;
+            background: #FFB547;
+        }
+
+        .password-strength-bar.strong {
+            width: 100%;
+            background: var(--success-color);
+        }
+
+        .password-hint {
+            font-size: 12px;
+            color: var(--text-secondary);
+            margin-top: 6px;
+        }
+
+        .terms-checkbox {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        .terms-checkbox input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+            accent-color: var(--primary-color);
+            margin-top: 2px;
+            flex-shrink: 0;
+        }
+
+        .terms-checkbox label {
+            color: var(--text-primary);
+            font-size: 14px;
+            cursor: pointer;
+            margin: 0;
+            line-height: 1.5;
+        }
+
+        .terms-checkbox label a {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .terms-checkbox label a:hover {
+            text-decoration: underline;
+        }
+
+        .btn-signup {
+            width: 100%;
+            padding: 16px;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 24px;
+        }
+
+        .btn-signup:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(67, 24, 255, 0.3);
+        }
+
+        .btn-signup:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-signup .spinner {
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-top-color: white;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            display: none;
+        }
+
+        .btn-signup.loading .spinner {
+            display: block;
+        }
+
+        .btn-signup.loading .btn-text {
+            display: none;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .divider {
+            display: flex;
+            align-items: center;
+            margin: 24px 0;
+        }
+
+        .divider::before,
+        .divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: var(--border-color);
+        }
+
+        .divider span {
+            padding: 0 16px;
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        .btn-google {
+            width: 100%;
+            padding: 14px;
+            background: white;
+            color: var(--text-primary);
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            transition: all 0.3s ease;
+            margin-bottom: 24px;
+        }
+
+        .btn-google:hover {
+            border-color: var(--primary-color);
+            background: var(--background-color);
+        }
+
+        .login-link {
+            text-align: center;
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        .login-link a {
+            color: var(--primary-color);
+            font-weight: 600;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .login-link a:hover {
+            color: var(--primary-dark);
+        }
+
+        /* Right Side - Illustration */
+        .signup-illustration {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 60px 40px;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .illustration-content {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+        }
+
+        .illustration-icon {
+            font-size: 100px;
+            margin-bottom: 32px;
+            opacity: 0.9;
+        }
+
+        .illustration-content h2 {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            line-height: 1.3;
+        }
+
+        .illustration-content p {
+            font-size: 16px;
+            opacity: 0.9;
+            line-height: 1.6;
+            max-width: 360px;
+            margin: 0 auto 40px;
+        }
+
+        .benefits-list {
+            text-align: left;
+            max-width: 360px;
+            margin: 0 auto;
+        }
+
+        .benefit-item {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+
+        .benefit-icon {
+            width: 48px;
+            height: 48px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            flex-shrink: 0;
+        }
+
+        .benefit-text {
+            flex: 1;
+        }
+
+        .benefit-text h4 {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .benefit-text p {
+            font-size: 13px;
+            opacity: 0.8;
+            margin: 0;
+        }
+
+        .circle {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .circle-1 {
+            width: 300px;
+            height: 300px;
+            top: -100px;
+            right: -100px;
+        }
+
+        .circle-2 {
+            width: 200px;
+            height: 200px;
+            bottom: -50px;
+            left: -50px;
+        }
+
+        /* Notification Toast */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 16px 24px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transform: translateX(400px);
+            transition: transform 0.3s ease;
+            z-index: 1000;
+        }
+
+        .notification.show {
+            transform: translateX(0);
+        }
+
+        .notification.success {
+            border-left: 4px solid var(--success-color);
+        }
+
+        .notification.error {
+            border-left: 4px solid var(--error-color);
+        }
+
+        .notification .icon {
+            font-size: 24px;
+        }
+
+        .notification.success .icon {
+            color: var(--success-color);
+        }
+
+        .notification.error .icon {
+            color: var(--error-color);
+        }
+
+        .notification .message {
+            color: var(--text-primary);
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 968px) {
+            .signup-container {
+                grid-template-columns: 1fr;
+                max-width: 500px;
+            }
+
+            .signup-illustration {
+                display: none;
+            }
+
+            .signup-form-section {
+                padding: 40px 30px;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 0;
+            }
+
+            .signup-container {
+                border-radius: 0;
+                min-height: 100vh;
+            }
+
+            .signup-form-section {
+                padding: 30px 20px;
+            }
+
+            .signup-header h1 {
+                font-size: 26px;
+            }
+
+            .logo {
+                margin-bottom: 20px;
+            }
+
+            .form-group {
+                margin-bottom: 16px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Notification Toast -->
+    <div id="notification" class="notification">
+        <span class="material-icons-outlined icon">check_circle</span>
+        <span class="message">Success!</span>
+    </div>
+
+    <div class="signup-container">
+        <!-- Left Side - Signup Form -->
+        <div class="signup-form-section">
+            <div class="logo">
+                <img src="Images/PADY 2.png" alt="PADY Logo" onerror="this.style.display='none'">
+                <span class="logo-text">PADY</span>
+            </div>
+
+            <div class="signup-header">
+                <h1>Create Account</h1>
+                <p>Join PADY Healthcare and manage your health digitally</p>
+            </div>
+
+            <form id="signupForm">
+                <!-- Full Name & Email -->
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="fullName">Full Name</label>
+                        <div class="input-wrapper">
+                            <span class="material-icons-outlined">person</span>
+                            <input 
+                                type="text" 
+                                id="fullName" 
+                                class="form-control" 
+                                placeholder="John Doe"
+                                required
+                            >
+                        </div>
+                        <div class="error-message" id="nameError">Please enter your full name</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">Email Address</label>
+                        <div class="input-wrapper">
+                            <span class="material-icons-outlined">email</span>
+                            <input 
+                                type="email" 
+                                id="email" 
+                                class="form-control" 
+                                placeholder="john@example.com"
+                                required
+                            >
+                        </div>
+                        <div class="error-message" id="emailError">Please enter a valid email</div>
+                    </div>
+                </div>
+
+                <!-- Phone & Date of Birth -->
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="phone">Phone Number</label>
+                        <div class="input-wrapper">
+                            <span class="material-icons-outlined">phone</span>
+                            <input 
+                                type="tel" 
+                                id="phone" 
+                                class="form-control" 
+                                placeholder="+250 788 123 456"
+                                required
+                            >
+                        </div>
+                        <div class="error-message" id="phoneError">Please enter a valid phone number</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="dob">Date of Birth</label>
+                        <div class="input-wrapper">
+                            <span class="material-icons-outlined">cake</span>
+                            <input 
+                                type="date" 
+                                id="dob" 
+                                class="form-control"
+                                required
+                            >
+                        </div>
+                        <div class="error-message" id="dobError">Please enter your date of birth</div>
+                    </div>
+                </div>
+
+                <!-- Gender & Blood Type -->
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="gender">Gender</label>
+                        <div class="input-wrapper">
+                            <span class="material-icons-outlined">person</span>
+                            <select id="gender" class="form-control" required>
+                                <option value="">Select Gender</option>
+                                <option value="male">Male</option>
+                                <option value="female">Female</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                        <div class="error-message" id="genderError">Please select your gender</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="bloodType">Blood Type (Optional)</label>
+                        <div class="input-wrapper">
+                            <span class="material-icons-outlined">bloodtype</span>
+                            <select id="bloodType" class="form-control">
+                                <option value="">Select Blood Type</option>
+                                <option value="A+">A+</option>
+                                <option value="A-">A-</option>
+                                <option value="B+">B+</option>
+                                <option value="B-">B-</option>
+                                <option value="AB+">AB+</option>
+                                <option value="AB-">AB-</option>
+                                <option value="O+">O+</option>
+                                <option value="O-">O-</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Password -->
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <div class="input-wrapper">
+                        <span class="material-icons-outlined">lock</span>
+                        <input 
+                            type="password" 
+                            id="password" 
+                            class="form-control" 
+                            placeholder="Create a strong password"
+                            required
+                        >
+                        <button type="button" class="password-toggle" id="togglePassword">
+                            <span class="material-icons-outlined">visibility_off</span>
+                        </button>
+                    </div>
+                    <div class="password-strength" id="passwordStrength">
+                        <div class="password-strength-bar" id="passwordStrengthBar"></div>
+                    </div>
+                    <div class="password-hint">Minimum 8 characters with letters and numbers</div>
+                    <div class="error-message" id="passwordError">Password is too weak</div>
+                </div>
+
+                <!-- Confirm Password -->
+                <div class="form-group">
+                    <label for="confirmPassword">Confirm Password</label>
+                    <div class="input-wrapper">
+                        <span class="material-icons-outlined">lock</span>
+                        <input 
+                            type="password" 
+                            id="confirmPassword" 
+                            class="form-control" 
+                            placeholder="Re-enter your password"
+                            required
+                        >
+                        <button type="button" class="password-toggle" id="toggleConfirmPassword">
+                            <span class="material-icons-outlined">visibility_off</span>
+                        </button>
+                    </div>
+                    <div class="error-message" id="confirmPasswordError">Passwords do not match</div>
+                </div>
+
+                <!-- Terms & Conditions -->
+                <div class="terms-checkbox">
+                    <input type="checkbox" id="terms" required>
+                    <label for="terms">
+                        I agree to the <a href="#" onclick="event.preventDefault()">Terms of Service</a> and 
+                        <a href="#" onclick="event.preventDefault()">Privacy Policy</a>
+                    </label>
+                </div>
+
+                <!-- Signup Button -->
+                <button type="submit" class="btn-signup" id="signupBtn">
+                    <span class="spinner"></span>
+                    <span class="btn-text">Create Account</span>
+                </button>
+
+                <!-- Divider -->
+                <div class="divider">
+                    <span>or sign up with</span>
+                </div>
+
+                <!-- Google Signup -->
+                <button type="button" class="btn-google" id="googleSignup">
+                    <svg width="20" height="20" viewBox="0 0 20 20">
+                        <path fill="#4285F4" d="M19.6 10.23c0-.82-.1-1.42-.25-2.05H10v3.72h5.5c-.15.96-.74 2.31-2.04 3.22v2.45h3.16c1.89-1.73 2.98-4.3 2.98-7.34z"/>
+                        <path fill="#34A853" d="M13.46 15.13c-.83.59-1.96 1-3.46 1-2.64 0-4.88-1.74-5.68-4.15H1.07v2.52C2.72 17.75 6.09 20 10 20c2.7 0 4.96-.89 6.62-2.42l-3.16-2.45z"/>
+                        <path fill="#FBBC05" d="M3.99 10c0-.69.12-1.35.32-1.97V5.51H1.07A9.973 9.973 0 000 10c0 1.61.39 3.14 1.07 4.49l3.24-2.52c-.2-.62-.32-1.28-.32-1.97z"/>
+                        <path fill="#EA4335" d="M10 3.88c1.88 0 3.13.81 3.85 1.48l2.84-2.76C14.96.99 12.7 0 10 0 6.09 0 2.72 2.25 1.07 5.51l3.24 2.52C5.12 5.62 7.36 3.88 10 3.88z"/>
+                    </svg>
+                    Sign up with Google
+                </button>
+
+                <!-- Login Link -->
+                <div class="login-link">
+                    Already have an account? <a href="login.html">Login here</a>
+                </div>
+            </form>
+        </div>
+
+        <!-- Right Side - Illustration -->
+        <div class="signup-illustration">
+            <div class="circle circle-1"></div>
+            <div class="circle circle-2"></div>
+            
+            <div class="illustration-content">
+                <div class="illustration-icon">
+                    <span class="material-icons-outlined" style="font-size: inherit;">health_and_safety</span>
+                </div>
+                
+                <h2>Join PADY Today</h2>
+                <p>Experience healthcare management like never before with our comprehensive platform</p>
+
+                <div class="benefits-list">
+                    <div class="benefit-item">
+                        <div class="benefit-icon">
+                            <span class="material-icons-outlined">verified_user</span>
+                        </div>
+                        <div class="benefit-text">
+                            <h4>Secure Platform</h4>
+                            <p>Your health data is encrypted and protected</p>
+                        </div>
+                    </div>
+
+                    <div class="benefit-item">
+                        <div class="benefit-icon">
+                            <span class="material-icons-outlined">access_time</span>
+                        </div>
+                        <div class="benefit-text">
+                            <h4>24/7 Access</h4>
+                            <p>Access your records anytime, anywhere</p>
+                        </div>
+                    </div>
+
+                    <div class="benefit-item">
+                        <div class="benefit-icon">
+                            <span class="material-icons-outlined">mobile_friendly</span>
+                        </div>
+                        <div class="benefit-text">
+                            <h4>Easy to Use</h4>
+                            <p>Simple interface on all devices</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Password toggle functionality
+        function setupPasswordToggle(inputId, toggleId) {
+            const input = document.getElementById(inputId);
+            const toggle = document.getElementById(toggleId);
+            const icon = toggle.querySelector('.material-icons-outlined');
+            
+            toggle.addEventListener('click', function() {
+                if (input.type === 'password') {
+                    input.type = 'text';
+                    icon.textContent = 'visibility';
+                } else {
+                    input.type = 'password';
+                    icon.textContent = 'visibility_off';
+                }
+            });
+        }
+
+        setupPasswordToggle('password', 'togglePassword');
+        setupPasswordToggle('confirmPassword', 'toggleConfirmPassword');
+
+        // Password strength checker
+        document.getElementById('password').addEventListener('input', function() {
+            const password = this.value;
+            const strengthBar = document.getElementById('passwordStrengthBar');
+            const strengthContainer = document.getElementById('passwordStrength');
+            
+            if (password.length === 0) {
+                strengthContainer.style.display = 'none';
+                return;
+            }
+            
+            strengthContainer.style.display = 'block';
+            
+            let strength = 0;
+            if (password.length >= 8) strength++;
+            if (password.match(/[a-z]/) && password.match(/[A-Z]/)) strength++;
+            if (password.match(/[0-9]/)) strength++;
+            if (password.match(/[^a-zA-Z0-9]/)) strength++;
+            
+            strengthBar.className = 'password-strength-bar';
+            if (strength <= 1) {
+                strengthBar.classList.add('weak');
+            } else if (strength === 2 || strength === 3) {
+                strengthBar.classList.add('medium');
+            } else {
+                strengthBar.classList.add('strong');
+            }
+        });
+
+        // Form validation and submission
+        document.getElementById('signupForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            // Get form values
+            const fullName = document.getElementById('fullName');
+            const email = document.getElementById('email');
+            const phone = document.getElementById('phone');
+            const dob = document.getElementById('dob');
+            const gender = document.getElementById('gender');
+            const bloodType = document.getElementById('bloodType');
+            const password = document.getElementById('password');
+            const confirmPassword = document.getElementById('confirmPassword');
+            const terms = document.getElementById('terms');
+            const signupBtn = document.getElementById('signupBtn');
+            
+            // Reset errors
+            document.querySelectorAll('.error-message').forEach(el => el.style.display = 'none');
+            document.querySelectorAll('.form-control').forEach(el => el.classList.remove('error'));
+            
+            let isValid = true;
+            
+            // Validate full name
+            if (!fullName.value || fullName.value.trim().length < 3) {
+                fullName.classList.add('error');
+                document.getElementById('nameError').style.display = 'block';
+                isValid = false;
+            }
+            
+            // Validate email
+            if (!email.value || !email.value.includes('@')) {
+                email.classList.add('error');
+                document.getElementById('emailError').style.display = 'block';
+                isValid = false;
+            }
+            
+            // Validate phone
+            const phoneRegex = /^[+]?[\d\s-]{10,}$/;
+            if (!phone.value || !phoneRegex.test(phone.value)) {
+                phone.classList.add('error');
+                document.getElementById('phoneError').style.display = 'block';
+                isValid = false;
+            }
+            
+            // Validate DOB
+            if (!dob.value) {
+                dob.classList.add('error');
+                document.getElementById('dobError').style.display = 'block';
+                isValid = false;
+            }
+            
+            // Validate gender
+            if (!gender.value) {
+                gender.classList.add('error');
+                document.getElementById('genderError').style.display = 'block';
+                isValid = false;
+            }
+            
+            // Validate password
+            if (!password.value || password.value.length < 8) {
+                password.classList.add('error');
+                document.getElementById('passwordError').textContent = 'Password must be at least 8 characters';
+                document.getElementById('passwordError').style.display = 'block';
+                isValid = false;
+            }
+            
+            // Validate password match
+            if (password.value !== confirmPassword.value) {
+                confirmPassword.classList.add('error');
+                document.getElementById('confirmPasswordError').style.display = 'block';
+                isValid = false;
+            }
+            
+            // Validate terms
+            if (!terms.checked) {
+                showNotification('error', 'Please accept the terms and conditions');
+                isValid = false;
+            }
+            
+            if (!isValid) return;
+            
+            // Show loading
+            signupBtn.classList.add('loading');
+            signupBtn.disabled = true;
+            
+            // Simulate signup (replace with Firebase authentication)
+            setTimeout(() => {
+                showNotification('success', 'Account created successfully! Redirecting...');
+                
+                // Store user data (for demo)
+                const userData = {
+                    fullName: fullName.value,
+                    email: email.value,
+                    phone: phone.value,
+                    dob: dob.value,
+                    gender: gender.value,
+                    bloodType: bloodType.value
+                };
+                localStorage.setItem('userData', JSON.stringify(userData));
+                
+                setTimeout(() => {
+                    window.location.href = 'login.html';
+                }, 1500);
+            }, 2000);
+        });
+
+        // Google signup
+        document.getElementById('googleSignup').addEventListener('click', function() {
+            showNotification('info', 'Google sign-up coming soon!');
+            // Implement Google sign-up here
+        });
+
+        // Notification system
+        function showNotification(type, message) {
+            const notification = document.getElementById('notification');
+            const icon = notification.querySelector('.icon');
+            const messageEl = notification.querySelector('.message');
+            
+            messageEl.textContent = message;
+            notification.className = 'notification ' + type;
+            
+            if (type === 'success') {
+                icon.textContent = 'check_circle';
+            } else if (type === 'error') {
+                icon.textContent = 'error';
+            } else {
+                icon.textContent = 'info';
+            }
+            
+            notification.classList.add('show');
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
+        }
+    </script>
+
+    <!-- Firebase Integration (when ready) -->
+    <!--
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+    <script src="../../js/firebase-config.js"></script>
+    <script src="../../js/firebase-services.js"></script>
+    <script src="../../js/app.js"></script>
+    -->
+</body>
+
+</html>

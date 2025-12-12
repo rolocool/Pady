@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hospital Management - PADY</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --primary: #4318FF; --primary-dark: #2D0FDB; --secondary: #05CD99;
+            --bg: #f5f7fa; --card-bg: #fff; --text: #2B3674; --text-light: #A3AED0;
+            --border: #E9EDF7; --hover: #F4F7FE;
+        }
+        body { font-family: 'Poppins', sans-serif; background: var(--bg); }
+        .grid-container {
+            display: grid; grid-template-columns: 260px 1fr;
+            grid-template-rows: 70px 1fr; min-height: 100vh;
+            grid-template-areas: "sidebar header" "sidebar main";
+        }
+        .header {
+            grid-area: header; background: #f8f9fa; display: flex;
+            align-items: center; justify-content: space-between; padding: 0 30px;
+            border-bottom: 1px solid var(--border);
+        }
+        .header-left h4 { color: var(--text); font-size: 18px; font-weight: 600; }
+        .header-right { display: flex; gap: 20px; align-items: center; }
+        .header-right .material-icons-outlined { font-size: 24px; color: var(--text-light); cursor: pointer; }
+        #sidebar {
+            grid-area: sidebar; background: var(--card-bg); border-right: 1px solid var(--border);
+            position: sticky; top: 0; height: 100vh; overflow-y: auto;
+        }
+        .sidebar-brand {
+            display: flex; align-items: center; gap: 12px; padding: 20px 24px;
+            border-bottom: 1px solid var(--border);
+        }
+        .sidebar-brand .material-icons-outlined { font-size: 32px; color: var(--primary); }
+        .sidebar-brand strong { font-size: 24px; font-weight: 700; color: var(--primary); }
+        .sidebar-list { list-style: none; padding: 20px 0; }
+        .sidebar-list a {
+            display: flex; align-items: center; gap: 16px; padding: 14px 24px;
+            color: var(--text-light); text-decoration: none; font-size: 14px;
+            transition: all 0.3s; font-weight: 500;
+        }
+        .sidebar-list a:hover, .sidebar-list a.active {
+            background: var(--hover); color: var(--primary);
+        }
+        .sidebar-list a.active { border-left: 3px solid var(--primary); }
+        .logout-button { padding: 20px 24px; border-top: 1px solid var(--border); }
+        .btn-logout {
+            width: 100%; padding: 12px; background: var(--primary); color: white;
+            border: none; border-radius: 10px; font-size: 14px; font-weight: 600;
+            cursor: pointer; transition: all 0.3s; display: flex; align-items: center;
+            justify-content: center; gap: 8px;
+        }
+        .main-container { grid-area: main; padding: 30px; overflow-y: auto; }
+        .page-header { margin-bottom: 30px; }
+        .page-header h2 { font-size: 32px; font-weight: 700; color: var(--text); margin-bottom: 8px; }
+        .page-header p { color: var(--text-light); font-size: 14px; }
+        
+        /* Hospital Info Card */
+        .hospital-info-card {
+            background: var(--card-bg); padding: 32px; border-radius: 16px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08); margin-bottom: 30px;
+            display: grid; grid-template-columns: auto 1fr auto; gap: 24px;
+            align-items: center;
+        }
+        .hospital-logo {
+            width: 100px; height: 100px; border-radius: 16px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 48px; color: white;
+        }
+        .hospital-details h3 {
+            font-size: 24px; font-weight: 700; color: var(--text); margin-bottom: 12px;
+        }
+        .detail-row {
+            display: flex; align-items: center; gap: 12px;
+            margin-bottom: 8px; font-size: 14px; color: var(--text);
+        }
+        .detail-row .material-icons-outlined {
+            font-size: 20px; color: var(--text-light);
+        }
+        .btn-edit {
+            padding: 12px 24px; background: var(--primary); color: white;
+            border: none; border-radius: 10px; font-size: 14px; font-weight: 600;
+            cursor: pointer; display: flex; align-items: center; gap: 8px;
+            transition: all 0.3s;
+        }
+        .btn-edit:hover { background: var(--primary-dark); transform: translateY(-2px); }
+        
+        /* Section Titles */
+        .section-header {
+            display: flex; justify-content: space-between; align-items: center;
+            margin-bottom: 20px;
+        }
+        .section-title {
+            font-size: 24px; font-weight: 700; color: var(--text);
+        }
+        .btn-add {
+            padding: 10px 20px; background: var(--primary); color: white;
+            border: none; border-radius: 10px; font-size: 13px; font-weight: 600;
+            cursor: pointer; display: flex; align-items: center; gap: 6px;
+            transition: all 0.3s;
+        }
+        .btn-add:hover { background: var(--primary-dark); }
+        
+        /* Departments Grid */
+        .departments-section { margin-bottom: 30px; }
+        .departments-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+        }
+        .department-card {
+            background: var(--card-bg); padding: 24px; border-radius: 16px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08); transition: all 0.3s;
+            border-left: 4px solid var(--primary);
+        }
+        .department-card:hover { transform: translateY(-4px); box-shadow: 0 8px 24px rgba(0,0,0,0.12); }
+        .department-header {
+            display: flex; justify-content: space-between; align-items: start;
+            margin-bottom: 16px;
+        }
+        .department-icon {
+            width: 50px; height: 50px; border-radius: 12px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 24px; color: white;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .department-menu {
+            cursor: pointer; color: var(--text-light);
+        }
+        .department-name {
+            font-size: 18px; font-weight: 700; color: var(--text);
+            margin-bottom: 4px;
+        }
+        .department-head {
+            font-size: 13px; color: var(--text-light);
+            margin-bottom: 16px;
+        }
+        .department-stats {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 12px;
+        }
+        .stat-box {
+            background: var(--hover); padding: 12px; border-radius: 10px;
+            text-align: center;
+        }
+        .stat-box .number {
+            font-size: 20px; font-weight: 700; color: var(--primary);
+            margin-bottom: 4px;
+        }
+        .stat-box .label {
+            font-size: 12px; color: var(--text-light);
+        }
+        
+        /* Facilities Section */
+        .facilities-section { margin-bottom: 30px; }
+        .facilities-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 20px;
+        }
+        .facility-card {
+            background: var(--card-bg); padding: 24px; border-radius: 16px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+        .facility-header {
+            display: flex; align-items: center; gap: 16px;
+            margin-bottom: 16px;
+        }
+        .facility-icon {
+            width: 48px; height: 48px; border-radius: 12px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 24px; color: white;
+        }
+        .facility-icon.beds { background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); }
+        .facility-icon.theater { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); }
+        .facility-icon.icu { background: linear-gradient(135deg, #FFB547 0%, #FF8A00 100%); }
+        .facility-icon.emergency { background: linear-gradient(135deg, #EE5D50 0%, #C73D31 100%); }
+        .facility-info h4 {
+            font-size: 16px; font-weight: 600; color: var(--text);
+            margin-bottom: 4px;
+        }
+        .facility-info p {
+            font-size: 13px; color: var(--text-light);
+        }
+        .capacity-bar {
+            background: var(--border); height: 8px; border-radius: 4px;
+            overflow: hidden; margin-bottom: 8px;
+        }
+        .capacity-fill {
+            height: 100%; background: var(--primary);
+            transition: width 0.3s;
+        }
+        .capacity-fill.warning { background: #FFB547; }
+        .capacity-fill.danger { background: #EE5D50; }
+        .capacity-text {
+            font-size: 14px; font-weight: 600; color: var(--text);
+            text-align: center;
+        }
+        
+        @media (max-width: 968px) {
+            .grid-container { grid-template-columns: 1fr; grid-template-areas: "header" "main"; }
+            #sidebar { display: none; }
+            .hospital-info-card { grid-template-columns: 1fr; text-align: center; }
+            .hospital-logo { margin: 0 auto; }
+        }
+        @media (max-width: 640px) {
+            .main-container { padding: 20px; }
+            .departments-grid { grid-template-columns: 1fr; }
+            .facilities-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="grid-container">
+        <header class="header">
+            <div class="header-left"><h4>Hospital Management</h4></div>
+            <div class="header-right">
+                <span class="material-icons-outlined">notifications</span>
+                <span class="material-icons-outlined">account_circle</span>
+            </div>
+        </header>
+
+        <aside id="sidebar">
+            <div class="sidebar-brand">
+                <span class="material-icons-outlined">local_hospital</span>
+                <strong>PADY</strong>
+            </div>
+            <ul class="sidebar-list">
+                <li><a href="dashboard.html"><span class="material-icons-outlined">dashboard</span> Dashboard</a></li>
+                <li><a href="patient_management.html"><span class="material-icons-outlined">people</span> Patient Management</a></li>
+                <li><a href="add_patient.html"><span class="material-icons-outlined">person_add</span> Add Patient</a></li>
+                <li><a href="doctor_management.html"><span class="material-icons-outlined">medical_services</span> Doctor Management</a></li>
+                <li><a href="hospital_management.html" class="active"><span class="material-icons-outlined">local_hospital</span> Hospital Management</a></li>
+                <li><a href="Scheduling.html"><span class="material-icons-outlined">event</span> Scheduling</a></li>
+                <li><a href="generate_bill.html"><span class="material-icons-outlined">receipt</span> Generate Bill</a></li>
+                <li><a href="Patient_Reports.html"><span class="material-icons-outlined">description</span> Patient Reports</a></li>
+                <li><a href="patient_testing_log.html"><span class="material-icons-outlined">science</span> Testing Log</a></li>
+                <li><a href="profile.html"><span class="material-icons-outlined">person</span> Profile</a></li>
+            </ul>
+            <div class="logout-button">
+                <button class="btn-logout" onclick="window.location.href='login.html'">
+                    <span class="material-icons-outlined">logout</span> Logout
+                </button>
+            </div>
+        </aside>
+
+        <main class="main-container">
+            <div class="page-header">
+                <h2>Hospital Management</h2>
+                <p>Manage hospital information, departments, and facilities</p>
+            </div>
+
+            <!-- Hospital Information -->
+            <div class="hospital-info-card">
+                <div class="hospital-logo">
+                    <span class="material-icons-outlined">local_hospital</span>
+                </div>
+                <div class="hospital-details">
+                    <h3>PADY Healthcare Center - Kigali</h3>
+                    <div class="detail-row">
+                        <span class="material-icons-outlined">location_on</span>
+                        <span>KG 7 Ave, Kigali, Rwanda</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="material-icons-outlined">phone</span>
+                        <span>+250 788 000 000</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="material-icons-outlined">email</span>
+                        <span>info@pady.com</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="material-icons-outlined">badge</span>
+                        <span>License: HF-2024-KGL-001</span>
+                    </div>
+                </div>
+                <button class="btn-edit" onclick="editHospitalInfo()">
+                    <span class="material-icons-outlined" style="font-size: 18px;">edit</span>
+                    Edit Info
+                </button>
+            </div>
+
+            <!-- Departments Section -->
+            <div class="departments-section">
+                <div class="section-header">
+                    <h3 class="section-title">Departments</h3>
+                    <button class="btn-add" onclick="addDepartment()">
+                        <span class="material-icons-outlined" style="font-size: 16px;">add</span>
+                        Add Department
+                    </button>
+                </div>
+
+                <div class="departments-grid">
+                    <!-- Cardiology -->
+                    <div class="department-card">
+                        <div class="department-header">
+                            <div class="department-icon">
+                                <span class="material-icons-outlined">favorite</span>
+                            </div>
+                            <span class="material-icons-outlined department-menu">more_vert</span>
+                        </div>
+                        <div class="department-name">Cardiology</div>
+                        <div class="department-head">Head: Dr. Sarah Smith</div>
+                        <div class="department-stats">
+                            <div class="stat-box">
+                                <div class="number">12</div>
+                                <div class="label">Doctors</div>
+                            </div>
+                            <div class="stat-box">
+                                <div class="number">50</div>
+                                <div class="label">Capacity</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Pediatrics -->
+                    <div class="department-card">
+                        <div class="department-header">
+                            <div class="department-icon">
+                                <span class="material-icons-outlined">child_care</span>
+                            </div>
+                            <span class="material-icons-outlined department-menu">more_vert</span>
+                        </div>
+                        <div class="department-name">Pediatrics</div>
+                        <div class="department-head">Head: Dr. Jean Mugabo</div>
+                        <div class="department-stats">
+                            <div class="stat-box">
+                                <div class="number">8</div>
+                                <div class="label">Doctors</div>
+                            </div>
+                            <div class="stat-box">
+                                <div class="number">30</div>
+                                <div class="label">Capacity</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Surgery -->
+                    <div class="department-card">
+                        <div class="department-header">
+                            <div class="department-icon">
+                                <span class="material-icons-outlined">local_hospital</span>
+                            </div>
+                            <span class="material-icons-outlined department-menu">more_vert</span>
+                        </div>
+                        <div class="department-name">Surgery</div>
+                        <div class="department-head">Head: Dr. Marie Uwase</div>
+                        <div class="department-stats">
+                            <div class="stat-box">
+                                <div class="number">15</div>
+                                <div class="label">Doctors</div>
+                            </div>
+                            <div class="stat-box">
+                                <div class="number">40</div>
+                                <div class="label">Capacity</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- General Medicine -->
+                    <div class="department-card">
+                        <div class="department-header">
+                            <div class="department-icon">
+                                <span class="material-icons-outlined">medical_services</span>
+                            </div>
+                            <span class="material-icons-outlined department-menu">more_vert</span>
+                        </div>
+                        <div class="department-name">General Medicine</div>
+                        <div class="department-head">Head: Dr. Paul Niyonzima</div>
+                        <div class="department-stats">
+                            <div class="stat-box">
+                                <div class="number">20</div>
+                                <div class="label">Doctors</div>
+                            </div>
+                            <div class="stat-box">
+                                <div class="number">60</div>
+                                <div class="label">Capacity</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Facilities Section -->
+            <div class="facilities-section">
+                <div class="section-header">
+                    <h3 class="section-title">Hospital Facilities</h3>
+                </div>
+
+                <div class="facilities-grid">
+                    <!-- General Beds -->
+                    <div class="facility-card">
+                        <div class="facility-header">
+                            <div class="facility-icon beds">
+                                <span class="material-icons-outlined">bed</span>
+                            </div>
+                            <div class="facility-info">
+                                <h4>General Beds</h4>
+                                <p>Available beds</p>
+                            </div>
+                        </div>
+                        <div class="capacity-bar">
+                            <div class="capacity-fill" style="width: 72%;"></div>
+                        </div>
+                        <div class="capacity-text">180 / 250</div>
+                    </div>
+
+                    <!-- Operating Theaters -->
+                    <div class="facility-card">
+                        <div class="facility-header">
+                            <div class="facility-icon theater">
+                                <span class="material-icons-outlined">local_hospital</span>
+                            </div>
+                            <div class="facility-info">
+                                <h4>Operating Theaters</h4>
+                                <p>Total theaters</p>
+                            </div>
+                        </div>
+                        <div class="capacity-bar">
+                            <div class="capacity-fill" style="width: 40%;"></div>
+                        </div>
+                        <div class="capacity-text">2 / 5</div>
+                    </div>
+
+                    <!-- ICU Beds -->
+                    <div class="facility-card">
+                        <div class="facility-header">
+                            <div class="facility-icon icu">
+                                <span class="material-icons-outlined">monitor_heart</span>
+                            </div>
+                            <div class="facility-info">
+                                <h4>ICU Beds</h4>
+                                <p>Intensive care</p>
+                            </div>
+                        </div>
+                        <div class="capacity-bar">
+                            <div class="capacity-fill warning" style="width: 80%;"></div>
+                        </div>
+                        <div class="capacity-text">20 / 25</div>
+                    </div>
+
+                    <!-- Emergency Beds -->
+                    <div class="facility-card">
+                        <div class="facility-header">
+                            <div class="facility-icon emergency">
+                                <span class="material-icons-outlined">emergency</span>
+                            </div>
+                            <div class="facility-info">
+                                <h4>Emergency Beds</h4>
+                                <p>ER capacity</p>
+                            </div>
+                        </div>
+                        <div class="capacity-bar">
+                            <div class="capacity-fill danger" style="width: 75%;"></div>
+                        </div>
+                        <div class="capacity-text">15 / 20</div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        function editHospitalInfo() {
+            alert('Edit hospital information form would open here');
+        }
+
+        function addDepartment() {
+            alert('Add new department form would open here');
+        }
+    </script>
+</body>
+</html>
