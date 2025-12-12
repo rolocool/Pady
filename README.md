@@ -51,38 +51,11 @@ To set up the application for local development:
    npm run dev
    ```
 
-6. Access the API documentation:
-   - Open your browser and go to [http://localhost:7001/api-docs/](http://localhost:7001/api-docs/).
-   - A small deployment has been made [https://rumunyana.github.io/PADY/]
-
 ## Deployment
 
-To deploy the application:
+-The app has already been deployed on vercel: https://pady-opal.vercel.app/index.html#
 
-1. Build the project:
-   ```bash
-   npm run build
-   ```
-
-2. Start the production server:
-   ```bash
-   npm start
-   ```
-
-## Database Migrations
-
-If you are using PostgreSQL:
-
-- Run migrations:
-  ```bash
-  npm run migrate
-  ```
-
-- Undo migrations:
-  ```bash
-  npm run undo-migrate
-  ```
 
 ## Author and Acknowledgement
 
-Created by PADY
+Created by Roline UMUNYANA
