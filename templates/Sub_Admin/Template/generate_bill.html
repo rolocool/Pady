@@ -24,12 +24,20 @@
             align-items: center; justify-content: space-between; padding: 0 30px;
             border-bottom: 1px solid var(--border);
         }
+        .header-left { display: flex; align-items: center; }
         .header-left h4 { color: var(--text); font-size: 18px; font-weight: 600; }
         .header-right { display: flex; gap: 20px; align-items: center; }
         .header-right .material-icons-outlined { font-size: 24px; color: var(--text-light); cursor: pointer; }
+
+        /* Mobile Menu Toggle */
+        #menuToggle {
+            font-size: 28px; cursor: pointer; display: none; margin-right: 15px; color: var(--text);
+        }
+
         #sidebar {
             grid-area: sidebar; background: var(--card-bg); border-right: 1px solid var(--border);
-            position: sticky; top: 0; height: 100vh; overflow-y: auto;
+            position: fixed; top: 0; left: 0; height: 100vh; width: 260px;
+            overflow-y: auto; z-index: 1000; transition: left 0.3s ease;
         }
         .sidebar-brand {
             display: flex; align-items: center; gap: 12px; padding: 20px 24px;
@@ -211,14 +219,24 @@
             border: 2px solid var(--border);
         }
         .btn-secondary:hover { background: var(--border); }
-        
+
+        /* Overlay for mobile sidebar */
+        .sidebar-overlay {
+            position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.5); z-index: 999;
+            display: none;
+        }
+        .sidebar-overlay.active { display: block; }
+
         @media (max-width: 1200px) {
             .bill-layout { grid-template-columns: 1fr; }
             .bill-summary { position: static; }
         }
         @media (max-width: 968px) {
             .grid-container { grid-template-columns: 1fr; grid-template-areas: "header" "main"; }
-            #sidebar { display: none; }
+            #menuToggle { display: block; }
+            #sidebar { left: -260px; }
+            #sidebar.open { left: 0; }
             .service-item { grid-template-columns: 1fr; }
             .payment-methods { grid-template-columns: 1fr; }
         }
@@ -229,9 +247,15 @@
     </style>
 </head>
 <body>
+    <!-- Sidebar Overlay (mobile) -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
     <div class="grid-container">
         <header class="header">
-            <div class="header-left"><h4>Generate Bill</h4></div>
+            <div class="header-left">
+                <span class="material-icons-outlined" id="menuToggle">menu</span>
+                <h4>Generate Bill</h4>
+            </div>
             <div class="header-right">
                 <span class="material-icons-outlined">notifications</span>
                 <span class="material-icons-outlined">account_circle</span>
@@ -374,7 +398,7 @@
                         </div>
                         <div class="info-row">
                             <span class="label">Date:</span>
-                            <span class="value"><?php echo date('M d, Y'); ?></span>
+                            <span class="value" id="billDate"></span>
                         </div>
                     </div>
 
@@ -561,9 +585,34 @@
             setTimeout(() => window.location.reload(), 1500);
         }
 
-        // Set today's date
+        // Set today's date (pure JS, no PHP needed)
         const today = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
-        document.querySelector('#summaryPatient .info-row:nth-child(3) .value').textContent = today;
+        document.getElementById('billDate').textContent = today;
+
+        // Mobile sidebar toggle
+        const menuToggle = document.getElementById('menuToggle');
+        const sidebar = document.getElementById('sidebar');
+        const overlay = document.getElementById('sidebarOverlay');
+
+        menuToggle.addEventListener('click', () => {
+            sidebar.classList.toggle('open');
+            overlay.classList.toggle('active');
+        });
+
+        overlay.addEventListener('click', () => {
+            sidebar.classList.remove('open');
+            overlay.classList.remove('active');
+        });
+
+        // Close sidebar when clicking a link on mobile
+        document.querySelectorAll('.sidebar-list a').forEach(link => {
+            link.addEventListener('click', () => {
+                if (window.innerWidth <= 968) {
+                    sidebar.classList.remove('open');
+                    overlay.classList.remove('active');
+                }
+            });
+        });
     </script>
 </body>
 </html>

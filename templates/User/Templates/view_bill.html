@@ -3,57 +3,90 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>View Bills - PADY</title>
+    <title>View Bills - PADY Healthcare</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         :root {
-            --primary: #4318FF; --primary-dark: #2D0FDB; --secondary: #05CD99;
+            --primary: #007bff; --primary-dark: #0056b3; --secondary: #05CD99;
             --bg: #f5f7fa; --card-bg: #fff; --text: #2B3674; --text-light: #A3AED0;
             --border: #E9EDF7; --hover: #F4F7FE; --success: #05CD99; --warning: #FFB547;
             --error: #EE5D50;
         }
         body { font-family: 'Poppins', sans-serif; background: var(--bg); }
+
         .grid-container {
-            display: grid; grid-template-columns: 260px 1fr;
-            grid-template-rows: 70px 1fr; min-height: 100vh;
+            display: grid;
+            grid-template-columns: 260px 1fr;
+            grid-template-rows: 70px 1fr;
             grid-template-areas: "sidebar header" "sidebar main";
+            min-height: 100vh;
         }
+
+        /* Header */
         .header {
             grid-area: header; background: #f8f9fa; display: flex;
             align-items: center; justify-content: space-between; padding: 0 30px;
-            border-bottom: 1px solid var(--border);
+            border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 100;
         }
-        .header h4 { color: var(--text); font-size: 18px; font-weight: 600; }
+        .header-left { display: flex; align-items: center; gap: 20px; }
+        .menu-icon { display: none; cursor: pointer; font-size: 28px; color: var(--text); }
+        .header-left h4 { color: var(--text); font-size: 18px; font-weight: 600; }
         .header-right { display: flex; gap: 20px; align-items: center; }
         .header-right .material-icons-outlined { font-size: 24px; color: var(--text-light); cursor: pointer; }
-        
+        .header-right .material-icons-outlined:hover { color: var(--primary); }
+
+        /* Sidebar */
         #sidebar {
             grid-area: sidebar; background: var(--card-bg); border-right: 1px solid var(--border);
-            position: sticky; top: 0; height: 100vh;
+            position: fixed; top: 0; left: 0; width: 260px; height: 100vh;
+            overflow-y: auto; transform: translateX(-100%);
+            transition: transform 0.3s ease; z-index: 200;
         }
+        #sidebar.open { transform: translateX(0); }
+
         .sidebar-brand {
             display: flex; align-items: center; gap: 12px; padding: 20px 24px;
             border-bottom: 1px solid var(--border);
         }
         .sidebar-brand .material-icons-outlined { font-size: 32px; color: var(--primary); }
         .sidebar-brand strong { font-size: 24px; font-weight: 700; color: var(--primary); }
+        .sidebar-brand a { text-decoration: none; color: inherit; }
+
         .sidebar-list { list-style: none; padding: 20px 0; }
         .sidebar-list a {
             display: flex; align-items: center; gap: 16px; padding: 14px 24px;
-            color: var(--text-light); text-decoration: none; font-size: 14px; transition: all 0.3s;
+            color: var(--text-light); text-decoration: none; font-size: 14px;
+            font-weight: 500; transition: all 0.3s;
         }
         .sidebar-list a:hover, .sidebar-list a.active {
             background: var(--hover); color: var(--primary);
         }
         .sidebar-list a.active { border-left: 3px solid var(--primary); }
-        
+        .sidebar-list .material-icons-outlined { font-size: 22px; }
+
+        .logout-button { padding: 20px 24px; border-top: 1px solid var(--border); }
+        .btn-logout {
+            width: 100%; padding: 12px; background: var(--primary); color: white;
+            border: none; border-radius: 10px; font-size: 14px; font-weight: 600;
+            cursor: pointer; transition: all 0.3s; display: flex; align-items: center;
+            justify-content: center; gap: 8px;
+        }
+        .btn-logout:hover { background: var(--primary-dark); transform: translateY(-2px); }
+
+        /* Overlay */
+        .overlay {
+            display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5);
+            z-index: 150;
+        }
+        .overlay.show { display: block; }
+
+        /* Main */
         .main-container { grid-area: main; padding: 30px; overflow-y: auto; }
-        .page-header { margin-bottom: 30px; }
         .page-header h2 { font-size: 32px; font-weight: 700; color: var(--text); margin-bottom: 8px; }
         .page-header p { color: var(--text-light); font-size: 14px; }
-        
+
         /* Summary Cards */
         .summary-grid {
             display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -72,7 +105,7 @@
         .summary-card .amount.pending { color: var(--warning); }
         .summary-card .amount.overdue { color: var(--error); }
         .summary-card p { font-size: 13px; color: var(--text-light); }
-        
+
         /* Filters */
         .filters-section {
             background: var(--card-bg); padding: 20px 24px; border-radius: 16px;
@@ -100,7 +133,7 @@
         }
         .filter-chip:hover { border-color: var(--primary); background: var(--hover); }
         .filter-chip.active { border-color: var(--primary); background: var(--primary); color: white; }
-        
+
         /* Bills Grid */
         .bills-grid {
             display: grid; gap: 20px;
@@ -113,7 +146,7 @@
         .bill-card:hover {
             transform: translateY(-4px); box-shadow: 0 8px 24px rgba(0,0,0,0.12);
         }
-        
+
         .bill-header {
             padding: 20px 24px; border-bottom: 1px solid var(--border);
             display: flex; justify-content: space-between; align-items: center;
@@ -128,7 +161,7 @@
         .bill-status.paid { background: rgba(5,205,153,0.1); color: var(--success); }
         .bill-status.pending { background: rgba(255,181,71,0.1); color: var(--warning); }
         .bill-status.overdue { background: rgba(238,93,80,0.1); color: var(--error); }
-        
+
         .bill-body {
             padding: 24px;
         }
@@ -149,7 +182,7 @@
         .bill-info-item p {
             font-size: 14px; color: var(--text); font-weight: 500;
         }
-        
+
         .bill-amount {
             background: var(--hover); padding: 20px; border-radius: 12px;
             text-align: center; margin-bottom: 20px;
@@ -160,7 +193,7 @@
         .bill-amount .amount {
             font-size: 36px; font-weight: 700; color: var(--primary);
         }
-        
+
         .bill-services {
             margin-bottom: 20px;
         }
@@ -174,7 +207,7 @@
         .service-item:last-child { border-bottom: none; }
         .service-name { color: var(--text); }
         .service-price { color: var(--text); font-weight: 600; }
-        
+
         .bill-actions {
             display: flex; gap: 12px;
         }
@@ -192,45 +225,62 @@
             background: var(--hover); color: var(--primary); border: 2px solid var(--border);
         }
         .btn-secondary:hover { background: var(--border); }
-        
+
+        /* Responsive */
         @media (max-width: 968px) {
             .grid-container { grid-template-columns: 1fr; grid-template-areas: "header" "main"; }
-            #sidebar { display: none; }
+            .menu-icon { display: block; }
             .summary-grid { grid-template-columns: 1fr 1fr; }
             .bill-info-grid { grid-template-columns: 1fr; }
+            .main-container { padding: 20px; }
         }
         @media (max-width: 480px) {
-            .main-container { padding: 20px; }
             .summary-grid { grid-template-columns: 1fr; }
             .bill-actions { flex-direction: column; }
         }
     </style>
 </head>
 <body>
+    <!-- Overlay -->
+    <div class="overlay" id="overlay" onclick="closeSidebar()"></div>
+
     <div class="grid-container">
+        <!-- Header -->
         <header class="header">
-            <h4>View Bills</h4>
+            <div class="header-left">
+                <div class="menu-icon" onclick="openSidebar()">
+                    <span class="material-icons-outlined">menu</span>
+                </div>
+                <h4>View Bills</h4>
+            </div>
             <div class="header-right">
                 <span class="material-icons-outlined">notifications</span>
                 <span class="material-icons-outlined">account_circle</span>
             </div>
         </header>
 
+        <!-- Sidebar -->
         <aside id="sidebar">
             <div class="sidebar-brand">
-                <span class="material-icons-outlined">add_box</span>
-                <strong>PADY</strong>
+                <span class="material-icons-outlined">local_hospital</span>
+                <strong><a href="profile.html">PADY</a></strong>
             </div>
             <ul class="sidebar-list">
                 <li><a href="profile.html"><span class="material-icons-outlined">person</span> My Profile</a></li>
-                <li><a href="hospitals.html"><span class="material-icons-outlined">add_box</span> Find Hospitals</a></li>
+                <li><a href="hospitals.html"><span class="material-icons-outlined">local_hospital</span> Find Hospitals</a></li>
                 <li><a href="consultation.html"><span class="material-icons-outlined">event</span> Book Appointment</a></li>
                 <li><a href="records.html"><span class="material-icons-outlined">folder</span> Medical Records</a></li>
                 <li><a href="view_bill.html" class="active"><span class="material-icons-outlined">receipt</span> View Bills</a></li>
                 <li><a href="payment.html"><span class="material-icons-outlined">credit_card</span> Payments</a></li>
             </ul>
+            <div class="logout-button">
+                <button class="btn-logout" onclick="window.location.href='../../../index.html'">
+                    <span class="material-icons-outlined">logout</span> Logout
+                </button>
+            </div>
         </aside>
 
+        <!-- Main Content -->
         <main class="main-container">
             <div class="page-header">
                 <h2>Medical Bills</h2>
@@ -489,6 +539,26 @@
     </div>
 
     <script>
+        function openSidebar() {
+            document.getElementById('sidebar').classList.add('open');
+            document.getElementById('overlay').classList.add('show');
+        }
+
+        function closeSidebar() {
+            document.getElementById('sidebar').classList.remove('open');
+            document.getElementById('overlay').classList.remove('show');
+        }
+
+        // Close sidebar when clicking outside on mobile
+        document.addEventListener('click', (e) => {
+            const sidebar = document.getElementById('sidebar');
+            const menuIcon = document.querySelector('.menu-icon');
+            if (window.innerWidth <= 968 && sidebar.classList.contains('open') &&
+                !sidebar.contains(e.target) && !menuIcon.contains(e.target)) {
+                closeSidebar();
+            }
+        });
+
         // Filter chips
         document.querySelectorAll('.filter-chip').forEach(chip => {
             chip.addEventListener('click', function() {

@@ -1,0 +1,28 @@
+<!-- Shared Sidebar -->
+<aside id="sidebar">
+    <div class="sidebar-title">
+        <div class="sidebar-brand">
+            <span class="material-icons-outlined">local_hospital</span>
+            <strong><a href="profile.html">PADY</a></strong>
+        </div>
+        <span class="material-icons-outlined close-btn" onclick="closeSidebar()">close</span>
+    </div>
+    
+    <ul class="sidebar-list">
+        <li><a href="profile.html"><span class="material-icons-outlined">person</span> My Profile</a></li>
+        <li><a href="hospitals.html"><span class="material-icons-outlined">local_hospital</span> Find Hospitals</a></li>
+        <li><a href="consultation.html"><span class="material-icons-outlined">event</span> Book Appointment</a></li>
+        <li><a href="records.html"><span class="material-icons-outlined">folder</span> Medical Records</a></li>
+        <li><a href="view_bill.html"><span class="material-icons-outlined">receipt</span> View Bills</a></li>
+        <li><a href="payment.html"><span class="material-icons-outlined">credit_card</span> Payments</a></li>
+    </ul>
+
+    <div class="logout-button">
+        <button class="btn-logout" onclick="logout()">
+            <span class="material-icons-outlined">logout</span> Logout
+        </button>
+    </div>
+</aside>
+
+<!-- Mobile Overlay -->
+<div class="overlay" id="overlay" onclick="closeSidebar()"></div>

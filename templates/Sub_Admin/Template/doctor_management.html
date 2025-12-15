@@ -24,12 +24,20 @@
             align-items: center; justify-content: space-between; padding: 0 30px;
             border-bottom: 1px solid var(--border);
         }
+        .header-left { display: flex; align-items: center; }
         .header-left h4 { color: var(--text); font-size: 18px; font-weight: 600; }
         .header-right { display: flex; gap: 20px; align-items: center; }
         .header-right .material-icons-outlined { font-size: 24px; color: var(--text-light); cursor: pointer; }
+
+        /* Mobile Menu Toggle */
+        #menuToggle {
+            font-size: 28px; cursor: pointer; display: none; margin-right: 15px; color: var(--text);
+        }
+
         #sidebar {
             grid-area: sidebar; background: var(--card-bg); border-right: 1px solid var(--border);
-            position: sticky; top: 0; height: 100vh; overflow-y: auto;
+            position: fixed; top: 0; left: 0; height: 100vh; width: 260px;
+            overflow-y: auto; z-index: 1000; transition: left 0.3s ease;
         }
         .sidebar-brand {
             display: flex; align-items: center; gap: 12px; padding: 20px 24px;
@@ -203,10 +211,20 @@
         }
         .star { color: #FFB547; font-size: 18px; }
         .rating-value { font-size: 14px; font-weight: 600; color: var(--text); margin-left: 8px; }
-        
+
+        /* Overlay for mobile sidebar */
+        .sidebar-overlay {
+            position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.5); z-index: 999;
+            display: none;
+        }
+        .sidebar-overlay.active { display: block; }
+
         @media (max-width: 968px) {
             .grid-container { grid-template-columns: 1fr; grid-template-areas: "header" "main"; }
-            #sidebar { display: none; }
+            #menuToggle { display: block; }
+            #sidebar { left: -260px; }
+            #sidebar.open { left: 0; }
             .page-header { flex-direction: column; align-items: start; gap: 16px; }
             .doctors-grid { grid-template-columns: 1fr; }
         }
@@ -218,9 +236,15 @@
     </style>
 </head>
 <body>
+    <!-- Sidebar Overlay (mobile) -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
     <div class="grid-container">
         <header class="header">
-            <div class="header-left"><h4>Doctor Management</h4></div>
+            <div class="header-left">
+                <span class="material-icons-outlined" id="menuToggle">menu</span>
+                <h4>Doctor Management</h4>
+            </div>
             <div class="header-right">
                 <span class="material-icons-outlined">notifications</span>
                 <span class="material-icons-outlined">account_circle</span>
@@ -318,7 +342,7 @@
 
             <!-- Doctors Grid -->
             <div class="doctors-grid">
-                <!-- Doctor Card 1 -->
+                <!-- Doctor Cards remain unchanged -->
                 <div class="doctor-card">
                     <div class="doctor-header">
                         <div class="availability-toggle active" onclick="toggleAvailability(this)">
@@ -329,7 +353,6 @@
                     <div class="doctor-body">
                         <div class="doctor-name">Dr. Sarah Smith</div>
                         <center><span class="doctor-specialization">Cardiologist</span></center>
-                        
                         <div class="doctor-info">
                             <div class="info-item">
                                 <span class="material-icons-outlined">badge</span>
@@ -348,7 +371,6 @@
                                 <span>Experience: 12 years</span>
                             </div>
                         </div>
-
                         <div class="doctor-stats">
                             <div class="stat-item">
                                 <div class="number">245</div>
@@ -359,7 +381,6 @@
                                 <div class="label">Rating</div>
                             </div>
                         </div>
-
                         <div class="rating">
                             <span class="material-icons-outlined star">star</span>
                             <span class="material-icons-outlined star">star</span>
@@ -368,7 +389,6 @@
                             <span class="material-icons-outlined star">star_half</span>
                             <span class="rating-value">4.8</span>
                         </div>
-
                         <div class="doctor-actions">
                             <button class="btn-action btn-view" onclick="viewDoctor(1)">
                                 <span class="material-icons-outlined" style="font-size: 16px;">visibility</span>
@@ -382,7 +402,7 @@
                     </div>
                 </div>
 
-                <!-- Doctor Card 2 -->
+                <!-- The other 3 doctor cards remain exactly the same -->
                 <div class="doctor-card">
                     <div class="doctor-header">
                         <div class="availability-toggle active" onclick="toggleAvailability(this)">
@@ -393,7 +413,6 @@
                     <div class="doctor-body">
                         <div class="doctor-name">Dr. Jean Mugabo</div>
                         <center><span class="doctor-specialization">Pediatrician</span></center>
-                        
                         <div class="doctor-info">
                             <div class="info-item">
                                 <span class="material-icons-outlined">badge</span>
@@ -412,7 +431,6 @@
                                 <span>Experience: 8 years</span>
                             </div>
                         </div>
-
                         <div class="doctor-stats">
                             <div class="stat-item">
                                 <div class="number">189</div>
@@ -423,7 +441,6 @@
                                 <div class="label">Rating</div>
                             </div>
                         </div>
-
                         <div class="rating">
                             <span class="material-icons-outlined star">star</span>
                             <span class="material-icons-outlined star">star</span>
@@ -432,7 +449,6 @@
                             <span class="material-icons-outlined star">star</span>
                             <span class="rating-value">4.9</span>
                         </div>
-
                         <div class="doctor-actions">
                             <button class="btn-action btn-view" onclick="viewDoctor(2)">
                                 <span class="material-icons-outlined" style="font-size: 16px;">visibility</span>
@@ -446,7 +462,6 @@
                     </div>
                 </div>
 
-                <!-- Doctor Card 3 -->
                 <div class="doctor-card">
                     <div class="doctor-header">
                         <div class="availability-toggle" onclick="toggleAvailability(this)">
@@ -457,7 +472,6 @@
                     <div class="doctor-body">
                         <div class="doctor-name">Dr. Marie Uwase</div>
                         <center><span class="doctor-specialization">Surgeon</span></center>
-                        
                         <div class="doctor-info">
                             <div class="info-item">
                                 <span class="material-icons-outlined">badge</span>
@@ -476,7 +490,6 @@
                                 <span>Experience: 15 years</span>
                             </div>
                         </div>
-
                         <div class="doctor-stats">
                             <div class="stat-item">
                                 <div class="number">312</div>
@@ -487,7 +500,6 @@
                                 <div class="label">Rating</div>
                             </div>
                         </div>
-
                         <div class="rating">
                             <span class="material-icons-outlined star">star</span>
                             <span class="material-icons-outlined star">star</span>
@@ -496,7 +508,6 @@
                             <span class="material-icons-outlined star">star_half</span>
                             <span class="rating-value">4.7</span>
                         </div>
-
                         <div class="doctor-actions">
                             <button class="btn-action btn-view" onclick="viewDoctor(3)">
                                 <span class="material-icons-outlined" style="font-size: 16px;">visibility</span>
@@ -510,7 +521,6 @@
                     </div>
                 </div>
 
-                <!-- Doctor Card 4 -->
                 <div class="doctor-card">
                     <div class="doctor-header">
                         <div class="availability-toggle active" onclick="toggleAvailability(this)">
@@ -521,7 +531,6 @@
                     <div class="doctor-body">
                         <div class="doctor-name">Dr. Paul Niyonzima</div>
                         <center><span class="doctor-specialization">General Physician</span></center>
-                        
                         <div class="doctor-info">
                             <div class="info-item">
                                 <span class="material-icons-outlined">badge</span>
@@ -540,7 +549,6 @@
                                 <span>Experience: 10 years</span>
                             </div>
                         </div>
-
                         <div class="doctor-stats">
                             <div class="stat-item">
                                 <div class="number">421</div>
@@ -551,7 +559,6 @@
                                 <div class="label">Rating</div>
                             </div>
                         </div>
-
                         <div class="rating">
                             <span class="material-icons-outlined star">star</span>
                             <span class="material-icons-outlined star">star</span>
@@ -560,7 +567,6 @@
                             <span class="material-icons-outlined star">star_half</span>
                             <span class="rating-value">4.6</span>
                         </div>
-
                         <div class="doctor-actions">
                             <button class="btn-action btn-view" onclick="viewDoctor(4)">
                                 <span class="material-icons-outlined" style="font-size: 16px;">visibility</span>
@@ -599,6 +605,31 @@
             document.querySelectorAll('.doctor-card').forEach(card => {
                 const text = card.textContent.toLowerCase();
                 card.style.display = text.includes(search) ? '' : 'none';
+            });
+        });
+
+        // Mobile sidebar toggle
+        const menuToggle = document.getElementById('menuToggle');
+        const sidebar = document.getElementById('sidebar');
+        const overlay = document.getElementById('sidebarOverlay');
+
+        menuToggle.addEventListener('click', () => {
+            sidebar.classList.toggle('open');
+            overlay.classList.toggle('active');
+        });
+
+        overlay.addEventListener('click', () => {
+            sidebar.classList.remove('open');
+            overlay.classList.remove('active');
+        });
+
+        // Close sidebar when clicking a link on mobile
+        document.querySelectorAll('.sidebar-list a').forEach(link => {
+            link.addEventListener('click', () => {
+                if (window.innerWidth <= 968) {
+                    sidebar.classList.remove('open');
+                    overlay.classList.remove('active');
+                }
             });
         });
     </script>
