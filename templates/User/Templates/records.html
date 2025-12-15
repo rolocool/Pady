@@ -41,10 +41,26 @@
         #sidebar {
             grid-area: sidebar; background: var(--card-bg); border-right: 1px solid var(--border);
             position: fixed; top: 0; left: 0; width: 260px; height: 100vh;
-            overflow-y: auto; transform: translateX(-100%);
-            transition: transform 0.3s ease; z-index: 200;
+            overflow-y: auto; transition: transform 0.3s ease; z-index: 200;
         }
-        #sidebar.open { transform: translateX(0); }
+
+        /* Desktop: always visible */
+        @media (min-width: 969px) {
+            #sidebar {
+                transform: translateX(0);
+                position: static;
+            }
+        }
+
+        /* Mobile: hidden by default */
+        @media (max-width: 968px) {
+            #sidebar {
+                transform: translateX(-100%);
+            }
+            #sidebar.open {
+                transform: translateX(0);
+            }
+        }
 
         .sidebar-brand {
             display: flex; align-items: center; gap: 12px; padding: 20px 24px;
@@ -386,11 +402,11 @@
                         Take 1 capsule three times daily for 7 days. Complete full course even if symptoms improve. Take with food to reduce stomach upset.
                     </p>
                     <div class="record-actions">
-                        <button class="btn btn-primary" onclick="viewRecord('Prescription')">
+                        <button class="btn btn-primary" onclick="viewRecord('Amoxicillin')">
                             <span class="material-icons-outlined" style="font-size: 18px;">visibility</span>
                             View Details
                         </button>
-                        <button class="btn btn-secondary" onclick="downloadRecord('Prescription')">
+                        <button class="btn btn-secondary" onclick="downloadRecord('Amoxicillin')">
                             <span class="material-icons-outlined" style="font-size: 18px;">download</span>
                             Download
                         </button>
@@ -416,11 +432,11 @@
                         Frontal and lateral chest radiographs. Lungs are clear with no evidence of infiltrates or masses. Heart size normal. No pleural effusion.
                     </p>
                     <div class="record-actions">
-                        <button class="btn btn-primary" onclick="viewRecord('Xray')">
+                        <button class="btn btn-primary" onclick="viewRecord('Chest X-ray')">
                             <span class="material-icons-outlined" style="font-size: 18px;">visibility</span>
                             View Images
                         </button>
-                        <button class="btn btn-secondary" onclick="downloadRecord('Xray')">
+                        <button class="btn btn-secondary" onclick="downloadRecord('Chest X-ray')">
                             <span class="material-icons-outlined" style="font-size: 18px;">download</span>
                             Download
                         </button>
@@ -446,11 +462,11 @@
                         Comprehensive annual checkup. Blood pressure 120/80, BMI 23.5. All vital signs normal. Recommended maintaining healthy lifestyle with regular exercise.
                     </p>
                     <div class="record-actions">
-                        <button class="btn btn-primary" onclick="viewRecord('Report')">
+                        <button class="btn btn-primary" onclick="viewRecord('Annual Physical')">
                             <span class="material-icons-outlined" style="font-size: 18px;">visibility</span>
                             View Report
                         </button>
-                        <button class="btn btn-secondary" onclick="downloadRecord('Report')">
+                        <button class="btn btn-secondary" onclick="downloadRecord('Annual Physical')">
                             <span class="material-icons-outlined" style="font-size: 18px;">download</span>
                             Download
                         </button>
@@ -476,11 +492,11 @@
                         Cholesterol screening. Total cholesterol: 185 mg/dL, LDL: 110 mg/dL, HDL: 55 mg/dL, Triglycerides: 100 mg/dL. All values within healthy range.
                     </p>
                     <div class="record-actions">
-                        <button class="btn btn-primary" onclick="viewRecord('Lipid')">
+                        <button class="btn btn-primary" onclick="viewRecord('Lipid Panel')">
                             <span class="material-icons-outlined" style="font-size: 18px;">visibility</span>
                             View Results
                         </button>
-                        <button class="btn btn-secondary" onclick="downloadRecord('Lipid')">
+                        <button class="btn btn-secondary" onclick="downloadRecord('Lipid Panel')">
                             <span class="material-icons-outlined" style="font-size: 18px;">download</span>
                             Download
                         </button>
@@ -538,12 +554,16 @@
             document.getElementById('overlay').classList.remove('show');
         }
 
-        // Close sidebar when clicking outside on mobile
+        // Close sidebar when clicking outside — only on mobile
         document.addEventListener('click', (e) => {
+            if (window.innerWidth > 968) return;
+
             const sidebar = document.getElementById('sidebar');
             const menuIcon = document.querySelector('.menu-icon');
-            if (window.innerWidth <= 968 && sidebar.classList.contains('open') &&
-                !sidebar.contains(e.target) && !menuIcon.contains(e.target)) {
+            
+            if (sidebar.classList.contains('open') &&
+                !sidebar.contains(e.target) && 
+                !menuIcon.contains(e.target)) {
                 closeSidebar();
             }
         });
@@ -559,7 +579,10 @@
 
         document.getElementById('searchRecords').addEventListener('input', filterRecords);
         document.getElementById('dateFilter').addEventListener('change', filterRecords);
-        document.getElementById('sortFilter').addEventListener('change', sortRecords);
+        document.getElementById('sortFilter').addEventListener('change', () => {
+            filterRecords(); // ensure visibility first
+            sortRecords();
+        });
 
         function filterRecords() {
             const searchTerm = document.getElementById('searchRecords').value.toLowerCase();
@@ -588,7 +611,7 @@
         function sortRecords() {
             const sort = document.getElementById('sortFilter').value;
             const container = document.getElementById('recordsList');
-            const cards = Array.from(document.querySelectorAll('.record-card'));
+            const cards = Array.from(container.querySelectorAll('.record-card'));
 
             cards.sort((a, b) => {
                 const dateA = new Date(a.dataset.date);
@@ -606,6 +629,10 @@
         function downloadRecord(type) {
             alert(`Downloading ${type} record as PDF...`);
         }
+
+        // Initial load
+        filterRecords();
+        sortRecords();
     </script>
 </body>
 </html>

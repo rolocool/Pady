@@ -100,12 +100,26 @@
             width: 260px;
             height: 100vh;
             overflow-y: auto;
-            transform: translateX(-100%);
             transition: transform 0.3s ease;
             z-index: 200;
         }
-        #sidebar.open {
-            transform: translateX(0);
+
+        /* Desktop: always visible */
+        @media (min-width: 969px) {
+            #sidebar {
+                transform: translateX(0);
+                position: static; /* Integrates properly with grid */
+            }
+        }
+
+        /* Mobile: hidden by default */
+        @media (max-width: 968px) {
+            #sidebar {
+                transform: translateX(-100%);
+            }
+            #sidebar.open {
+                transform: translateX(0);
+            }
         }
 
         .sidebar-brand {
@@ -606,151 +620,164 @@
                     </div>
                 </div>
                 
-                        <!-- Hospital Card 2 -->
-               <div class="hospital-card" data-type="public">
-                   <div class="hospital-image">
-                       <span class="material-icons-outlined placeholder-icon">local_hospital</span>
-                       <div class="hospital-badge">Open 24/7</div>
-                   </div>
-                   <div class="hospital-content">
-                       <div class="hospital-header">
-                           <h3 class="hospital-name">CHUK</h3>
-                           <span class="hospital-type">Teaching Hospital</span>
-                       </div>
-                       <div class="hospital-details">
-                           <div class="detail-item">
-                               <span class="material-icons-outlined">location_on</span>
-                               <span class="detail-text">KG 7 Ave, Nyarugenge, Kigali</span>
-                           </div>
-                           <div class="detail-item">
-                               <span class="material-icons-outlined">phone</span>
-                               <span class="detail-text">+250 788 490 100</span>
-                           </div>
-                           <div class="detail-item">
-                               <span class="material-icons-outlined">medical_services</span>
-                               <span class="detail-text">General Medicine, Surgery, Maternity, Oncology</span>
-                           </div>
-                       </div>
-                       <div class="hospital-stats">
-                           <div class="stat-item">
-                               <span class="stat-value">200+</span>
-                               <span class="stat-label">Doctors</span>
-                           </div>
-                           <div class="stat-item">
-                               <span class="stat-value">500+</span>
-                               <span class="stat-label">Beds</span>
-                           </div>
-                           <div class="stat-item">
-                               <span class="stat-value">4.7</span>
-                               <span class="stat-label">Rating</span>
-                           </div>
-                       </div>
-                       <div class="hospital-actions">
-                           <button class="btn btn-primary" onclick="bookAppointment('CHUK')">
-                               <span class="material-icons-outlined" style="font-size: 18px;">event</span>
-                               Book Now
-                           </button>
-                           <button class="btn btn-secondary" onclick="viewDetails('CHUK')">
-                               <span class="material-icons-outlined" style="font-size: 18px;">info</span>
-                               Details
-                           </button>
-                       </div>
-                   </div>
-               </div>
+                <!-- Hospital Card 2 -->
+                <div class="hospital-card" data-type="public">
+                    <div class="hospital-image">
+                        <span class="material-icons-outlined placeholder-icon">local_hospital</span>
+                        <div class="hospital-badge">Open 24/7</div>
+                    </div>
+                    <div class="hospital-content">
+                        <div class="hospital-header">
+                            <h3 class="hospital-name">CHUK</h3>
+                            <span class="hospital-type">Teaching Hospital</span>
+                        </div>
+                        <div class="hospital-details">
+                            <div class="detail-item">
+                                <span class="material-icons-outlined">location_on</span>
+                                <span class="detail-text">KG 7 Ave, Nyarugenge, Kigali</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="material-icons-outlined">phone</span>
+                                <span class="detail-text">+250 788 490 100</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="material-icons-outlined">medical_services</span>
+                                <span class="detail-text">General Medicine, Surgery, Maternity, Oncology</span>
+                            </div>
+                        </div>
+                        <div class="hospital-stats">
+                            <div class="stat-item">
+                                <span class="stat-value">200+</span>
+                                <span class="stat-label">Doctors</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-value">500+</span>
+                                <span class="stat-label">Beds</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-value">4.7</span>
+                                <span class="stat-label">Rating</span>
+                            </div>
+                        </div>
+                        <div class="hospital-actions">
+                            <button class="btn btn-primary" onclick="bookAppointment('CHUK')">
+                                <span class="material-icons-outlined" style="font-size: 18px;">event</span>
+                                Book Now
+                            </button>
+                            <button class="btn btn-secondary" onclick="viewDetails('CHUK')">
+                                <span class="material-icons-outlined" style="font-size: 18px;">info</span>
+                                Details
+                            </button>
+                        </div>
+                    </div>
+                </div>
 
+                <!-- Hospital Card 3 -->
+                <div class="hospital-card" data-type="public">
+                    <div class="hospital-image">
+                        <span class="material-icons-outlined placeholder-icon">local_hospital</span>
+                        <div class="hospital-badge">Open 24/7</div>
+                    </div>
+                    <div class="hospital-content">
+                        <div class="hospital-header">
+                            <h3 class="hospital-name">Kanombe Military Hospital</h3>
+                            <span class="hospital-type">Military Hospital</span>
+                        </div>
+                        <div class="hospital-details">
+                            <div class="detail-item">
+                                <span class="material-icons-outlined">location_on</span>
+                                <span class="detail-text">Kanombe, Kigali</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="material-icons-outlined">phone</span>
+                                <span class="detail-text">+250 788 490 200</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="material-icons-outlined">medical_services</span>
+                                <span class="detail-text">General Medicine, Emergency, Diagnostics</span>
+                            </div>
+                        </div>
+                        <div class="hospital-stats">
+                            <div class="stat-item">
+                                <span class="stat-value">80+</span>
+                                <span class="stat-label">Doctors</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-value">150+</span>
+                                <span class="stat-label">Beds</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-value">4.6</span>
+                                <span class="stat-label">Rating</span>
+                            </div>
+                        </div>
+                        <div class="hospital-actions">
+                            <button class="btn btn-primary" onclick="bookAppointment('Kanombe Military Hospital')">
+                                <span class="material-icons-outlined" style="font-size: 18px;">event</span>
+                                Book Now
+                            </button>
+                            <button class="btn btn-secondary" onclick="viewDetails('Kanombe Military Hospital')">
+                                <span class="material-icons-outlined" style="font-size: 18px;">info</span>
+                                Details
+                            </button>
+                        </div>
+                    </div>
+                </div>
 
-               <!-- Hospital Card 3 -->
-               <div class="hospital-card" data-type="public">
-                   <div class="hospital-image">
-                       <span class="material-icons-outlined placeholder-icon">local_hospital</span>
-                       <div class="hospital-badge">Open 24/7</div>
-                   </div>
-                   <div class="hospital-content">
-                       <div class="hospital-header">
-                           <h3 class="hospital-name">Kanombe Military Hospital</h3>
-                           <span class="hospital-type">Military Hospital</span>
-                       </div>
-                       <div class="hospital-details">
-                           <div class="detail-item">
-                               <span class="material-icons-outlined">location_on</span>
-                               <span class="detail-text">Kanombe, Kigali</span>
-                           </div>
-                           <div class="detail-item">
-                               <span class="material-icons-outlined">phone</span>
-                               <span class="detail-text">+250 788 490 200</span>
-                           </div>
-                           <div class="detail-item">
-                               <span class="material-icons-outlined">medical_services</span>
-                               <span class="detail-text">General Medicine, Emergency, Diagnostics</span>
-                           </div>
-                       </div>
-                       <div class="hospital-stats">
-                           <div class="stat-item">
-                               <span class="stat-value">80+</span>
-                               <span class="stat-label">Doctors</span>
-                           </div>
-                           <div class="stat-item">
-                               <span class="stat-value">150+</span>
-                               <span class="stat-label">Beds</span>
-                           </div>
-                           <div class="stat-item">
-                               <span class="stat-value">4.6</span>
-                               <span class="stat-label">Rating</span>
-                           </div>
-                       </div>
-                       <div class="hospital-actions">
-                           <button class="btn btn-primary" onclick="bookAppointment('Kanombe Hospital')">
-                               <span class="material-icons-outlined" style="font-size: 18px;">event</span>
-                               Book Now
-                           </button>
-                           <button class="btn btn-secondary" onclick="viewDetails('Kanombe Hospital')">
-                               <span class="material-icons-outlined" style="font-size: 18px;">info</span>
-                               Details
-                           </button>
-                       </div>
-                   </div>
-               </div>
-
-
-               <!-- Hospital Card 4 -->
-               <div class="hospital-card" data-type="clinic">
-                   <div class="hospital-image">
-                       <span class="material-icons-outlined placeholder-icon">local_hospital</span>
-                       <div class="hospital-badge clinic">Clinic</div>
-                   </div>
-                   <div class="hospital-content">
-                       <div class="hospital-header">
-                           <h3 class="hospital-name">Plateau Poly-Clinic</h3>
-                           <span class="hospital-type">Private Clinic</span>
-                       </div>
-                       <div class="hospital-details">
-                           <div class="detail-item">
-                               <span class="material-icons-outlined">location_on</span>
-                               <span class="detail-text">KN 4 Ave, Nyarugenge, Kigali</span>
-                           </div>
-                           <div class="detail-item">
-                               <span class="material-icons-outlined">phone</span>
-                               <span class="detail-text">+250 788 490 300</span>
-                           </div>
-                           <div class="detail-item">
-                               <span class="material-icons-outlined">medical_services</span>
-                               <span class="detail-text">Consultation, Laboratory, Pharmacy</span>
-                           </div>
-                       </div>
-                       <div class="hospital-stats">
-                           <div class="stat-item">
-                               <span class="stat-value">25+</span>
-                               <span class="stat-label">Doctors</span>
-                           </div>
-                           <div class="stat-item">
-                               <span class="stat-value">40+</span>
-                               <span class="stat-label">Beds</span>
-                           </div>
-                           <div class="stat-item">
-                               <span class="stat-value">4.9</span>
-                               <span class="stat-label">Rating</span>
-                           </div>
-                       </div>
+                <!-- Hospital Card 4 -->
+                <div class="hospital-card" data-type="clinic">
+                    <div class="hospital-image">
+                        <span class="material-icons-outlined placeholder-icon">local_hospital</span>
+                        <div class="hospital-badge">Clinic</div>
+                    </div>
+                    <div class="hospital-content">
+                        <div class="hospital-header">
+                            <h3 class="hospital-name">Plateau Poly-Clinic</h3>
+                            <span class="hospital-type">Private Clinic</span>
+                        </div>
+                        <div class="hospital-details">
+                            <div class="detail-item">
+                                <span class="material-icons-outlined">location_on</span>
+                                <span class="detail-text">KN 4 Ave, Nyarugenge, Kigali</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="material-icons-outlined">phone</span>
+                                <span class="detail-text">+250 788 490 300</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="material-icons-outlined">medical_services</span>
+                                <span class="detail-text">Consultation, Laboratory, Pharmacy</span>
+                            </div>
+                        </div>
+                        <div class="hospital-stats">
+                            <div class="stat-item">
+                                <span class="stat-value">25+</span>
+                                <span class="stat-label">Doctors</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-value">40+</span>
+                                <span class="stat-label">Beds</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-value">4.9</span>
+                                <span class="stat-label">Rating</span>
+                            </div>
+                        </div>
+                        <div class="hospital-actions">
+                            <button class="btn btn-primary" onclick="bookAppointment('Plateau Poly-Clinic')">
+                                <span class="material-icons-outlined" style="font-size: 18px;">event</span>
+                                Book Now
+                            </button>
+                            <button class="btn btn-secondary" onclick="viewDetails('Plateau Poly-Clinic')">
+                                <span class="material-icons-outlined" style="font-size: 18px;">info</span>
+                                Details
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
 
     <script>
         function openSidebar() {
@@ -763,17 +790,21 @@
             document.getElementById('overlay').classList.remove('show');
         }
 
-        // Close sidebar when clicking outside on mobile
+        // Close sidebar when clicking outside — only on mobile
         document.addEventListener('click', (e) => {
+            if (window.innerWidth > 968) return;
+
             const sidebar = document.getElementById('sidebar');
             const menuIcon = document.querySelector('.menu-icon');
-            if (window.innerWidth <= 968 && sidebar.classList.contains('open') &&
-                !sidebar.contains(e.target) && !menuIcon.contains(e.target)) {
+            
+            if (sidebar.classList.contains('open') &&
+                !sidebar.contains(e.target) && 
+                !menuIcon.contains(e.target)) {
                 closeSidebar();
             }
         });
 
-        // Your original filter and search functionality (unchanged)
+        // Filter chips functionality
         document.querySelectorAll('.filter-chip').forEach(chip => {
             chip.addEventListener('click', function() {
                 document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
@@ -792,19 +823,23 @@
             });
         });
 
+        // Search functionality
         document.getElementById('hospital-search').addEventListener('input', function(e) {
             const searchTerm = e.target.value.toLowerCase();
             const cards = document.querySelectorAll('.hospital-card');
             
             cards.forEach(card => {
                 const hospitalName = card.querySelector('.hospital-name').textContent.toLowerCase();
-                const location = card.querySelector('.detail-text').textContent.toLowerCase();
+                const locationElements = card.querySelectorAll('.detail-text');
+                let matches = hospitalName.includes(searchTerm);
                 
-                if (hospitalName.includes(searchTerm) || location.includes(searchTerm)) {
-                    card.style.display = 'block';
-                } else {
-                    card.style.display = 'none';
-                }
+                locationElements.forEach(el => {
+                    if (el.textContent.toLowerCase().includes(searchTerm)) {
+                        matches = true;
+                    }
+                });
+                
+                card.style.display = matches ? 'block' : 'none';
             });
         });
 

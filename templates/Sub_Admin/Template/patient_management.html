@@ -19,18 +19,39 @@
             grid-template-rows: 70px 1fr; min-height: 100vh;
             grid-template-areas: "sidebar header" "sidebar main";
         }
+        
+        /* Header */
         .header {
             grid-area: header; background: #f8f9fa; display: flex;
             align-items: center; justify-content: space-between; padding: 0 30px;
             border-bottom: 1px solid var(--border);
         }
         .header-left { display: flex; align-items: center; gap: 20px; }
+        .menu-icon { 
+            cursor: pointer; font-size: 28px; color: var(--text); display: none; 
+        }
         .header-left h4 { color: var(--text); font-size: 18px; font-weight: 600; }
         .header-right { display: flex; gap: 20px; align-items: center; }
-        .header-right .material-icons-outlined { font-size: 24px; color: var(--text-light); cursor: pointer; }
+        .search-container {
+            position: relative; width: 300px;
+        }
+        .search-container input {
+            width: 100%; padding: 10px 40px 10px 16px; border: 2px solid var(--border);
+            border-radius: 10px; font-size: 14px; font-family: 'Poppins';
+        }
+        .search-container .material-icons-outlined {
+            position: absolute; right: 12px; top: 50%; transform: translateY(-50%);
+            color: var(--text-light); font-size: 20px;
+        }
+        .header-right .material-icons-outlined {
+            font-size: 24px; color: var(--text-light); cursor: pointer;
+        }
+        
+        /* Sidebar */
         #sidebar {
             grid-area: sidebar; background: var(--card-bg); border-right: 1px solid var(--border);
-            position: sticky; top: 0; height: 100vh; overflow-y: auto;
+            position: fixed; top: 0; left: 0; height: 100vh; width: 260px;
+            overflow-y: auto; z-index: 1000; transition: left 0.3s ease;
         }
         .sidebar-brand {
             display: flex; align-items: center; gap: 12px; padding: 20px 24px;
@@ -55,6 +76,9 @@
             cursor: pointer; transition: all 0.3s; display: flex; align-items: center;
             justify-content: center; gap: 8px;
         }
+        .btn-logout:hover { background: var(--primary-dark); transform: translateY(-2px); }
+        
+        /* Main */
         .main-container { grid-area: main; padding: 30px; overflow-y: auto; }
         .page-header { 
             display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;
@@ -145,10 +169,22 @@
         }
         .page-btn.active { background: var(--primary); color: white; border-color: var(--primary); }
         .page-btn:hover { border-color: var(--primary); }
-        
+
+        /* Overlay for mobile sidebar */
+        .sidebar-overlay {
+            position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.5); z-index: 999;
+            display: none;
+        }
+        .sidebar-overlay.active { display: block; }
+
+        /* Responsive */
         @media (max-width: 968px) {
             .grid-container { grid-template-columns: 1fr; grid-template-areas: "header" "main"; }
-            #sidebar { display: none; }
+            .menu-icon { display: block; }
+            #sidebar { left: -260px; }
+            #sidebar.open { left: 0; }
+            .search-container { display: none; }
             .page-header { flex-direction: column; align-items: start; gap: 16px; }
             table { display: block; overflow-x: auto; }
         }
@@ -160,10 +196,22 @@
     </style>
 </head>
 <body>
+    <!-- Sidebar Overlay (mobile) -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
     <div class="grid-container">
         <header class="header">
-            <div class="header-left"><h4>Patient Management</h4></div>
+            <div class="header-left">
+                <div class="menu-icon" id="menuToggle">
+                    <span class="material-icons-outlined">menu</span>
+                </div>
+                <h4>Patient Management</h4>
+            </div>
             <div class="header-right">
+                <div class="search-container">
+                    <input type="search" placeholder="Search patients, doctors...">
+                    <span class="material-icons-outlined">search</span>
+                </div>
                 <span class="material-icons-outlined">notifications</span>
                 <span class="material-icons-outlined">account_circle</span>
             </div>
@@ -393,6 +441,31 @@
             document.querySelectorAll('tbody tr').forEach(row => {
                 const text = row.textContent.toLowerCase();
                 row.style.display = text.includes(search) ? '' : 'none';
+            });
+        });
+
+        // Mobile sidebar toggle
+        const menuToggle = document.getElementById('menuToggle');
+        const sidebar = document.getElementById('sidebar');
+        const overlay = document.getElementById('sidebarOverlay');
+
+        menuToggle.addEventListener('click', () => {
+            sidebar.classList.toggle('open');
+            overlay.classList.toggle('active');
+        });
+
+        overlay.addEventListener('click', () => {
+            sidebar.classList.remove('open');
+            overlay.classList.remove('active');
+        });
+
+        // Close sidebar when clicking a link on mobile
+        document.querySelectorAll('.sidebar-list a').forEach(link => {
+            link.addEventListener('click', () => {
+                if (window.innerWidth <= 968) {
+                    sidebar.classList.remove('open');
+                    overlay.classList.remove('active');
+                }
             });
         });
     </script>

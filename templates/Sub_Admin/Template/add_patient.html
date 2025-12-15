@@ -19,16 +19,35 @@
             grid-template-rows: 70px 1fr; min-height: 100vh;
             grid-template-areas: "sidebar header" "sidebar main";
         }
+        
+        /* Header */
         .header {
             grid-area: header; background: #f8f9fa; display: flex;
             align-items: center; justify-content: space-between; padding: 0 30px;
-            border-bottom: 1px solid var(--border); position: relative;
+            border-bottom: 1px solid var(--border);
         }
-        .header-left { display: flex; align-items: center; }
+        .header-left { display: flex; align-items: center; gap: 20px; }
+        .menu-icon { 
+            cursor: pointer; font-size: 28px; color: var(--text); display: none; 
+        }
         .header-left h4 { color: var(--text); font-size: 18px; font-weight: 600; }
         .header-right { display: flex; gap: 20px; align-items: center; }
-        .header-right .material-icons-outlined { font-size: 24px; color: var(--text-light); cursor: pointer; }
-
+        .search-container {
+            position: relative; width: 300px;
+        }
+        .search-container input {
+            width: 100%; padding: 10px 40px 10px 16px; border: 2px solid var(--border);
+            border-radius: 10px; font-size: 14px; font-family: 'Poppins';
+        }
+        .search-container .material-icons-outlined {
+            position: absolute; right: 12px; top: 50%; transform: translateY(-50%);
+            color: var(--text-light); font-size: 20px;
+        }
+        .header-right .material-icons-outlined {
+            font-size: 24px; color: var(--text-light); cursor: pointer;
+        }
+        
+        /* Sidebar */
         #sidebar {
             grid-area: sidebar; background: var(--card-bg); border-right: 1px solid var(--border);
             position: fixed; top: 0; left: 0; height: 100vh; width: 260px;
@@ -57,12 +76,13 @@
             cursor: pointer; transition: all 0.3s; display: flex; align-items: center;
             justify-content: center; gap: 8px;
         }
+        .btn-logout:hover { background: var(--primary-dark); transform: translateY(-2px); }
+        
+        /* Main */
         .main-container { grid-area: main; padding: 30px; overflow-y: auto; }
-
-        /* Mobile Menu Toggle */
-        #menuToggle {
-            font-size: 28px; cursor: pointer; display: none; margin-right: 15px; color: var(--text);
-        }
+        .page-header { margin-bottom: 30px; }
+        .page-header h2 { font-size: 32px; font-weight: 700; color: var(--text); margin-bottom: 8px; }
+        .page-header p { color: var(--text-light); font-size: 14px; }
 
         /* Progress Steps */
         .progress-steps {
@@ -155,33 +175,40 @@
         }
         .sidebar-overlay.active { display: block; }
 
-        /* Responsive Adjustments */
+        /* Responsive */
         @media (max-width: 968px) {
-            .grid-container {
-                grid-template-columns: 1fr;
-                grid-template-areas: "header" "main";
-            }
-            #menuToggle { display: block; }
+            .grid-container { grid-template-columns: 1fr; grid-template-areas: "header" "main"; }
+            .menu-icon { display: block; }
             #sidebar { left: -260px; }
             #sidebar.open { left: 0; }
+            .search-container { display: none; }
             .form-card { padding: 24px; }
             .form-row { grid-template-columns: 1fr; }
             .progress-steps { flex-wrap: wrap; gap: 12px; }
             .main-container { padding: 20px; }
         }
+        @media (max-width: 640px) {
+            .main-container { padding: 20px; }
+        }
     </style>
 </head>
 <body>
-    <!-- Sidebar Overlay (for mobile) -->
+    <!-- Sidebar Overlay (mobile) -->
     <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
     <div class="grid-container">
         <header class="header">
             <div class="header-left">
-                <span class="material-icons-outlined menu-toggle" id="menuToggle">menu</span>
+                <div class="menu-icon" id="menuToggle">
+                    <span class="material-icons-outlined">menu</span>
+                </div>
                 <h4>Add New Patient</h4>
             </div>
             <div class="header-right">
+                <div class="search-container">
+                    <input type="search" placeholder="Search patients, doctors...">
+                    <span class="material-icons-outlined">search</span>
+                </div>
                 <span class="material-icons-outlined">notifications</span>
                 <span class="material-icons-outlined">account_circle</span>
             </div>

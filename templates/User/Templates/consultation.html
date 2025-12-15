@@ -38,12 +38,36 @@
 
         /* Sidebar */
         #sidebar {
-            grid-area: sidebar; background: var(--card-bg); border-right: 1px solid var(--border);
-            position: fixed; top: 0; left: 0; width: 260px; height: 100vh;
-            overflow-y: auto; transform: translateX(-100%);
-            transition: transform 0.3s ease; z-index: 200;
+            grid-area: sidebar;
+            background: var(--card-bg);
+            border-right: 1px solid var(--border);
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 260px;
+            height: 100vh;
+            overflow-y: auto;
+            transition: transform 0.3s ease;
+            z-index: 200;
         }
-        #sidebar.open { transform: translateX(0); }
+
+        /* Desktop: always visible */
+        @media (min-width: 969px) {
+            #sidebar {
+                transform: translateX(0);
+                position: static; /* Integrates properly with grid */
+            }
+        }
+
+        /* Mobile: hidden by default, slides in when open */
+        @media (max-width: 968px) {
+            #sidebar {
+                transform: translateX(-100%);
+            }
+            #sidebar.open {
+                transform: translateX(0);
+            }
+        }
 
         .sidebar-brand {
             display: flex; align-items: center; gap: 12px; padding: 20px 24px;
@@ -197,7 +221,10 @@
 
         /* Responsive */
         @media (max-width: 968px) {
-            .grid-container { grid-template-columns: 1fr; grid-template-areas: "header" "main"; }
+            .grid-container { 
+                grid-template-columns: 1fr; 
+                grid-template-areas: "header" "main"; 
+            }
             .menu-icon { display: block; }
             .main-container { padding: 20px; }
         }
@@ -282,7 +309,6 @@
             <!-- Booking Form -->
             <div class="booking-card">
                 <form id="bookingForm">
-                    <!-- All your original form steps (1-5) remain exactly the same -->
                     <!-- Step 1: Hospital Selection -->
                     <div class="form-step active" data-step="1">
                         <h3 style="margin-bottom: 24px; color: var(--text);">Select Hospital</h3>
@@ -412,17 +438,21 @@
             document.getElementById('overlay').classList.remove('show');
         }
 
-        // Close sidebar when clicking outside on mobile
+        // Close sidebar when clicking outside — only on mobile
         document.addEventListener('click', (e) => {
+            if (window.innerWidth > 968) return; // Ignore on desktop
+
             const sidebar = document.getElementById('sidebar');
             const menuIcon = document.querySelector('.menu-icon');
-            if (window.innerWidth <= 968 && sidebar.classList.contains('open') &&
-                !sidebar.contains(e.target) && !menuIcon.contains(e.target)) {
+            
+            if (sidebar.classList.contains('open') &&
+                !sidebar.contains(e.target) && 
+                !menuIcon.contains(e.target)) {
                 closeSidebar();
             }
         });
 
-        // Your original booking script (unchanged)
+        // Booking form logic
         let currentStep = 1;
         const totalSteps = 5;
         const bookingData = {};
@@ -521,11 +551,11 @@
         }
 
         function updateSummary() {
-            document.getElementById('summaryHospital').textContent = bookingData.hospitalName;
-            document.getElementById('summaryDoctor').textContent = bookingData.doctorName;
-            document.getElementById('summaryDate').textContent = new Date(bookingData.date).toLocaleDateString();
-            document.getElementById('summaryTime').textContent = bookingData.timeDisplay;
-            document.getElementById('summaryReason').textContent = bookingData.reason;
+            document.getElementById('summaryHospital').textContent = bookingData.hospitalName || '-';
+            document.getElementById('summaryDoctor').textContent = bookingData.doctorName || '-';
+            document.getElementById('summaryDate').textContent = bookingData.date ? new Date(bookingData.date).toLocaleDateString() : '-';
+            document.getElementById('summaryTime').textContent = bookingData.timeDisplay || '-';
+            document.getElementById('summaryReason').textContent = bookingData.reason || '-';
         }
 
         function submitBooking() {
@@ -534,6 +564,7 @@
                   'Doctor: ' + bookingData.doctorName + '\n' +
                   'Date: ' + bookingData.date + '\n' +
                   'Time: ' + bookingData.timeDisplay);
+            // Redirect or reset form as needed
             window.location.href = 'profile.html';
         }
     </script>

@@ -41,10 +41,26 @@
         #sidebar {
             grid-area: sidebar; background: var(--card-bg); border-right: 1px solid var(--border);
             position: fixed; top: 0; left: 0; width: 260px; height: 100vh;
-            overflow-y: auto; transform: translateX(-100%);
-            transition: transform 0.3s ease; z-index: 200;
+            overflow-y: auto; transition: transform 0.3s ease; z-index: 200;
         }
-        #sidebar.open { transform: translateX(0); }
+
+        /* Desktop: always visible */
+        @media (min-width: 969px) {
+            #sidebar {
+                transform: translateX(0);
+                position: static;
+            }
+        }
+
+        /* Mobile: hidden by default */
+        @media (max-width: 968px) {
+            #sidebar {
+                transform: translateX(-100%);
+            }
+            #sidebar.open {
+                transform: translateX(0);
+            }
+        }
 
         .sidebar-brand {
             display: flex; align-items: center; gap: 12px; padding: 20px 24px;
@@ -549,12 +565,16 @@
             document.getElementById('overlay').classList.remove('show');
         }
 
-        // Close sidebar when clicking outside on mobile
+        // Close sidebar when clicking outside — only on mobile
         document.addEventListener('click', (e) => {
+            if (window.innerWidth > 968) return;
+
             const sidebar = document.getElementById('sidebar');
             const menuIcon = document.querySelector('.menu-icon');
-            if (window.innerWidth <= 968 && sidebar.classList.contains('open') &&
-                !sidebar.contains(e.target) && !menuIcon.contains(e.target)) {
+            
+            if (sidebar.classList.contains('open') &&
+                !sidebar.contains(e.target) && 
+                !menuIcon.contains(e.target)) {
                 closeSidebar();
             }
         });
@@ -598,6 +618,9 @@
         function viewReceipt(billNumber) {
             alert(`Viewing receipt for bill ${billNumber}...`);
         }
+
+        // Initial filter
+        filterBills();
     </script>
 </body>
 </html>
